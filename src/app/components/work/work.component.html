@@ -1,0 +1,129 @@
+<article class="work container" *ngIf="items">
+  <header class="work__header">
+    <h1
+      class="work__header__title title centered grey"
+      title="Work"
+      *ngIf="page === 'home'"
+    >Work</h1>
+
+    <!-- filters -->
+    <ul class="work__header__filters" *ngIf="page === 'home'">
+      <li
+        class="work__header__filters__filter"
+        *ngFor="let filter of filters"
+        [class.tab--open]="filter.openTab"
+        [class.tab--closed]="!filter.openTab"
+      >
+        <span
+          class="work__header__filters__filter__label button button--dark"
+          (clickOutside)="filter.openTab ? toggleFilterTab(filter) : null"
+          [exclude]="'.work__header__filters__filter__dropdown'"
+          (click)="toggleFilterTab(filter)"
+        >{{filter.type}}</span>
+        <!-- arrow icon -->
+        <ul class="work__header__filters__filter__dropdown">
+
+          <!-- uncategorized items -->
+          <ng-container *ngIf="!valuesCategorized(filter.values)">
+            <div class="work__header__filters__filter__dropdown__categorie">
+              <li
+                class="work__header__filters__filter__dropdown__value"
+                *ngFor="let value of filter.values"
+                (click)="toggleFilter(filter.type, value)"
+                [class.filter--active]="findActiveFilter(filter.type, value)"
+              >
+                {{value}}
+              </li>
+            </div>
+          </ng-container>
+
+          <!-- categorized items -->
+          <ng-container *ngIf="valuesCategorized(filter.values)">
+            <li *ngFor="let categorie of filter.values">
+              <ul class="work__header__filters__filter__dropdown__categorie">
+                  <h3>{{categorie.name}}</h3>
+                  <li
+                    *ngFor="let value of categorie.values;"
+                    class="work__header__filters__filter__dropdown__value"
+                    [class.filter--active]="findActiveFilter(filter.type, value)"
+                    (click)="toggleFilter(filter.type, value, $event)"
+                  >
+                    {{value}}
+                  </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ul>
+    <!-- end filters -->
+
+    <p
+      class="work__header__filters__text"
+      [class.no-filters]="activeFilters.length <= 0"
+      *ngIf="page === 'home'"
+    >
+      {{activeFilters.length > 0 ? '' : 'No filter applied'}}
+      <ng-container *ngFor="let filter of activeFilters">
+        <div
+          class="button"
+          *ngFor="let value of filter.values"
+          (click)="toggleFilter(filter.type, value)"
+        >{{value}}</div>
+      </ng-container>
+    </p>
+    <p class="work__header__filters__text" *ngIf="page === 'work'">
+      More focused on {{ filter?.type }}
+    </p>
+
+  </header>
+
+  <main class="work__items">
+    <!-- <p class="work__items__results">{{showItems.length ? showItems.length : 'No'}} {{showItems.length <= 1 ? 'result' : 'results'}}</p> -->
+    <ul
+      class="work__items__list"
+      #container
+      [ngClass]="{'is--loading': !masonryLoaded, 'is--loaded': masonryLoaded}"
+    >
+      <li
+        class="work__items__list__item"
+        *ngFor="let item of showItems;"
+        (click)="routeToPost(item.title); hoverLeave($event)"
+        (mousemove)="hoverAnimation($event)"
+        (mouseleave)="hoverLeave($event)"
+      >
+        <article>
+          <figure *ngIf="item.media">
+              <img
+                [src]="item.media.imageUrl"
+                [alt]="item.title"
+                (load)="imageLoaded();"
+              >
+              <!-- <video nocontrols [hidden]="!item.media.videoPlaying">
+                <source src="{{item.media.videoUrl}}">
+              </video> -->
+          </figure>
+          <ul *ngIf="item.metadata">
+            <li>{{item.metadata['focus']}}</li>
+            <li>{{item.metadata['purpose']}}</li>
+          </ul>
+          <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
+        </article>
+      </li>
+    </ul>
+    <a
+      class="work__items__show-button button button--light"
+      *ngIf="items.length > showAmount"
+      (click)="showAmount = showAmount + 3; updateFilter()"
+    >
+      Show More
+    </a>
+    <!-- <a
+      class="work__items__show-button button button--light"
+      *ngIf="this.showItems.length <= showAmount && this.showItems.length > 3"
+      (click)="showAmount = showAmount - 3; updateFilter()"
+    >
+      Show Less
+    </a> -->
+  </main>
+</article>

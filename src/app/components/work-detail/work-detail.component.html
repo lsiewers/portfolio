@@ -1,0 +1,72 @@
+<article class="work-detail" *ngIf="data">
+  <header class="work-detail__header">
+    <figure class="work-detail__header__media">
+        <img [src]="data.media.imageUrl" [alt]="data.title">
+    </figure>
+    <h1 class="work-detail__header__title">{{data.title}}</h1>
+  </header>
+
+  <main class="work-detail__main">
+    <!-- Content -->
+    <section class="work-detail__content" [innerHTML]="data.details">
+    </section>
+
+    <!-- Metadata -->
+    <aside class="work-detail__metadata">
+      <ul class="work-detail__metadata__list">
+        <li
+          *ngFor="let data of data.metadata"
+          class="work-detail__metadata__list__item {{data.type}}"
+        >
+          <h1>{{data.type}}</h1>
+          <p *ngIf="isArray(data.value)">{{data.value}}</p>
+          <ng-container *ngIf="!isArray(data.value)">
+            <p *ngFor="let value of data.value">{{value}}</p>
+          </ng-container>
+        </li>
+      </ul>
+    </aside>
+  </main>
+
+  <!-- Feedback PMI -->
+  <footer class="work-detail__feedback">
+    <header  class="work-detail__feedback__header">
+        <h1 class="work-detail__feedback__header__title">PMI</h1>
+        <p class="work-detail__feedback__header__description">Let me know what your thoughts are about this project (anonymous)</p>
+    </header>
+
+    <main class="work-detail__feedback__topics">
+      <div class="work-detail__feedback__topic" *ngFor="let topic of pmi; let i = index">
+        <h3 class="work-detail__feedback__topic__title">Things you <strong>{{topic.title}}</strong> about this project</h3>
+        <ul class="work-detail__feedback__topic__fields">
+          <li
+            class="work-detail__feedback__topic__fields__field"
+            *ngFor="let field of topic.fields; let j = index"
+          >
+            <input
+              type="text"
+              placeholder="I {{topic.title}}..."
+              [(ngModel)]="topic.fields[j]"
+              [ngModelOptions]="{'updateOn': 'blur'}"
+              (keyup.enter)="$event.target.blur(); addField(topic.fields, $event);"
+              (keyup.backspace)="$event.target.value.length === 0 && j > 0 ? $event.target.blur() : null"
+              (keyup.esc)="$event.target.blur();"
+              (blur)="removeField(i, j, $event);"
+            />
+          </li>
+          <li class="work-detail__feedback__topic__fields__field">
+            <a class="work-detail__feedback__topic__fields__field__add button button--light" (click)="addField(topic.fields, $event)">+</a>
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <a class="work-detail__feedback__send button button--dark">Send feedback ></a>
+  </footer>
+</article>
+
+<app-work [filter]="workFilter"></app-work>
+
+<div class="work-detail__back-to-home">
+  <a class="button button--dark">< Terug naar Home</a>
+</div>

@@ -1,0 +1,23 @@
+.work-detail__metadata {
+  width: 480px;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+      margin: 12px 0;
+      width: 100%;
+
+      &.purpose, &.focus, &.client, &.budget { width: 50%; }
+
+      h1, p { margin: 6px 0; }
+
+      h1 {
+        text-transform: uppercase;
+        font-size: .75em;
+      }
+      p { text-transform: capitalize; }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+$mobile: 480px;
+$tablet: 900px;
+$desktop: 1200px;
+
+// Small devices
+@mixin mobile {
+  @media screen and (max-width: #{$mobile}) and (orientation: portrait) {
+      @content;
+  }
+}
+
+// tablet
+@mixin tablet {
+  @media screen and (min-width: #{$mobile}) and (max-width: #{$tablet}) and (orientation: portrait) {
+      @content;
+  }
+}
+
+// tablet and mobile
+@mixin portable {
+  @media screen and (max-width: #{$tablet}) and (orientation: portrait) {
+      @content;
+  }
+}
+
+// desktop
+@mixin desktop {
+  @media screen and (min-width: #{$tablet}) {
+      @content;
+  }
+}

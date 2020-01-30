@@ -1,0 +1,24 @@
+@import '../../../assets/scss/all';
+
+
+@import 'scss/work-detail__content';
+@import 'scss/work-detail__header';
+@import 'scss/work-detail__metadata';
+@import 'scss/work-detail__feedback';
+
+.work-detail {
+
+  &__main {
+    padding: 48px 36px;
+    max-width: 1200px;
+    display: flex;
+    margin: 0 auto;
+  }
+
+  &__back-to-home {
+    @include flexbox(row, center, center);
+    padding: 24px 36px;
+    background-color: $color--grey;
+    a { color: $color--grey-dark; }
+  }
+}

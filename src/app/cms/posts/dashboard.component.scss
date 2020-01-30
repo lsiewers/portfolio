@@ -1,0 +1,14 @@
+@import '../../../assets/scss/all';
+@import '../../../app/components/work/work.component';
+
+.dashboard {
+
+  &__header {
+    @extend %block--grey-light;
+    padding: 36px;
+  }
+
+  &__posts {
+    padding: 36px;
+  }
+}
