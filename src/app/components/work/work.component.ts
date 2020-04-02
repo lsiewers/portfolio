@@ -19,6 +19,7 @@ import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
 import { FilterClass } from './filterClass';
 import { Observable, BehaviorSubject, empty } from 'rxjs';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-work',
@@ -26,7 +27,7 @@ import { Observable, BehaviorSubject, empty } from 'rxjs';
   styleUrls: ['./work.component.scss']
 })
 export class WorkComponent implements AfterViewInit, AfterContentChecked {
-  @Input() projectFilter: Observable<Filter>;
+  @Input() projectFilter: Filter;
 
   // filters
   filterClass: FilterClass;
@@ -59,20 +60,20 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
 
   ngAfterViewInit(): void {
-
     this.filterClass = new FilterClass(this);
     this.setPageType();
     this.getItems().then(items => {
       this.items = items;
       if (this.pageType === 'work') {
-        this.filterClass.getFilteredItems(this.items, this.showAmount, this.projectTitle);
+        this.filterClass.toggleFilter(this.projectFilter);
+        this.filterClass.setFilteredItems(this.projectTitle);
       } else {
         this.filterClass.setFilteredItems();
+        this.filtersService.getFilters().then(filters => this.filterClass.filters = filters);
       }
       this.loadMasonry();
     });
 
-    this.filtersService.getFilters().then(filters => this.filterClass.filters = filters);
   }
 
   // set-up
@@ -131,13 +132,30 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   }
 
   // Other
+  projectDetailRoute(e: string, projectFilter: Filter) {
+    this.projectTitle = decodeURI(e).substr(1);
+
+    if (projectFilter === this.projectFilter) {
+      this.filterClass.setFilteredItems(this.projectTitle);
+    } else {
+      if (!isUndefined(this.projectFilter)) {
+        this.filterClass.toggleFilter(this.projectFilter);
+        this.filterClass.toggleFilter(projectFilter);
+        this.projectFilter = projectFilter;
+        this.filterClass.setFilteredItems(this.projectTitle);
+      }
+    }
+  }
+
   routeToPost(title: string) {
-    this.router.navigate([this.pageType === 'cms' ? 'cms/' + encodeURI(title)
-    : encodeURI(title)]);
+    this.router.navigate([this.pageType === 'cms' ? 'cms/' + title
+    : title]);
   }
 
   imageLoaded() {
     this.loadedImages++;
+    console.log(this.loadedImages);
+
     if (this.loadedImages >= this.showItems.length - 1) { this.loadMasonry(); }
   }
 
@@ -159,5 +177,5 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
 
   // Resize update
   @HostListener('window:resize')
-  bricksUpdate() { this.loadMasonry(); }
+  bricksUpdate() { this.bricks.resize(); }
 }

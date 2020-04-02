@@ -1,9 +1,10 @@
 .button {
-  // font-weight: 900;
+  font-weight: 600;
+  text-decoration: none;
   display: inline-block;
   padding: .65em 1.15em;
   margin: 6px;
-  border-radius: 1em;
+  border-radius: 2em;
   cursor: pointer;
   transform: scale(1);
   box-sizing: border-box;
@@ -14,7 +15,7 @@
   }
 
   &--dark {
-    border: solid 0.22em rgba($color--grey-dark, 0.12);
+    border: solid 0.1em rgba($color--grey-dark, 0.12);
     color: $color--grey-dark;
 
     &:hover {
@@ -23,7 +24,7 @@
   }
 
   &--light {
-    border: solid 0.22em rgba($color--grey-light, 0.09);
+    border: solid 0.1em rgba($color--grey-light, 0.09);
     color: $color--grey-light;
 
     &:hover {

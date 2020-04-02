@@ -19,7 +19,7 @@
   &__back-to-home {
     @include flexbox(row, center, center);
     padding: 24px 36px;
-    background-color: $color--grey-light;
+    background-color: white;
     a { color: $color--grey-dark; }
   }
 }

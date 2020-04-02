@@ -1,6 +1,5 @@
 .work__items {
   @include flexbox(column);
-  width: 100%;
 
   &__results {
     display: inline;
@@ -8,7 +7,6 @@
   }
 
   &__list {
-    width: 100%;
     margin-top: $space--normal;
     // display: flex;
     // flex-direction: column;
@@ -33,7 +31,7 @@
       min-width: 240px; max-width: 360px;
       // widsth: 360px;
       // border: solid 6px $color--black;
-      // background-color: rgba($color--grey-darker, 0.4);
+      background-color: white;
       border-radius: 18px;
       box-sizing: border-box;
       // padding: 1em 1em 1.25em;
@@ -69,11 +67,11 @@
         position: relative;
 
         &::before {
-          content: '';
-          @include size;
-          @include abs(unset, unset, 0, 0);
-          display: block;
-          background: linear-gradient(15deg, white, rgba(white, 0));
+          // content: '';
+          // @include size;
+          // @include abs(unset, unset, 0, 0);
+          // display: block;
+          // background: linear-gradient(15deg, white, rgba(white, 0));
         }
 
         img { @include size; }
@@ -94,7 +92,10 @@
         text-align: left;
       }
 
-      p { padding: 0px 24px 18px; }
+      p {
+        padding: 0px 24px 18px;
+        font-family: $font-serif;
+      }
     }
 
     .masonry-gutter { width: 10%; }

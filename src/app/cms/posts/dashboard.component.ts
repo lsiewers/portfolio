@@ -77,10 +77,6 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
     this.db.collection<Item>('posts').valueChanges().subscribe(posts => this.posts = posts);
   }
 
-  encodeURI(title: string) {
-    return encodeURI(title);
-  }
-
   addProject() {
     this.workService.createWorkPost(this.newPost).then(data => {
       this.newPost.id = data.id;

@@ -1,20 +1,22 @@
 @import '../../../assets/scss/all';
 
 .home {
+  @include flexbox(column, center);
   font-size: 1.1em;
   position: relative;
-  padding: 0px 30px;
+  // padding: 0px 48px;
 
-  &__title { @extend %title--h4; }
+  &__title { @extend %title--h3; }
 
   &__article {
     @include flexbox(row, center, center);
-    @extend %block--grey-light;
+    // @extend %block--grey-light;
+    border: solid 3px $color--grey-light;
     overflow: hidden;
-    border-radius: 36px;
+    border-radius: 30px;
     max-height: 240px;
     max-width: 960px;
-    padding: 12px 48px;
+    padding: 0px 42px;
 
     figure {
       @include rel(unset, unset, -30px, -60px);
@@ -32,6 +34,7 @@
     p {
       max-width: 480px;
       line-height: 1.6;
+      font-family: $font-serif;
     }
   }
 }

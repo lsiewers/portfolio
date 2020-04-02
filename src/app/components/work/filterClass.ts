@@ -49,6 +49,7 @@ export class FilterClass {
     } else {
       // if specific value is already filtered
       if (filteredType.values.includes(value)) {
+        console.log('already existing');
         // remove filtered item
         filteredType.values.splice(filteredType.values.indexOf(value), 1);
 
@@ -59,8 +60,6 @@ export class FilterClass {
         filteredType.values.push(value);
       }
     }
-
-    this.setFilteredItems();
   }
 
   // update filters and view
@@ -78,6 +77,7 @@ export class FilterClass {
       this.activeFilters.forEach(filteredType => {
         // for each work item from items.json (> database request)
         items.forEach(item => {
+
           // if detail page is equal to this item
           if (item.title === projectTitle) {
             item.filterComplete.push(false);
@@ -126,7 +126,8 @@ export class FilterClass {
     this.workComponent.showItems = this.getFilteredItems(
       this.workComponent.items,
       this.workComponent.showAmount,
-      !isUndefined(projectTitle) && projectTitle === 'work' ?
+      !isUndefined(projectTitle) &&
+      this.workComponent.pageType === 'work' ?
         projectTitle : null
     );
   }

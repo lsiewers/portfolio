@@ -29,7 +29,7 @@
               <li
                 class="work__header__filters__filter__dropdown__value"
                 *ngFor="let value of filter.values"
-                (click)="filterClass.toggleFilter({type: filter.type, values: [value]})"
+                (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
                 [class.filter--active]="filterClass.findActiveFilter(filter.type, value)"
               >
                 {{value}}
@@ -46,7 +46,7 @@
                     *ngFor="let value of categorie.values;"
                     class="work__header__filters__filter__dropdown__value"
                     [class.filter--active]="filterClass.findActiveFilter(filter.type, value)"
-                    (click)="filterClass.toggleFilter({type: filter.type, values: [filter.value]})"
+                    (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
                   >
                     {{value}}
                   </li>
@@ -68,14 +68,17 @@
         <div
           class="button"
           *ngFor="let value of filter.values"
-          (click)="filterClass.toggleFilter({type: filter.type, values: [filter.value]})"
-        >{{value}}</div>
+          (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
+        >
+          {{ value }}
+        </div>
       </ng-container>
     </p>
+
     <p
       class="work__header__filters__text"
-      *ngIf="pageType === 'work' && filterClass.projectFocus">
-      More focused on {{ filterClass.projectFocus.values }}
+      *ngIf="pageType === 'work' && projectFilter">
+      More focused on {{ projectFilter.values }}
     </p>
 
   </header>

@@ -1,18 +1,19 @@
-import { Component, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Inject, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router, RouterEvent } from '@angular/router';
 import { Item } from '../../models/item';
 import { Observable } from 'rxjs';
 import { WorkService } from 'src/app/services/work.service';
-import { WorkComponent } from '../work/work.component';
 import { isUndefined, isArray } from 'util';
 import { Filter } from 'src/app/models/filter';
+import { WorkComponent } from '../work/work.component';
 
 @Component({
   selector: 'app-work-detail',
   templateUrl: './work-detail.component.html',
   styleUrls: ['./work-detail.component.scss']
 })
-export class WorkDetailComponent implements AfterViewInit {
+export class WorkDetailComponent {
+  @ViewChild('workComponent', {static: false}) workComponent: WorkComponent;
   data: Item;
   pmi = [
     {
@@ -32,7 +33,7 @@ export class WorkDetailComponent implements AfterViewInit {
   blur = 0;
   opacity = 1;
   currentPage: string;
-  projectFilter: Observable<Filter>;
+  projectFilter: Filter;
 
   constructor(
     private activeRouter: ActivatedRoute,
@@ -43,25 +44,23 @@ export class WorkDetailComponent implements AfterViewInit {
       if (!isUndefined(e.url)) {
         if (this.currentPage !== e.url || isUndefined(this.currentPage)) {
           this.currentPage = e.url;
-          this.onRoute();
+          this.onRoute(e.url);
+          return isUndefined(this.workComponent) ?
+            null : this.workComponent.projectDetailRoute(e.url, this.projectFilter);
         }
       }
     });
   }
 
-  ngAfterViewInit(): void  {
-  }
-
-  onRoute() {
-    this.activeRouter.params.subscribe(data => {
-      this.workService.getWorkPost(decodeURI(data.id))
-        .then(post => {
-          this.data = post;
-          this.projectFilter = new Observable<Filter>((observer) => {
-            observer.next(post.metadata.find(subdata => subdata.type === 'focus'));
-          });
-        });
-    });
+  onRoute(param) {
+    const projectTitle = decodeURI(param).substr(1);
+    this.workService.getWorkPost(projectTitle)
+      .then(post => {
+        this.data = post;
+        return projectTitle !== '' ?
+          this.projectFilter = post.metadata.find(subdata => subdata.type === 'focus')
+          : null;
+      });
   }
 
   isArray(obj) { return isArray(obj); }

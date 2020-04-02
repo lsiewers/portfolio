@@ -5,7 +5,6 @@ html,
 body {
   // @extend %block--grey-dark;
   font-family: $font-body;
-  font-weight: 600;
   overflow-x: hidden;
 
   -webkit-font-smoothing: antialiased;
@@ -13,6 +12,8 @@ body {
 }
 
 // html { overflow: hidden;; }
+
+body { background-image: url('assets/images/lightpaperfibers.png') }
 
 html,
 body,
