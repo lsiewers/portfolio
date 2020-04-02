@@ -7,16 +7,18 @@ import {
   AfterContentChecked,
   HostListener,
   Input,
-  AfterViewInit
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
 import Bricks, { BricksInstance } from 'bricks.js';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router, ActivatedRoute } from '@angular/router';
 import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
+import { FilterClass } from './filterClass';
+import { Observable, BehaviorSubject, empty } from 'rxjs';
 
 @Component({
   selector: 'app-work',
@@ -24,20 +26,22 @@ import { FiltersService } from 'src/app/services/filters.service';
   styleUrls: ['./work.component.scss']
 })
 export class WorkComponent implements AfterViewInit, AfterContentChecked {
-  @ViewChild('container', {static: false}) masonryContainer?: ElementRef<HTMLElement>;
-  @Input() set filter(val) { this.filterSubject.next(val); }
-  get filter() { return this.filterSubject.getValue(); }
-  filters: Filter[] = [];
-  activeFilters: Filter[] = [];
-  filterSubject = new BehaviorSubject<{title?: string, type?: string}>({});
+  @Input() projectFilter: Observable<Filter>;
 
+  // filters
+  filterClass: FilterClass;
+
+  // items
   items: Item[];
   showItems: Item[];
-  page: string;
 
+  // page/url
+  pageType: string;
+  projectTitle: string;
+
+  // masonry
   bricks: BricksInstance;
   loadedImages = 0;
-  // filters: Filter[] = [];
   masonryLoaded = false;
   showAmount = 3;
   suggested = false;
@@ -47,46 +51,76 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef,
     private workService: WorkService,
     private filtersService: FiltersService,
+    private activeRouter: ActivatedRoute,
     private router: Router
-  ) {
-   }
+  ) {}
 
+   // lifecycle hooks
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
 
   ngAfterViewInit(): void {
-    this.workService.getWorkList()
-      .then(data => this.items = data)
-      .finally(() => setTimeout(() => this.updateFilter(), 500));
 
-    this.page = this.router.url === '/' ? 'home' : 'work-detail';
-    this.filtersService.getFilters().then(filters => {
-      console.log(filters);
+    this.filterClass = new FilterClass(this);
+    this.setPageType();
+    this.getItems().then(items => {
+      this.items = items;
+      if (this.pageType === 'work') {
+        this.filterClass.getFilteredItems(this.items, this.showAmount, this.projectTitle);
+      } else {
+        this.filterClass.setFilteredItems();
+      }
+      this.loadMasonry();
+    });
 
-      this.filters = filters;
+    this.filtersService.getFilters().then(filters => this.filterClass.filters = filters);
+  }
+
+  // set-up
+  async getItems(): Promise<Item[]> {
+    return await new Promise((resolve) => {
+      this.workService.getWorkList()
+        .then(data => resolve(data));
+      });
+  }
+
+  setPageType() {
+    this.activeRouter.url.subscribe(params => {
+      const url = params.length ? params[0].path : undefined;
+
+      if (typeof url === 'undefined') { this.pageType = 'home';
+      } else if (url.includes('cms')) { this.pageType = 'cms';
+      } else {
+        this.pageType = 'work';
+        this.projectTitle = decodeURI(url);
+      }
     });
   }
 
-  masonryInit() {
-    // console.log(this.masonryContainer);
-
-    this.bricks = Bricks({
-      container: typeof this.masonryContainer !== 'undefined' ? this.masonryContainer.nativeElement : '.work__items__list',
-      packed: 'packed',
-      sizes: [
-        { mq: '820px', columns: 2, gutter: 36 },
-        { mq: '900px', columns: 2, gutter: 60 },
-        { mq: '1280px', columns: 3, gutter: 36 },
-        { mq: '1400px', columns: 3, gutter: 60 }
-      ]
-    });
+  // check if categorized or not
+  valuesCategorized(valuesList: Array<any>): boolean {
+    return !!(valuesList[0] instanceof Object);
   }
 
   loadMasonry() {
-    this.masonryInit();
     setTimeout(() => {
+      this.bricks = Bricks({
+        container: '.work__items__list',
+        packed: 'packed',
+        sizes: [
+          { mq: '820px', columns: 2, gutter: 36 },
+          { mq: '900px', columns: 2, gutter: 60 },
+          { mq: '1280px', columns: 3, gutter: 36 },
+          { mq: '1400px', columns: 3, gutter: 60 }
+        ]
+      });
       this.bricks.pack();
       this.masonryLoaded = true;
     }, 400);
+  }
+
+  // metadata per item
+  getMetadataValue(item: Item['metadata'], title: string) {
+    return item.find(data => data.type === title).values;
   }
 
   showMetadata(item: Item, type: string): any {
@@ -96,125 +130,18 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
     return values[0].value instanceof Array ? ((values[0].value) as Array<string>).join(', ') : values[0].value;
   }
 
-  toggleFilterTab(filter: Filter) {
-    const activatedTabs = [];
-    // console.log(filter);
-    if (!filter.openTab) {
-      let delay;
-      this.filters.find(f => f.openTab === true) ? delay = true : delay = false;
-      this.filters.forEach(f => {
-        if (f.openTab === undefined) { f.openTab = false; }
-        if (f !== filter) { f.openTab ? f.openTab = false : null }
-        else if (delay) { setTimeout(() => f.openTab = true, 480); }
-        else { f.openTab = true; }
-
-        activatedTabs.push(f.openTab);
-      });
-    } else { filter.openTab = false; }
+  // Other
+  routeToPost(title: string) {
+    this.router.navigate([this.pageType === 'cms' ? 'cms/' + encodeURI(title)
+    : encodeURI(title)]);
   }
-
-  valuesCategorized(valuesList: Array<any>): boolean {
-    return !!(valuesList[0] instanceof Object);
-  }
-
-  toggleFilter(filterType: string, value: string) {
-    const filteredType = this.activeFilters.find(activeFilter => activeFilter.type === filterType);
-
-    // if type is already filtered
-    if (this.activeFilters.length === 0 || typeof filteredType === 'undefined') {
-      this.activeFilters.push({type: filterType, values: [value]});
-    } else {
-      // if specific value is already filtered
-      if (filteredType.values.includes(value)) {
-        // remove filtered item
-        filteredType.values.splice(filteredType.values.indexOf(value), 1);
-
-        // remove object from active filters if empty
-        !filteredType.values.length ? this.activeFilters.splice(this.activeFilters.indexOf(filteredType), 1) : null;
-      } else {
-        // add filtered item
-        filteredType.values.push(value);
-      }
-    }
-
-    this.updateFilter();
-  }
-
-  updateFilter() {
-    this.masonryLoaded = false;
-    this.showItems = [];
-    let itemsProcessed = 0;
-
-    // reset values
-    this.items.forEach(item => item.filterComplete = []);
-
-    // go through items if filters are active
-    if (this.activeFilters.length > 0) {
-      // for each active filter
-      this.activeFilters.forEach(filteredType => {
-        // for each work item from items.json (> database request)
-        this.items.forEach(item => {
-          itemsProcessed++; // counter to check if each item is processed
-
-          // if detail page is equal to this item
-          if (item.title === this.filter.title) { return item.filterComplete.push(false); }
-
-          // get item metadata equal to filter type (e.a. 'focus')
-          const typeMatch = item.metadata.find(data => data.type === filteredType.type);
-
-          // for each value in filter type (e.a. 'User Experience')
-          filteredType.values.forEach(value => {
-            // if item.filterComplete doesn't exist jet, create it
-            if (item.filterComplete === undefined) { item.filterComplete = []; }
-
-            // if typeMatch.value (item metadata value) equals filter, set to true!
-            // if metadata contains multiple values, check if value is inside array
-            if (
-              typeMatch.value instanceof Array && typeMatch.value.includes(value) ||
-              typeMatch.value === value
-            ) {
-              item.filterComplete.push(true);
-            } else { item.filterComplete.push(false); } // else set to false!
-            // console.log(!item.filterComplete.includes(false), item.filterComplete);
-          });
-
-          // if all items are processed, show!
-          if (itemsProcessed === this.items.length) {
-            // console.log('Completed', this.activeFilters, this.showItems, this.items.map(i => i.filterComplete));
-            this.loadMasonry();
-          }
-        });
-      });
-
-      // re iterate through items for check
-      this.items.forEach(item => {
-
-        // if item includes doesn't include a false match with filter
-        if (!item.filterComplete.includes(false)) {
-          // and amount of items is lower than maximum to show
-          if (this.showItems.length < this.showAmount) { this.showItems.push(item); } // add item!
-        }
-      });
-
-    } else {
-      this.items.forEach(item => this.showItems.length < this.showAmount ? this.showItems.push(item) : null);
-    }
-
-  }
-
-  findActiveFilter(type: string, value: string) {
-    const filteredType = this.activeFilters.find(activeFilter => activeFilter.type === type);
-    return typeof filteredType === 'undefined' ? false : filteredType.values.includes(value);
-  }
-
-  routeToPost(title) { this.router.navigate([encodeURI(title)]); }
 
   imageLoaded() {
     this.loadedImages++;
-    if (this.loadedImages === this.showItems.length) { this.loadMasonry(); }
+    if (this.loadedImages >= this.showItems.length - 1) { this.loadMasonry(); }
   }
 
-  // animation of hover on work item
+  // Hover animations
   hoverAnimation(e: MouseEvent) {
     const target: HTMLElement = e.currentTarget as HTMLElement;
 
@@ -230,6 +157,7 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
     target.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg)';
   }
 
+  // Resize update
   @HostListener('window:resize')
-  bricksUpdate() { this.bricks.resize(); }
+  bricksUpdate() { this.loadMasonry(); }
 }

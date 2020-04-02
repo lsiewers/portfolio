@@ -1,8 +1,11 @@
 export interface Item {
   id: string;
   title: string;
+  subtitle: string;
   media: {
     imageUrl: string;
+    imagePos: 'bottom' | 'top' | 'center',
+    imageRef: string;
     videoUrl?: string;
     videoPlaying?: boolean;
   };
@@ -10,31 +13,34 @@ export interface Item {
   metadata: [
     {
       type: 'focus';
-      value: any;
+      values: Array<string>;
     },
     {
       type: 'purpose',
-      value: string
+      values: string
     },
     {
       type: 'tools',
-      value: any;
+      values: Array<string>;
     },
     {
       type: 'budget',
-      value: string
+      values: string
     },
     {
       type: 'client',
-      value: any
+      values: Array<string>
     },
     {
       type: 'collaboration',
-      value: any
+      values: 'solo' | Array<{
+        name: string,
+        url?: string
+      }>
     },
     {
       type: 'finish date',
-      value: Date
+      values: Date
     }
   ];
   details: InnerHTML;

@@ -25,41 +25,7 @@ li {
   list-style: none;
 }
 
-.button {
-  font-weight: bold;
-  display: inline-block;
-  padding: 9px 15px;
-  margin: 6px;
-  border-radius: 12px;
-  cursor: pointer;
-  transform: scale(1);
-  box-sizing: border-box;
-  transition: background-color 0.12s ease-in, transform 0.12s ease-out;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &--dark {
-    border: solid 0.2em rgba($color--grey-dark, 0.12);
-    color: $color--grey-dark;
-
-    &:hover {
-      background-color: rgba($color--grey-dark, 0.12);
-    }
-  }
-
-  &--light {
-    border: solid 0.2em rgba($color--grey-light, 0.09);
-    color: $color--grey-light;
-
-    &:hover {
-      background-color: rgba($color--grey-light, 0.09);
-    }
-  }
-
-  &:active {
-    transition: transform 0.024s ease-out;
-    transform: scale(1);
-  }
+a {
+  // text-decoration: none;
+  color: $color--grey-dark;
 }

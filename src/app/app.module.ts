@@ -18,6 +18,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DashboardComponent } from './cms/posts/dashboard.component';
 import { PostDetailComponent } from './cms/post-detail/post-detail.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
    declarations: [
@@ -36,6 +37,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
       HttpClientModule,
       ClickOutsideModule,
       FormsModule,
+      AngularEditorModule,
       AngularFireStorageModule,
       AngularFireModule.initializeApp(environment.firebase),
       AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database feature

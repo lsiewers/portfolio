@@ -1,26 +1,90 @@
-<header>
-  <figure>
-    <img [src]="data.media.imageUrl" alt="">
-    <video>
-      <source [src]="data.media.videoUrl"/>
-    </video>
-    <h1><input [(ngModel)]="data.title" type="text"></h1>
-  </figure>
-</header>
-<main>
-  <!-- metadata, title + input -->
-  <!-- filterable metadata = select boxes of existing filters -->
+<article class="work-detail cms-detail" *ngIf="data">
+  <header class="work-detail__header cms-detail__header">
+    <figure class="work-detail__header__media {{data.media.imagePos}}">
+      <img [src]="data.media.imageUrl">
+      <video>
+        <source [src]="data.media.videoUrl"/>
+      </video>
+    </figure>
+    <input class="cms-detail__header__img-input" type="text" [(ngModel)]="data.media.imageUrl">
 
-  <!-- wydsasdfoijs innerHTML creator NPM -->
+    <select [(ngModel)]="data.media.imagePos">
+      <option value="top">Top</option>
+      <option value="center">Center</option>
+      <option value="bottom">Bottom</option>
+    </select>
+    <input class="cms-detail__header__reference-input" type="text" [(ngModel)]="data.media.imageRef" placeholder="image reference caption">
+    <h1 class="work-detail__header__title">
+      <input
+        class="cms-detail__header__title"
+        [(ngModel)]="data.title"
+        type="text">
+    </h1>
+    <p class="work-detail__header__subtitle cms-detail__header__subtitle">
+      short description
+      <textarea
+        [(ngModel)]="data.subtitle"
+        type="text"></textarea>
+    </p>
+  </header>
+  <main class="work-detail__main cms-detail__main">
+    <!-- Content -->
 
-  <!-- pmi results -->
-  <!-- <ul>
-    <li>user >
-      ul > topics > results
-    </li>
-  </ul> -->
-</main>
-<footer>
-  <!-- buttons back, delete, save -->
-  <!-- feedback -->
-</footer>
+    <section class="work-detail__content cms-detail__main__content">
+        <angular-editor [(ngModel)]="data.details" [config]="editorConfig"></angular-editor>
+    </section>
+
+    <!-- Metadata -->
+    <aside class="work-detail__metadata cms-detail__main__metadata">
+      <small class="cms-detail__main__metadata__id">ID: {{data.id}}</small>
+      <ul class="work-detail__metadata__list">
+        <li
+          *ngFor="let subdata of data.metadata"
+          class="work-detail__metadata__list__item {{subdata.type}}"
+        >
+          <h1>{{subdata.type}}</h1>
+          <p *ngIf="!isArray(subdata.values)">
+            <input [(ngModel)]="subdata.values" type="text">
+          </p>
+          <ng-container *ngIf="isArray(subdata.values) && subdata.type !== 'finish date' && subdata.type !== 'collaboration'">
+            <p *ngFor="let value of subdata.values; let i = index">
+              <input
+                [(ngModel)]="subdata.values[i]"
+                [ngModelOptions]="{'updateOn': 'blur'}"
+                type="text"
+                (keyup.enter)="addField(subdata.type, $event)"
+                (keyup.backspace)="removeField(subdata.type, i, $event)"
+              >
+            </p>
+          </ng-container>
+          <p *ngIf="subdata.type === 'collaboration'">
+            <input *ngFor="let value of subdata.values" [(ngModel)]="value.name" type="text">
+            <input *ngFor="let value of subdata.values; let i = index" [(ngModel)]="value.url" type="text"
+            (keyup.enter)="addField(subdata.type, $event)"
+            (keyup.backspace)="removeField(subdata.type, i, $event)">
+            <!-- <input [(ngModel)]="subdata.values" type="date"> -->
+          </p>
+          <p *ngIf="subdata.type === 'finish date'">
+            {{subdata | json}}
+            <input [(ngModel)]="subdata.values" type="date">
+          </p>
+        </li>
+      </ul>
+    </aside>
+  </main>
+  <footer class="cms-detail__footer">
+    <div class="cms-detail__footer__images">
+        <h1>Image Gallery</h1>
+      <ul>
+        <li *ngFor="let img of images">
+          <img [src]="img.url">
+          <small>{{img.name}}</small>
+          <button class="button button--dark" (click)="deleteImage(img.name)">delete</button>
+        </li>
+      </ul>
+      <input class="button button--dark" type="file" accept=".png, .jpeg, .jpg" (change)="uploadImage($event)">
+    </div>
+    <button class="button button--dark delete" (click)="delete();">Delete</button>
+    <button class="button button--dark save" (click)="save()">Save</button>
+  </footer>
+</article>

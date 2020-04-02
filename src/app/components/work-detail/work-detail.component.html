@@ -1,7 +1,10 @@
 <article class="work-detail" *ngIf="data">
   <header class="work-detail__header">
-    <figure class="work-detail__header__media">
-        <img [src]="data.media.imageUrl" [alt]="data.title">
+    <figure class="work-detail__header__media {{data.media.imagePos}}">
+        <img
+          [src]="data.media.imageUrl"
+          [alt]="data.title"
+        >
     </figure>
     <h1 class="work-detail__header__title">{{data.title}}</h1>
   </header>
@@ -19,9 +22,14 @@
           class="work-detail__metadata__list__item {{data.type}}"
         >
           <h1>{{data.type}}</h1>
-          <p *ngIf="isArray(data.value)">{{data.value}}</p>
-          <ng-container *ngIf="!isArray(data.value)">
-            <p *ngFor="let value of data.value">{{value}}</p>
+          <p *ngIf="!isArray(data.values) && data.type !== 'finish date'">{{data.values}}</p>
+          <time *ngIf="data.type === 'finish date'">{{data.values | date}}</time>
+          <ng-container *ngIf="isArray(data.values) && data.type !== 'collaboration'">
+            <p *ngFor="let value of data.values">{{value}}</p>
+          </ng-container>
+          <!-- collaboration -->
+          <ng-container *ngIf="isArray(data.values) && data.type === 'collaboration'">
+            <a *ngFor="let value of data.values" [href]="value.url">{{value.name}}</a>
           </ng-container>
         </li>
       </ul>
@@ -29,7 +37,7 @@
   </main>
 
   <!-- Feedback PMI -->
-  <footer class="work-detail__feedback">
+  <!-- <footer class="work-detail__feedback">
     <header  class="work-detail__feedback__header">
         <h1 class="work-detail__feedback__header__title">PMI</h1>
         <p class="work-detail__feedback__header__description">Let me know what your thoughts are about this project (anonymous)</p>
@@ -62,10 +70,10 @@
     </main>
 
     <a class="work-detail__feedback__send button button--dark">Send feedback ></a>
-  </footer>
+  </footer> -->
 </article>
 
-<app-work [filter]="workFilter"></app-work>
+<app-work [projectFilter]="projectFilter | async"></app-work>
 
 <div class="work-detail__back-to-home">
   <a class="button button--dark">< Terug naar Home</a>

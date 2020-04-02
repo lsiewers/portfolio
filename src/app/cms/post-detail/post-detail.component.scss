@@ -1,0 +1,103 @@
+@import '../../components/work-detail/work-detail.component.scss';
+
+:host ::ng-deep .angular-editor-toolbar {
+  &, & button {
+    font-family: $font-body !important;
+    border: none !important;
+    background: none !important;
+    appearance: none;
+  }
+}
+
+.cms-detail {
+  input, button, textarea {
+    appearance: none;
+    background: inherit;
+    max-width: 100%;
+
+    font-family: $font-body;
+  }
+
+  input:not([type='file']), textarea {
+    margin-top: 12px; padding: .5em 1em;
+    box-sizing: border-box;
+    appearance: none;
+    background-color: white;
+    border: 1px solid $color--grey-light;
+    font-size: 1em;
+    transition:
+      transform 0.12s ease-out,
+      background-color 0.12s ease-in;
+    transform: scale(1);
+
+    &::placeholder { opacity: .4; }
+    &:focus {
+      transform: scale(1.05);
+    }
+  }
+
+  &__header {
+
+    &__img-input {
+      width: 300px;
+      margin: 36px 36px 0;
+    }
+
+    &__reference-input { margin-left: 36px; }
+
+    &__title {
+      @extend %title--h4;
+      font-family: $font-title !important;
+      width: 100%;
+      color: black;
+      border: none;
+    }
+
+    &__subtitle {
+      width: 540px;
+      display: block;
+      margin: 0 auto 24px;
+      border: none;
+
+      textarea {
+        width: 100%;
+        height: 180px;
+      }
+    }
+  }
+
+  &__main {
+
+    &__content {
+      padding-left: 0;
+
+      .angular-editor-textarea {
+        @extend .work-detail__content;
+      }
+    }
+
+    &__metadata {
+
+      &__id { color: $color--grey; }
+    }
+  }
+
+  &__footer {
+    padding: 30px 36px;
+    &__images {
+      padding: 0 0 90px;
+
+      ul { display: flex; }
+
+      li {
+        width: 25%;
+        margin: 12px 0 12px 24px;
+
+        img { width: 100%; }
+      }
+    }
+
+    .delete { border: none }
+    .save { font-size: 1.1em; }
+  }
+}
