@@ -6,6 +6,7 @@ body {
   // @extend %block--grey-dark;
   font-family: $font-body;
   overflow-x: hidden;
+  position: relative;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -13,7 +14,14 @@ body {
 
 // html { overflow: hidden;; }
 
-body { background-image: url('assets/images/lightpaperfibers.png') }
+body::before {
+  content: '';
+  @include abs();
+  @include size();
+  background-image: url('assets/images/lightpaperfibers.png');
+  opacity: .75;
+  z-index: -1;
+}
 
 html,
 body,

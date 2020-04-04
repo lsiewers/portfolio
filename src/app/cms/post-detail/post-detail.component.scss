@@ -9,11 +9,31 @@
   }
 }
 
+::ng-deep .angular-editor-textarea {
+  @extend .content;
+
+  border: 1px solid $color--grey-light !important;
+  outline: none !important;
+  appearance: none !important;
+  resize: none !important;
+  transition:
+    transform 0.12s ease-out;
+  transform: scale(1);
+  transform-origin: center top;
+
+  &:focus {
+    transform: scale(1.05);
+  }
+}
+
+::ng-deep .angular-editor-placeholder { display: none !important }
+
 .cms-detail {
   input, button, textarea {
     appearance: none;
     background: inherit;
     max-width: 100%;
+    resize: none;
 
     font-family: $font-body;
   }
@@ -32,6 +52,7 @@
 
     &::placeholder { opacity: .4; }
     &:focus {
+      outline: none;
       transform: scale(1.05);
     }
   }

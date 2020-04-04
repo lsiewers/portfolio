@@ -9,17 +9,18 @@
 .work-detail {
 
   &__main {
-    padding: 48px 36px;
+    padding: 48px 24px;
     max-width: 1200px;
     display: flex;
     margin: 0 auto;
-    background-color: white;
+
+    @include portable { @include flexbox(column-reverse); }
+    @include tablet { padding: 0 48px }
   }
 
   &__back-to-home {
     @include flexbox(row, center, center);
     padding: 24px 36px;
-    background-color: white;
     a { color: $color--grey-dark; }
   }
 }

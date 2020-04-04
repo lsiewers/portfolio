@@ -11,7 +11,7 @@
 
   <main class="work-detail__main">
     <!-- Content -->
-    <section class="work-detail__content" [innerHTML]="data.details">
+    <section class="work-detail__content content" [innerHTML]="data.details">
     </section>
 
     <!-- Metadata -->
@@ -76,5 +76,5 @@
 <app-work *ngIf="projectFilter && currentPage" [projectFilter]="projectFilter" #workComponent></app-work>
 
 <div class="work-detail__back-to-home">
-  <a [routerLink]="['/']" class="button button--dark">< Terug naar Home</a>
+  <a [routerLink]="['/']" class="button button--dark">&#8592; Terug</a>
 </div>

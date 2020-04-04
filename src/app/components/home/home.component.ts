@@ -7,9 +7,23 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  moreInfo = false;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  toggleMoreInfo() {
+    console.log(this.moreInfo);
+
+    this.moreInfo = !this.moreInfo;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    console.log('click');
+
+    this.moreInfo ? this.moreInfo = false : null;
   }
 }

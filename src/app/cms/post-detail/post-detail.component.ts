@@ -16,11 +16,11 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     editable: true,
     spellcheck: true,
     height: '30rem',
-    minHeight: '25rem',
+    minHeight: '30rem',
     placeholder: 'Enter text here...',
     translate: 'no',
     defaultParagraphSeparator: 'p',
-    defaultFontName: 'Questrial',
+    defaultFontName: '',
     toolbarHiddenButtons: [
       [
         'indent',
@@ -46,6 +46,14 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
       {
         name: 'Highlight',
         class: 'highlight'
+      },
+      {
+        name: 'Button',
+        class: 'button'
+      },
+      {
+        name: 'Button Outlined',
+        class: 'button button--dark'
       }
     ]
   };

@@ -19,6 +19,7 @@ import { DashboardComponent } from './cms/posts/dashboard.component';
 import { PostDetailComponent } from './cms/post-detail/post-detail.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MoreInfoComponent } from './components/more-info/more-info.component';
 
 @NgModule({
    declarations: [
@@ -29,7 +30,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
       WorkDetailComponent,
       ContactComponent,
       DashboardComponent,
-      PostDetailComponent
+      PostDetailComponent,
+      MoreInfoComponent
    ],
    imports: [
       BrowserModule,

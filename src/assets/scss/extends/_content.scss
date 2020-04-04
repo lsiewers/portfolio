@@ -1,0 +1,82 @@
+.content {
+  p {
+    font-family: $font-serif;
+    line-height: 1.6;
+    margin-top: 48px;
+    font-size: 1.15em;
+    color: $color--grey-dark;
+  }
+
+  pre {
+    background-color: $color--grey-light;
+    font-family: $font-mono;
+    margin-top: 18px;
+    padding: 30px 6px;
+    line-height: 1.6;
+    border-radius: 24px;
+  }
+
+  & > p:first-child {
+    font-size: 1.5em;
+    line-height: 1.8;
+
+    @include portable { font-size: 1.38em; }
+
+    &::first-letter {
+      border: solid 2px $color--grey-light;
+      font-size: 2.1em;
+      line-height: 1;
+      display: inline-block;
+      padding: 0px 6px;
+      margin-right: 6px;
+      border-radius: 12px;
+    }
+  }
+
+  span.highlight {
+    position: relative;
+
+    &::before {
+      content: '';
+      @include abs(0, unset, unset, 0);
+      @include size(100%, calc(100% + 6px));
+      display: block;
+      background-color: $color--grey-light;
+      z-index: -1;
+    }
+  }
+
+  span.quote {
+    position: relative;
+    left: -24px;
+    margin-top: 30px;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    font-size: 2.4em;
+    line-height: 1.5;
+    color: $color--grey;
+    z-index: 1;
+
+    @include portable { font-size: 1.6em; }
+
+    &::before {
+      content: '\201C';
+      // font-family: $font-title;
+      @include rel(42px, unset, unset, .25em);
+      color: $color--grey-light;
+      font-size: 3.6em;
+      line-height: .1;
+      z-index: -1;
+    }
+  }
+
+  img {
+    width: 100%;
+    border-radius: 30px;
+  }
+
+  .button {
+    font-family: $font-body;
+  }
+}

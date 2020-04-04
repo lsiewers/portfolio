@@ -7,6 +7,16 @@
     z-index: -1;
     position: relative;
 
+    @include portable {
+      width: 100%;
+      height: auto;
+
+      img {
+        display: block;
+        position: unset !important;
+      }
+    }
+
     &.top { @include flexbox(row, flex-start) }
     &.center { @include flexbox(row, center) }
     &.bottom { @include flexbox(row, flex-end) }

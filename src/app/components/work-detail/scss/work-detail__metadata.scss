@@ -1,5 +1,6 @@
 .work-detail__metadata {
   width: 480px;
+  min-width: 320px;
 
   &__list {
     display: flex;
@@ -8,8 +9,17 @@
     &__item {
       margin: 12px 0;
       width: 100%;
+      color: $color--grey-dark;
 
       &.purpose, &.focus, &.client, &.budget { width: 50%; }
+      &.tools p,
+      &.collaboration p {
+        display: inline;
+
+        &:not(:last-child)::after {
+          content: ', ';
+        }
+      }
 
       h1, p { margin: 6px 0; }
 
@@ -17,7 +27,14 @@
         text-transform: uppercase;
         font-size: .75em;
       }
+
       p { text-transform: capitalize; }
+
+      @include portable {
+        &.purpose, &.focus, &.client, &.budget { width: 40%; }
+        font-size: 1.2em;
+        text-size-adjust:100%
+      }
     }
   }
 }
