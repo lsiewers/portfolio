@@ -1,4 +1,11 @@
 .content {
+
+  h1, h2, h3, h4 { margin: 2.1em 0 0em; }
+  h1 { @extend %title--h2; }
+  h2 { @extend %title--h3; }
+  h3 { @extend %title--h4; }
+  h4 { @extend %title--h5; }
+
   p {
     font-family: $font-serif;
     line-height: 1.6;

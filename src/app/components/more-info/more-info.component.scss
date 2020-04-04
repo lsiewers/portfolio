@@ -1,0 +1,13 @@
+@import '../../../assets/scss/all';
+
+.more-info {
+  max-width: 640px;
+  padding: 0 24px;
+  margin: 90px auto;
+
+  &__back-to-home {
+    @include flexbox(row, center, center);
+    padding: 24px 36px;
+    a { color: $color--grey-dark; }
+  }
+}

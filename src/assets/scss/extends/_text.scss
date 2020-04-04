@@ -33,3 +33,8 @@
   font-size: 1.6em;
 };
 
+%title--h5 {
+  @extend %title;
+  font-size: 1.4em;
+};
+
