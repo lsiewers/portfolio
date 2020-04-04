@@ -154,7 +154,6 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
 
   imageLoaded() {
     this.loadedImages++;
-    console.log(this.loadedImages);
 
     if (this.loadedImages >= this.showItems.length - 1) { this.loadMasonry(); }
   }

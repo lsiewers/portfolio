@@ -18,7 +18,7 @@ body::before {
   content: '';
   @include abs();
   @include size();
-  background-image: url('assets/images/lightpaperfibers.png');
+  background-image: url('assets/images/paper-texture.png');
   opacity: .75;
   z-index: -1;
 }

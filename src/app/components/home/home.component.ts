@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, Inject, AfterViewInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +10,31 @@ import { DOCUMENT } from '@angular/common';
 export class HomeComponent implements OnInit {
   moreInfo = false;
 
-  constructor() { }
+  constructor(
+    private meta: Meta,
+    private titleService: Title
+  ) {
+    this.updateMetadata();
+  }
 
   ngOnInit() {
+  }
+
+  updateMetadata() {
+    this.titleService.setTitle('Luuk Siewers, Interaction Designer');
+    this.meta.updateTag({ name: 'title', content: 'Luuk Siewers, Interaction Designer' });
+    this.meta.updateTag({ property: 'og:title', content: 'Luuk Siewers, Interaction Designer'});
+    this.meta.updateTag({ name: 'twitter:title', content: 'Luuk Siewers, Interaction Designer'});
+
+    this.meta.updateTag({ name: 'description', content: 'Mostly interested in creating and improving applied experiences using design methods and technology.' });
+    this.meta.updateTag({ property: 'og:description', content: 'Mostly interested in creating and improving applied experiences using design methods and technology.' });
+    this.meta.updateTag({ property: 'twitter:description', content: 'Mostly interested in creating and improving applied experiences using design methods and technology.' });
+
+    this.meta.updateTag({ property: 'og:url', content: 'https://luuksiewers.nl/' });
+    this.meta.updateTag({ property: 'twitter:url', content: 'https://luuksiewers.nl/' });
+
+    this.meta.updateTag({ property: 'og:image', content: 'https://luuksiewers.nl/assets/images/...' });
+    this.meta.updateTag({ property: 'twitter:image', content: 'https://luuksiewers.nl/assets/images/...' });
   }
 
   toggleMoreInfo() {

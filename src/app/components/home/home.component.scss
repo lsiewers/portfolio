@@ -1,5 +1,13 @@
 @import '../../../assets/scss/all';
 
+.main-title {
+  @extend %centralize--horizontal;
+  @extend %title--h4;
+  top: 0;
+  // position: fixed;
+  z-index: 999;
+}
+
 .home {
   @include flexbox(column, center);
   font-size: 1.1em;
