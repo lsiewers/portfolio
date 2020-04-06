@@ -78,10 +78,10 @@ export class WorkDetailComponent implements OnDestroy {
     this.workService.getWorkPost(projectTitle)
       .then(post => {
         this.data = post;
-        if (!isUndefined(post)) { this.updateMetadata(); }
-        return projectTitle !== '' ?
-          this.projectFilter = post.metadata.find(subdata => subdata.type === 'focus')
-          : null;
+      //   if (!isUndefined(post)) { this.updateMetadata(); }
+      //   return projectTitle !== '' ?
+      //     this.projectFilter = post.metadata.focus : null;
+      // });
       });
   }
 

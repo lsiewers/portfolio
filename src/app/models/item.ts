@@ -9,39 +9,19 @@ export interface Item {
     videoUrl?: string;
     videoPlaying?: boolean;
   };
-  filterComplete?: Array<boolean>;
-  metadata: [
-    {
-      type: 'focus';
-      values: Array<string>;
-    },
-    {
-      type: 'purpose',
-      values: string
-    },
-    {
-      type: 'tools',
-      values: Array<string>;
-    },
-    {
-      type: 'budget',
-      values: string
-    },
-    {
-      type: 'client',
-      values: Array<string>
-    },
-    {
-      type: 'collaboration',
-      values: 'solo' | Array<{
-        name: string,
-        url?: string
-      }>
-    },
-    {
-      type: 'finish date',
-      values: Date
-    }
-  ];
+  metadata: {
+    focus: Array<string>,
+    purpose: string,
+    tools: Array<string>,
+    budget: string,
+    client: Array<string>,
+    collaboration: 'solo' | Array<{
+      name: string,
+      url?: string
+    }>,
+    finishDate: Date
+  };
   details: InnerHTML;
+  filterComplete?: Array<boolean>;
+  imageLoaded?: boolean;
 }

@@ -18,18 +18,18 @@
     <aside class="work-detail__metadata">
       <ul class="work-detail__metadata__list">
         <li
-          *ngFor="let data of data.metadata"
-          class="work-detail__metadata__list__item {{data.type}}"
+          *ngFor="let metadata of data.metadata | keyvalue"
+          class="work-detail__metadata__list__item {{metadata.key}}"
         >
-          <h1>{{data.type}}</h1>
-          <p *ngIf="!isArray(data.values) && data.type !== 'finish date'">{{data.values}}</p>
-          <time *ngIf="data.type === 'finish date'">{{data.values | date}}</time>
-          <ng-container *ngIf="isArray(data.values) && data.type !== 'collaboration'">
-            <p *ngFor="let value of data.values">{{value}}</p>
+          <h1 *ngIf="isArray(metadata.value) ? metadata.value[0].length > 0 : metadata.value.length > 0">{{metadata.key}}</h1>
+          <p *ngIf="!isArray(metadata.value) && metadata.key !== 'finishDate'">{{metadata.value}}</p>
+          <time *ngIf="metadata.key === 'finishDate'">{{metadata.value | date}}</time>
+          <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'collaboration'">
+            <p *ngFor="let value of metadata.value">{{value}}</p>
           </ng-container>
           <!-- collaboration -->
-          <ng-container *ngIf="isArray(data.values) && data.type === 'collaboration'">
-            <a *ngFor="let value of data.values" [href]="value.url">{{value.name}}</a>
+          <ng-container *ngIf="isArray(metadata.value) && metadata.key === 'collaboration'">
+            <a *ngFor="let value of metadata.value" [href]="value.url">{{value.name}}</a>
           </ng-container>
         </li>
       </ul>

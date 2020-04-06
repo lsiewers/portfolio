@@ -34,36 +34,15 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
         videoUrl: ''
       },
       details: null,
-      metadata: [
-        {
-          type: 'focus',
-          values: ['']
-        },
-        {
-          type: 'purpose',
-          values: ''
-        },
-        {
-          type: 'tools',
-          values: ['']
-        },
-        {
-          type: 'budget',
-          values: ''
-        },
-        {
-          type: 'client',
-          values: ['']
-        },
-        {
-          type: 'collaboration',
-          values: [{name: 'Luuk', url: '//luuksiewers.nl'}]
-        },
-        {
-          type: 'finish date',
-          values: new Date('Wed Mar 25 2015 01:00:00 GMT+0100 (Central European Standard Time)')
-        }
-      ],
+      metadata: {
+        focus: [''],
+        purpose: '',
+        tools: [''],
+        budget: '',
+        client: [''],
+        collaboration: [{name: 'Luuk', url: '//luuksiewers.nl'}],
+        finishDate: new Date('Wed Mar 25 2015 01:00:00 GMT+0100 (Central European Standard Time)')
+      },
       filterComplete: null
     };
   }

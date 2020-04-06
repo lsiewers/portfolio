@@ -10,15 +10,15 @@
     <ul class="work__header__filters" *ngIf="pageType === 'home'">
       <li
         class="work__header__filters__filter"
-        *ngFor="let filter of filterClass.filters"
+        *ngFor="let filter of filters"
         [class.tab--open]="filter.openTab"
         [class.tab--closed]="!filter.openTab"
       >
         <span
           class="work__header__filters__filter__label button button--dark"
-          (clickOutside)="filter.openTab ? filterClass.toggleFilterTab(filter) : null"
+          (clickOutside)="filter.openTab ? toggleFilterTab(filter) : null"
           [exclude]="'.work__header__filters__filter__dropdown'"
-          (click)="filterClass.toggleFilterTab(filter)"
+          (click)="toggleFilterTab(filter)"
         >{{filter.type}}</span>
         <!-- arrow icon -->
         <ul class="work__header__filters__filter__dropdown">
@@ -29,8 +29,8 @@
               <li
                 class="work__header__filters__filter__dropdown__value"
                 *ngFor="let value of filter.values"
-                (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
-                [class.filter--active]="filterClass.findActiveFilter(filter.type, value)"
+                (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
+                [class.filter--active]="isActiveFilter(filter.type, value)"
               >
                 {{value}}
               </li>
@@ -45,8 +45,8 @@
                   <li
                     *ngFor="let value of categorie.values;"
                     class="work__header__filters__filter__dropdown__value"
-                    [class.filter--active]="filterClass.findActiveFilter(filter.type, value)"
-                    (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
+                    [class.filter--active]="isActiveFilter(filter.type, value)"
+                    (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
                   >
                     {{value}}
                   </li>
@@ -60,15 +60,15 @@
 
     <p
       class="work__header__filters__text"
-      [class.no-filters]="filterClass.activeFilters.length <= 0"
+      [class.no-filters]="activeFilters.length <= 0"
       *ngIf="pageType === 'home'"
     >
-      {{filterClass.activeFilters.length > 0 ? '' : 'No filter applied'}}
-      <ng-container *ngFor="let filter of filterClass.activeFilters">
+      {{activeFilters.length > 0 ? '' : 'No filter applied'}}
+      <ng-container *ngFor="let filter of activeFilters">
         <div
           class="button"
           *ngFor="let value of filter.values"
-          (click)="filterClass.toggleFilter({type: filter.type, values: [value]}); filterClass.setFilteredItems()"
+          (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
         >
           {{ value }}
         </div>
@@ -88,11 +88,12 @@
     <ul
       class="work__items__list"
       #container
-      [ngClass]="{'is--loading': !masonryLoaded, 'is--loaded': masonryLoaded}"
     >
       <li
+        [class.is--loading]="!masonryLoaded"
+        [class.is--loaded]="item.imageLoaded && masonryLoaded"
         class="work__items__list__item"
-        *ngFor="let item of showItems"
+        *ngFor="let item of items"
         (click)="routeToPost(item.title); hoverLeave($event)"
         (mousemove)="hoverAnimation($event)"
         (mouseleave)="hoverLeave($event)"
@@ -102,7 +103,7 @@
               <img
                 [src]="item.media.imageUrl"
                 [alt]="item.title"
-                (load)="imageLoaded();"
+                (load)="imageLoaded(item);"
                 *ngIf="item.media.imageUrl"
               >
               <!-- <video nocontrols [hidden]="!item.media.videoPlaying">
@@ -111,8 +112,8 @@
           </figure>
           <div>
             <ul *ngIf="item.metadata">
-              <li>{{getMetadataValue(item.metadata, 'focus')}}</li>
-              <li>{{getMetadataValue(item.metadata, 'purpose')}}</li>
+              <li>{{ item.metadata.focus }}</li>
+              <li>{{ item.metadata.purpose }}</li>
             </ul>
             <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
             <p class="title grey" title="{{item.subtitle}}">{{item.subtitle}}</p>
@@ -121,9 +122,9 @@
       </li>
     </ul>
     <a
-      class="work__items__show-button button button--light"
+      class="work__items__show-button button button--dark"
       *ngIf="items.length > showAmount"
-      (click)="showAmount = showAmount + 3; showItems = filterClass.getFilteredItems()"
+      (click)="showAmount = showAmount + 3; filterClass.setFilteredItems();"
     >
       Show More
     </a>

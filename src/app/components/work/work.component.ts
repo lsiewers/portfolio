@@ -1,15 +1,10 @@
-// tslint:disable-next-line: max-line-length
 import {
   Component,
-  ViewChild,
-  ElementRef,
   ChangeDetectorRef,
   AfterContentChecked,
   HostListener,
   Input,
   AfterViewInit,
-  OnChanges,
-  SimpleChanges
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
@@ -17,8 +12,6 @@ import Bricks, { BricksInstance } from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
-import { FilterClass } from './filterClass';
-import { Observable, BehaviorSubject, empty } from 'rxjs';
 import { isUndefined } from 'util';
 
 @Component({
@@ -30,11 +23,11 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   @Input() projectFilter: Filter;
 
   // filters
-  filterClass: FilterClass;
+  activeFilters: Filter[] = [];
+  filters: Filter[] = [];
 
   // items
   items: Item[];
-  showItems: Item[];
 
   // page/url
   pageType: string;
@@ -60,20 +53,45 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
 
   ngAfterViewInit(): void {
-    this.filterClass = new FilterClass(this);
     this.setPageType();
-    this.getItems().then(items => {
-      this.items = items;
-      if (this.pageType === 'work') {
-        this.filterClass.toggleFilter(this.projectFilter);
-        this.filterClass.setFilteredItems(this.projectTitle);
-      } else {
-        this.filterClass.setFilteredItems();
-        this.filtersService.getFilters().then(filters => this.filterClass.filters = filters);
-      }
+    this.pageType === 'work' ?
+      this.toggleFilter(this.projectFilter) :
+      this.filtersService.getFilters().then(filters => this.filters = filters);
+    this.getFilteredItems();
+  }
+
+  isActiveFilter(type: string, value: string) {
+    const filteredType = this.activeFilters.find(activeFilter => activeFilter.type === type);
+    return typeof filteredType === 'undefined' ? false : filteredType.values.includes(value);
+  }
+
+  // filter methods
+  // filter tab (open/close)
+  toggleFilterTab(filter: Filter) {
+    const activatedTabs = [];
+    if (!filter.openTab) {
+      let delay;
+      this.filters.find(f => f.openTab === true) ? delay = true : delay = false;
+      this.filters.forEach(f => {
+        if (f.openTab === undefined) { f.openTab = false; }
+        // tslint:disable-next-line: no-unused-expression
+        if (f !== filter) { f.openTab ? f.openTab = false : null;
+        } else if (delay) {
+          setTimeout(() => f.openTab = true, 480);
+        } else { f.openTab = true; }
+
+        activatedTabs.push(f.openTab);
+      });
+    } else { filter.openTab = false; }
+  }
+
+  toggleFilter(filter: Filter) { this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters); }
+
+  getFilteredItems() {
+    this.filtersService.getFilteredItems(this.activeFilters).then(data => {
+      this.items = data;
       this.loadMasonry();
     });
-
   }
 
   // set-up
@@ -103,48 +121,30 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   }
 
   loadMasonry() {
-    setTimeout(() => {
-      this.bricks = Bricks({
-        container: '.work__items__list',
-        packed: 'packed',
-        sizes: [
-          { mq: '820px', columns: 2, gutter: 36 },
-          { mq: '900px', columns: 2, gutter: 60 },
-          { mq: '1280px', columns: 3, gutter: 36 },
-          { mq: '1400px', columns: 3, gutter: 60 }
-        ]
-      });
-      this.bricks.pack();
-      this.masonryLoaded = true;
-    }, 400);
-  }
+    this.loadedImages = 0;
+    this.items.forEach(item => item.imageLoaded = false);
+    console.log('pack');
 
-  // metadata per item
-  getMetadataValue(item: Item['metadata'], title: string) {
-    return item.find(data => data.type === title).values;
-  }
 
-  showMetadata(item: Item, type: string): any {
-    const values: any = item.metadata.filter(data => data.type === type);
-
-    // if array, return string with spaces. Else return initial string
-    return values[0].value instanceof Array ? ((values[0].value) as Array<string>).join(', ') : values[0].value;
+    // setTimeout(() => {
+    this.bricks = Bricks({
+      container: '.work__items__list',
+      packed: 'packed',
+      sizes: [
+        { mq: '820px', columns: 2, gutter: 36 },
+        { mq: '900px', columns: 2, gutter: 60 },
+        { mq: '1280px', columns: 3, gutter: 36 },
+        { mq: '1400px', columns: 3, gutter: 60 }
+      ]
+    });
+    this.bricks.pack();
+    this.masonryLoaded = true;
+    // }, 400);
   }
 
   // Other
   projectDetailRoute(e: string, projectFilter: Filter) {
     this.projectTitle = decodeURI(e).substr(1);
-
-    if (projectFilter === this.projectFilter) {
-      this.filterClass.setFilteredItems(this.projectTitle);
-    } else {
-      if (!isUndefined(this.projectFilter)) {
-        this.filterClass.toggleFilter(this.projectFilter);
-        this.filterClass.toggleFilter(projectFilter);
-        this.projectFilter = projectFilter;
-        this.filterClass.setFilteredItems(this.projectTitle);
-      }
-    }
   }
 
   routeToPost(title: string) {
@@ -152,10 +152,11 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
     : title]);
   }
 
-  imageLoaded() {
+  imageLoaded(item: Item) {
     this.loadedImages++;
+    item.imageLoaded = true;
 
-    if (this.loadedImages >= this.showItems.length - 1) { this.loadMasonry(); }
+    if (this.loadedImages >= this.items.length - 1) { this.loadMasonry(); }
   }
 
   // Hover animations

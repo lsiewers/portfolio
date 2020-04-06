@@ -23,7 +23,7 @@
     border-radius: 24px;
   }
 
-  & > p:first-child {
+  & > p:first-of-type {
     font-size: 1.5em;
     line-height: 1.8;
 
@@ -42,13 +42,15 @@
 
   span.highlight {
     position: relative;
+    white-space: nowrap;
 
     &::before {
       content: '';
-      @include abs(0, unset, unset, 0);
-      @include size(100%, calc(100% + 6px));
+      @include abs(.75em, unset, unset, 0);
+      @include size(100%, 12px);
       display: block;
-      background-color: $color--grey-light;
+      opacity: .5;
+      background-color: $color--grey;
       z-index: -1;
     }
   }

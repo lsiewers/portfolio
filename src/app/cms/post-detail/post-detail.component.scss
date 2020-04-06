@@ -6,12 +6,13 @@
     border: none !important;
     background: none !important;
     appearance: none;
+    outline: none !important;
   }
 }
 
 ::ng-deep .angular-editor-textarea {
   @extend .content;
-
+  cursor: text;
   border: 1px solid $color--grey-light !important;
   outline: none !important;
   appearance: none !important;
@@ -31,18 +32,19 @@
 .cms-detail {
   input, button, textarea {
     appearance: none;
-    background: inherit;
+    background: transparent;
     max-width: 100%;
     resize: none;
 
     font-family: $font-body;
   }
 
+  textarea { font-family: $font-serif; }
+
   input:not([type='file']), textarea {
     margin-top: 12px; padding: .5em 1em;
     box-sizing: border-box;
     appearance: none;
-    background-color: white;
     border: 1px solid $color--grey-light;
     font-size: 1em;
     transition:
@@ -117,6 +119,8 @@
         img { width: 100%; }
       }
     }
+
+    &__buttons { @include flexbox(row, center, center) }
 
     .delete { border: none }
     .save { font-size: 1.1em; }

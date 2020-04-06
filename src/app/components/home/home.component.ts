@@ -33,8 +33,8 @@ export class HomeComponent implements OnInit {
     this.meta.updateTag({ property: 'og:url', content: 'https://luuksiewers.nl/' });
     this.meta.updateTag({ property: 'twitter:url', content: 'https://luuksiewers.nl/' });
 
-    this.meta.updateTag({ property: 'og:image', content: 'https://luuksiewers.nl/assets/images/...' });
-    this.meta.updateTag({ property: 'twitter:image', content: 'https://luuksiewers.nl/assets/images/...' });
+    this.meta.updateTag({ property: 'og:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
+    this.meta.updateTag({ property: 'twitter:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
   }
 
   toggleMoreInfo() {

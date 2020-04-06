@@ -39,34 +39,33 @@
       <small class="cms-detail__main__metadata__id">ID: {{data.id}}</small>
       <ul class="work-detail__metadata__list">
         <li
-          *ngFor="let subdata of data.metadata"
-          class="work-detail__metadata__list__item {{subdata.type}}"
+          *ngFor="let metadata of data.metadata | keyvalue;"
+          class="work-detail__metadata__list__item {{metadata.key}}"
         >
-          <h1>{{subdata.type}}</h1>
-          <p *ngIf="!isArray(subdata.values)">
-            <input [(ngModel)]="subdata.values" type="text">
+          <h1>{{ metadata.key }}</h1>
+          <p *ngIf="!isArray(metadata.value)">
+            <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="text">
           </p>
-          <ng-container *ngIf="isArray(subdata.values) && subdata.type !== 'finish date' && subdata.type !== 'collaboration'">
-            <p *ngFor="let value of subdata.values; let i = index">
+          <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'finishDate' && metadata.key !== 'collaboration'">
+            <p *ngFor="let value of metadata.value; let i = index">
               <input
-                [(ngModel)]="subdata.values[i]"
+                [(ngModel)]="metadata.value[i]"
                 [ngModelOptions]="{'updateOn': 'blur'}"
                 type="text"
-                (keyup.enter)="addField(subdata.type, $event)"
-                (keyup.backspace)="removeField(subdata.type, i, $event)"
+                (keyup.enter)="addField(metadata, $event)"
+                (keyup.backspace)="removeField(metadata, i, $event)"
               >
             </p>
           </ng-container>
-          <p *ngIf="subdata.type === 'collaboration'">
-            <input *ngFor="let value of subdata.values" [(ngModel)]="value.name" type="text">
-            <input *ngFor="let value of subdata.values; let i = index" [(ngModel)]="value.url" type="text"
-            (keyup.enter)="addField(subdata.type, $event)"
-            (keyup.backspace)="removeField(subdata.type, i, $event)">
+          <p *ngIf="metadata.key === 'collaboration'">
+            <input *ngFor="let value of metadata.value | keyvalue; let i = index" [(ngModel)]="metadata.value[i].name" type="text">
+            <input *ngFor="let value of metadata.value | keyvalue; let i = index" [(ngModel)]="metadata.value[i].url" type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], $event)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)">
             <!-- <input [(ngModel)]="subdata.values" type="date"> -->
           </p>
-          <p *ngIf="subdata.type === 'finish date'">
-            {{subdata | json}}
-            <input [(ngModel)]="subdata.values" type="date">
+          <p *ngIf="metadata.key === 'finishDate'">
+            <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="date">
           </p>
         </li>
       </ul>
@@ -84,7 +83,9 @@
       </ul>
       <input class="button button--dark" type="file" accept=".png, .jpeg, .jpg" (change)="uploadImage($event)">
     </div>
-    <button class="button button--dark delete" (click)="delete();">Delete</button>
-    <button class="button button--dark save" (click)="save()">Save</button>
+    <div class="cms-detail__footer__buttons">
+      <button class="button button--dark delete" (click)="delete();">Delete</button>
+      <button class="button button--dark save" (click)="save()">Save</button>
+    </div>
   </footer>
 </article>

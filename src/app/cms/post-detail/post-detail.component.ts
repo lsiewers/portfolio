@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { Item } from 'src/app/models/item';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { WorkService } from 'src/app/services/work.service';
+import { isArray } from 'util';
 
 @Component({
   selector: 'app-post-detail',
@@ -66,6 +66,8 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef
   ) {
     this.activeRouter.params.subscribe(data => this.workService.getWorkPost(decodeURI(data.id)).then((post: Item) => {
+      console.log(post);
+
       this.data = post;
       this.updateImages();
     }));
@@ -77,24 +79,19 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
 
   }
 
+  trackById(index: number, metadata) {
+    return metadata
+  }
+
   isArray(value: any) {
-    return !(typeof value === 'string');
+    return isArray(value);
   }
 
-  addField(metadataType: string) {
-    (this.data.metadata
-    .find(subdata => subdata.type === metadataType)
-    .values as string[]).push('');
-  }
+  addField(metadata) { metadata.value.push(''); }
 
-  removeField(metadataType: string, index: number, e: Event) {
+  removeField(metadata: any, index: number, e: Event) {
     const targetEl: HTMLInputElement = e.target as HTMLInputElement;
-    const metadataValues = this.data.metadata
-      .find(subdata => subdata.type === metadataType)
-      .values as string[];
-
-
-    if (!targetEl.value && index > 0) { metadataValues.pop(); }
+    if (!targetEl.value && index > 0) { metadata.value.pop(); }
   }
 
   uploadImage(e: Event) {
@@ -125,6 +122,8 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
   }
 
   save() {
+    console.log(this.data);
+
     this.workService.updateWorkPost(this.data).then(() => this.router.navigate(['/cms']));
   }
 

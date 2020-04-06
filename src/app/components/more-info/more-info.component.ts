@@ -30,9 +30,6 @@ export class MoreInfoComponent implements OnInit {
 
     this.meta.updateTag({ property: 'og:url', content: 'https://luuksiewers.nl/about-me' });
     this.meta.updateTag({ property: 'twitter:url', content: 'https://luuksiewers.nl/about-me' });
-
-    this.meta.updateTag({ property: 'og:image', content: 'https://luuksiewers.nl/assets/images/...' });
-    this.meta.updateTag({ property: 'twitter:image', content: 'https://luuksiewers.nl/assets/images/...' });
   }
 
 }

@@ -17,16 +17,6 @@
       height: unset !important;
     }
 
-    &.is--loading {
-      transition: opacity .3s ease-out;
-      opacity: 0;
-    }
-
-    &.is--loaded {
-      transition: opacity .3s .2s ease-in;
-      opacity: 1;
-    }
-
     &__item {
       min-width: 240px; max-width: 360px;
       // widsth: 360px;
@@ -43,7 +33,8 @@
       overflow: hidden;
       transition:
         box-shadow .18s ease-in,
-        transform .24s ease-in;
+        transform .24s ease-in,
+        opacity .3s .2s ease-in;
       cursor: pointer;
 
       &:hover {
@@ -52,6 +43,9 @@
           transform .18s ease-out;
         box-shadow: 0 9px 24px rgba($color--grey, .18);
       }
+
+      &.is--loading { opacity: 0; }
+      &.is--loaded { opacity: 1; }
 
       @include portable {
         max-width: unset;

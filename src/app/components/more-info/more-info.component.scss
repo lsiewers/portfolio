@@ -5,6 +5,10 @@
   padding: 0 24px;
   margin: 90px auto;
 
+  &__portrait {
+    max-width: 180px;
+  }
+
   &__back-to-home {
     @include flexbox(row, center, center);
     padding: 24px 36px;
