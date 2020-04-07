@@ -15,7 +15,7 @@ constructor(
 ) { }
 
   getFilters() {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<any>((resolve) => {
       this.db.collection('/filters').valueChanges()
         .subscribe(snapshots => resolve(snapshots));
     });
@@ -46,7 +46,7 @@ constructor(
     return activeFilters;
   }
 
-  getFilteredItems(activeFilters: Filter[], showAmount?: number): Promise<Item[]> {
-    return this.workService.getWorkQuery(activeFilters, showAmount);
+  getFilteredItems(activeFilters: Filter[]): Promise<Item[]> {
+    return this.workService.getWorkQuery(activeFilters);
   }
 }

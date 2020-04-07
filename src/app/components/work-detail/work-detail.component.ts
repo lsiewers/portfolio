@@ -35,6 +35,7 @@ export class WorkDetailComponent implements OnDestroy {
   opacity = 1;
   currentPage: string;
   projectFilter: Filter;
+  // tslint:disable-next-line: variable-name
   _routerSubscription: Subscription;
 
   constructor(
@@ -78,10 +79,12 @@ export class WorkDetailComponent implements OnDestroy {
     this.workService.getWorkPost(projectTitle)
       .then(post => {
         this.data = post;
-      //   if (!isUndefined(post)) { this.updateMetadata(); }
-      //   return projectTitle !== '' ?
-      //     this.projectFilter = post.metadata.focus : null;
-      // });
+        if (!isUndefined(post)) { this.updateMetadata(); }
+        return projectTitle !== '' ?
+          this.projectFilter = {
+            type: Object.keys(post.metadata.focus)[0],
+            values: post.metadata.focus
+          } : null;
       });
   }
 

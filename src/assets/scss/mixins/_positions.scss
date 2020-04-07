@@ -8,7 +8,7 @@
   top: $top; right: $right; bottom: $bottom; left: $left;
 }
 
-@mixin fixed($top: unset, $right: unset, $bottom: unset, $left: unset) {
+@mixin fxd($top: unset, $right: unset, $bottom: unset, $left: unset) {
   position: fixed;
   top: $top; right: $right; bottom: $bottom; left: $left;
 }

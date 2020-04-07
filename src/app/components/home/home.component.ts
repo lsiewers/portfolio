@@ -8,8 +8,6 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  moreInfo = false;
-
   constructor(
     private meta: Meta,
     private titleService: Title
@@ -35,18 +33,5 @@ export class HomeComponent implements OnInit {
 
     this.meta.updateTag({ property: 'og:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
     this.meta.updateTag({ property: 'twitter:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
-  }
-
-  toggleMoreInfo() {
-    console.log(this.moreInfo);
-
-    this.moreInfo = !this.moreInfo;
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    console.log('click');
-
-    this.moreInfo ? this.moreInfo = false : null;
   }
 }

@@ -66,8 +66,6 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef
   ) {
     this.activeRouter.params.subscribe(data => this.workService.getWorkPost(decodeURI(data.id)).then((post: Item) => {
-      console.log(post);
-
       this.data = post;
       this.updateImages();
     }));

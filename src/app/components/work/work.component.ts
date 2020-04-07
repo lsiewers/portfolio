@@ -5,6 +5,7 @@ import {
   HostListener,
   Input,
   AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
@@ -12,14 +13,15 @@ import Bricks, { BricksInstance } from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
-import { isUndefined } from 'util';
+import { isUndefined, isNull } from 'util';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-work',
   templateUrl: './work.component.html',
   styleUrls: ['./work.component.scss']
 })
-export class WorkComponent implements AfterViewInit, AfterContentChecked {
+export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDestroy {
   @Input() projectFilter: Filter;
 
   // filters
@@ -29,14 +31,17 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   // items
   items: Item[];
 
+  previewOverlay = false;
+
   // page/url
   pageType: string;
   projectTitle: string;
+  // tslint:disable-next-line: variable-name
+  _routerSubscription: Subscription;
 
   // masonry
   bricks: BricksInstance;
   loadedImages = 0;
-  masonryLoaded = false;
   showAmount = 3;
   suggested = false;
 
@@ -55,7 +60,7 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   ngAfterViewInit(): void {
     this.setPageType();
     this.pageType === 'work' ?
-      this.toggleFilter(this.projectFilter) :
+      this.toggleFilter({ type: 'focus', values: this.projectFilter.values }) :
       this.filtersService.getFilters().then(filters => this.filters = filters);
     this.getFilteredItems();
   }
@@ -89,21 +94,22 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
 
   getFilteredItems() {
     this.filtersService.getFilteredItems(this.activeFilters).then(data => {
-      this.items = data;
-      this.loadMasonry();
+      this.pageType === 'work' ?
+        this.items = data.filter(item => item.title !== this.projectTitle) :
+        this.items = data;
     });
   }
 
   // set-up
-  async getItems(): Promise<Item[]> {
-    return await new Promise((resolve) => {
-      this.workService.getWorkList()
-        .then(data => resolve(data));
-      });
-  }
+  // async getItems(): Promise<Item[]> {
+  //   return await new Promise((resolve) => {
+  //     this.workService.getWorkList()
+  //       .then(data => resolve(data));
+  //     });
+  // }
 
   setPageType() {
-    this.activeRouter.url.subscribe(params => {
+    this._routerSubscription = this.activeRouter.url.subscribe(params => {
       const url = params.length ? params[0].path : undefined;
 
       if (typeof url === 'undefined') { this.pageType = 'home';
@@ -121,12 +127,6 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
   }
 
   loadMasonry() {
-    this.loadedImages = 0;
-    this.items.forEach(item => item.imageLoaded = false);
-    console.log('pack');
-
-
-    // setTimeout(() => {
     this.bricks = Bricks({
       container: '.work__items__list',
       packed: 'packed',
@@ -138,8 +138,6 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
       ]
     });
     this.bricks.pack();
-    this.masonryLoaded = true;
-    // }, 400);
   }
 
   // Other
@@ -154,28 +152,74 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked {
 
   imageLoaded(item: Item) {
     this.loadedImages++;
-    item.imageLoaded = true;
 
-    if (this.loadedImages >= this.items.length - 1) { this.loadMasonry(); }
+    if (this.loadedImages >= this.items.length) { this.loadMasonry(); }
   }
 
-  // Hover animations
-  hoverAnimation(e: MouseEvent) {
-    const target: HTMLElement = e.currentTarget as HTMLElement;
+  // Animations
+  hoverAnimation(e: MouseEvent, isPreview: boolean) {
+    console.log(isPreview);
 
-    const sensitivity = 0.1;
-    const x = (e.offsetX - target.offsetWidth / 2) * sensitivity;
-    const y = (e.offsetY - target.offsetHeight / 2) * sensitivity;
+    if (isUndefined(isPreview) || !isPreview) {
+      const target: HTMLElement = e.currentTarget as HTMLElement;
 
-    target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1.05) rotateX(${-y * 0.75}deg) rotateY(${x * 0.75}deg)`;
+      const sensitivity = 0.1;
+      const x = (e.offsetX - target.offsetWidth / 2) * sensitivity;
+      const y = (e.offsetY - target.offsetHeight / 2) * sensitivity;
+
+      target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1.05) rotateX(${-y * 0.75}deg) rotateY(${x * 0.75}deg)`;
+    }
   }
 
-  hoverLeave(e: MouseEvent) {
+  hoverLeave(e: MouseEvent, isPreview: boolean) {
+    if (isUndefined(isPreview) || !isPreview) {
+      this.resetTransform(e.currentTarget as HTMLElement);
+    }
+  }
+
+  resetTransform(item: HTMLElement) {
+    item.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg)';
+  }
+
+  toPreviewAnimation(e: MouseEvent, item: Item) {
+    this.previewOverlay = true;
+
     const target: HTMLElement = e.currentTarget as HTMLElement;
-    target.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg)';
+
+    // width of screen, element to center
+    // minus container's left and item's masonry position
+    const x =
+      window.innerWidth / 2 -
+      target.clientWidth / 2 -
+      target.parentElement.offsetLeft -
+      target.offsetLeft;
+
+    // minus container top position + item's height / margin to set at top of screen
+    // + scrollposition of htmlEL and minus masonry position
+    const y = -target.parentElement.offsetTop + target.clientHeight / 2 + window.scrollY - target.offsetTop;
+
+    target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1.2) rotateX(0deg) rotateY(0deg)`;
+    document.querySelector('html').style.overflow = 'hidden';
+
+    item.workPreview = true;
+  }
+
+  closePreview(item: Item, el?: HTMLElement, i?: number) {
+    isNull(el) ? el = document.querySelectorAll('.work__items__list__item')[i] as HTMLElement : null;
+
+    this.resetTransform(el);
+    this.previewOverlay = false;
+    setTimeout(() => {
+      item.workPreview = false;
+      document.querySelector('html').style.overflow = 'auto';
+    }, 300);
   }
 
   // Resize update
   @HostListener('window:resize')
   bricksUpdate() { this.bricks.resize(); }
+
+  ngOnDestroy(): void {
+    this._routerSubscription.unsubscribe();
+  }
 }

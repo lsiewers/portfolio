@@ -24,4 +24,5 @@ export interface Item {
   details: InnerHTML;
   filterComplete?: Array<boolean>;
   imageLoaded?: boolean;
+  workPreview?: boolean;
 }

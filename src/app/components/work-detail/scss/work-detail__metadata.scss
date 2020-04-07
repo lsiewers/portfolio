@@ -7,7 +7,6 @@
     flex-wrap: wrap;
 
     &__item {
-      margin: 24px 0 0;
       width: 100%;
       color: $color--grey-dark;
 
@@ -24,6 +23,7 @@
       h1, p { margin: 6px 0; }
 
       h1 {
+        margin-top: 24px;
         text-transform: uppercase;
         font-size: .75em;
       }

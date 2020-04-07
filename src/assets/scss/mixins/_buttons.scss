@@ -17,16 +17,16 @@
   }
 
   &--dark {
-    border: solid 0.1em rgba($color--grey-dark, 0.12);
+    border: solid 0.2em rgba($color--grey, 0.24);
     color: $color--grey-dark;
 
     &:hover {
-      background-color: rgba($color--grey-dark, 0.12);
+      background-color: rgba($color--grey, 0.24);
     }
   }
 
   &--light {
-    border: solid 0.1em rgba($color--grey-light, 0.09);
+    border: solid 0.2em rgba($color--grey-light, 0.09);
     color: $color--grey-light;
 
     &:hover {

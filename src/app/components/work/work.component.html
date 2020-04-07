@@ -1,4 +1,4 @@
-<article class="work container" *ngIf="items">
+<article class="work container" *ngIf="items?.length > 0">
   <header class="work__header">
     <h1
       class="work__header__title title centered grey"
@@ -56,15 +56,13 @@
         </ul>
       </li>
     </ul>
-    <!-- end filters -->
-
     <p
       class="work__header__filters__text"
       [class.no-filters]="activeFilters.length <= 0"
       *ngIf="pageType === 'home'"
     >
       {{activeFilters.length > 0 ? '' : 'No filter applied'}}
-      <ng-container *ngFor="let filter of activeFilters">
+      <ng-container *ngFor="let filter of activeFilters  | slice:0:showAmount">
         <div
           class="button"
           *ngFor="let value of filter.values"
@@ -74,7 +72,7 @@
         </div>
       </ng-container>
     </p>
-
+    <!-- end filters -->
     <p
       class="work__header__filters__text"
       *ngIf="pageType === 'work' && projectFilter">
@@ -85,18 +83,20 @@
 
   <main class="work__items">
     <!-- <p class="work__items__results">{{showItems.length ? showItems.length : 'No'}} {{showItems.length <= 1 ? 'result' : 'results'}}</p> -->
+    <div class="work__items__preview-overlay" [class.preview--active]="previewOverlay"></div>
     <ul
       class="work__items__list"
-      #container
+      [class.masonry--loaded]="items.length > 0"
     >
       <li
-        [class.is--loading]="!masonryLoaded"
-        [class.is--loaded]="item.imageLoaded && masonryLoaded"
         class="work__items__list__item"
-        *ngFor="let item of items"
-        (click)="routeToPost(item.title); hoverLeave($event)"
-        (mousemove)="hoverAnimation($event)"
-        (mouseleave)="hoverLeave($event)"
+        *ngFor="let item of items; let i = index"
+        (click)="item.workPreview ? null : toPreviewAnimation($event, item);"
+        (clickOutside)="item.workPreview ? closePreview(item, null, i) : null"
+        (keyup.esc)="item.workPreview ? closePreview(item, null, i) : null"
+        (mousemove)="hoverAnimation($event, item.workPreview)"
+        (mouseleave)="hoverLeave($event, item.workPreview)"
+        [class.state--preview]="item.workPreview"
       >
         <article>
           <figure>
@@ -111,12 +111,17 @@
               </video> -->
           </figure>
           <div>
-            <ul *ngIf="item.metadata">
-              <li>{{ item.metadata.focus }}</li>
-              <li>{{ item.metadata.purpose }}</li>
-            </ul>
             <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
-            <p class="title grey" title="{{item.subtitle}}">{{item.subtitle}}</p>
+            <p class="title grey" title="{{item.subtitle}}" *ngIf="item.workPreview">{{item.subtitle}}</p>
+            <ul *ngIf="item.metadata && item.workPreview">
+              <li>{{ item.metadata.purpose }} project</li>
+              <li>Focused on {{ item.metadata.focus }} design</li>
+              <li>
+                <ng-container *ngFor="let person of item.metadata.collaboration; let i = index">
+                  {{ person.name }} {{ i > 0 ? ', ' : null }}
+                </ng-container>
+              </li>
+            </ul>
           </div>
         </article>
       </li>
@@ -124,7 +129,7 @@
     <a
       class="work__items__show-button button button--dark"
       *ngIf="items.length > showAmount"
-      (click)="showAmount = showAmount + 3; filterClass.setFilteredItems();"
+      (click)="showAmount = showAmount + 3; getFilteredItems(); bricks.update()"
     >
       Show More
     </a>

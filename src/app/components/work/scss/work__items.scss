@@ -6,6 +6,16 @@
     text-align: center;
   }
 
+  &__preview-overlay {
+    @include abs(0, unset, unset, 0);
+    @include size;
+    background-color: rgba($color--grey, 0.0);
+    pointer-events: none;
+    transition: background-color 0.3s ease-out;
+
+    &.preview--active { background-color: rgba($color--grey, 0.24); }
+  }
+
   &__list {
     margin-top: $space--normal;
     // display: flex;
@@ -21,7 +31,8 @@
       min-width: 240px; max-width: 360px;
       // widsth: 360px;
       // border: solid 6px $color--black;
-      background-color: white;
+      // background-color: white;
+      background-image: url('/assets/images/paper-texture.png');
       border-radius: 18px;
       box-sizing: border-box;
       // padding: 1em 1em 1.25em;
@@ -35,7 +46,7 @@
         box-shadow .18s ease-in,
         transform .24s ease-in,
         opacity .3s .2s ease-in;
-      cursor: pointer;
+      opacity: 0;
 
       &:hover {
         transition:
@@ -44,8 +55,17 @@
         box-shadow: 0 9px 24px rgba($color--grey, .18);
       }
 
-      &.is--loading { opacity: 0; }
-      &.is--loaded { opacity: 1; }
+      &:not(.state--preview) {
+        cursor: pointer;
+
+        article { pointer-events: none; }
+      }
+
+      &.state--preview {
+        transition: transform .3s ease-out;
+      }
+
+      .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
 
       @include portable {
         max-width: unset;
@@ -54,7 +74,11 @@
         margin-top: 24px;
       }
 
-      article { pointer-events: none; }
+      &__close-preview {
+        @include abs(20px, 20px, unset, unset);
+        pointer-events: all !important;
+        z-index: 99;
+      }
 
       figure {
         margin: 0;
@@ -74,26 +98,41 @@
       ul {
         // background-color: $color--grey-light;
         color: $color--grey;
-        padding: 18px 24px 12px;
+        padding: 12px 24px 24px;
 
         li:not(:first-child) { margin-top: 3px }
       }
 
       h1 {
         @extend %title--h3;
-        padding: 18px 24px 0px;
+        padding: 18px 24px 30px;
         margin: 0;
         text-align: left;
       }
 
       p {
+        margin-top: 0;
         padding: 0px 24px 18px;
         font-family: $font-serif;
       }
     }
 
+
     .masonry-gutter { width: 10%; }
   }
 
   &__show-button { margin: 60px auto 0; }
+}
+
+@keyframes fadeIn {
+  0% {
+    box-shadow: 0 6px 12px rgba($color--grey, .3);
+    filter:blur(1px);
+    opacity: 0
+  }
+  100% {
+    box-shadow: 0 9px 24px rgba($color--grey, .18);
+    filter:blur(0px);
+    opacity: 1
+  }
 }

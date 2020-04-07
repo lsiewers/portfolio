@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, QuerySnapshot, DocumentData, CollectionReference, Query } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Item } from '../models/item';
 import { Filter } from '../models/filter';
@@ -30,14 +30,12 @@ export class WorkService {
     });
   }
 
-  getWorkQuery(activeFilters: Filter[], showAmount?: number): Promise<Item[]> {
+  getWorkQuery(activeFilters: Filter[]): Promise<Item[]> {
     return new Promise<Item[]>((resolve) => {
       this.db.collection<Item>('/posts', ref => {
         let queryList: any = ref;
         activeFilters.forEach(typeFilter => queryList = queryList.where(`metadata.${typeFilter.type}`, '==', typeFilter.values));
-        return !isUndefined(showAmount) ?
-          queryList.orderBy('metadata.finishDate').limit(showAmount) :
-          queryList.orderBy('metadata.finishDate');
+        return queryList.orderBy('metadata.finishDate');
       }).valueChanges()
         .subscribe(data => resolve(data));
     });
