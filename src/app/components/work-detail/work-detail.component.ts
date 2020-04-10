@@ -14,22 +14,22 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./work-detail.component.scss']
 })
 export class WorkDetailComponent implements OnDestroy {
-  @ViewChild('workComponent', {static: false}) workComponent: WorkComponent;
+  @ViewChild('workComponent', {static: false}) workComponent: WorkComponent
   data: Item;
-  pmi = [
-    {
-      title: 'like or see working',
-      fields: ['']
-    },
-    {
-      title: 'dislike or don\'t see working',
-      fields: ['']
-    },
-    {
-      title: 'find interesting',
-      fields: ['']
-    }
-  ];
+  // pmi = [
+  //   {
+  //     title: 'like or see working',
+  //     fields: ['']
+  //   },
+  //   {
+  //     title: 'dislike or don\'t see working',
+  //     fields: ['']
+  //   },
+  //   {
+  //     title: 'find interesting',
+  //     fields: ['']
+  //   }
+  // ];
   items: Observable<any[]>;
   blur = 0;
   opacity = 1;

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Item } from '../models/item';
-import { Filter } from '../models/filter';
-import { isUndefined, isArray } from 'util';
 
 @Injectable({
   providedIn: 'root'

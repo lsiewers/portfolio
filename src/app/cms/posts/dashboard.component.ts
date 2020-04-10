@@ -2,8 +2,6 @@ import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angu
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Item } from 'src/app/models/item';
 import { WorkService } from 'src/app/services/work.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ChangeDetectionStrategy } from '@angular/compiler/src/compiler_facade_interface';
 import { Router } from '@angular/router';
 
 @Component({
