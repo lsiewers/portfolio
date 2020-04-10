@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(process.env.FIREBASE_API_KEY);
   }
 
   updateMetadata() {
