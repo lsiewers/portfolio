@@ -20,6 +20,8 @@ import { PostDetailComponent } from './cms/post-detail/post-detail.component';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MoreInfoComponent } from './components/more-info/more-info.component';
+import { SortDatePipe } from './pipes/sort-date.pipe';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
    declarations: [
@@ -31,9 +33,11 @@ import { MoreInfoComponent } from './components/more-info/more-info.component';
       ContactComponent,
       DashboardComponent,
       PostDetailComponent,
-      MoreInfoComponent
+      MoreInfoComponent,
+      SortDatePipe
    ],
    imports: [
+      CommonModule,
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,

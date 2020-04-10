@@ -9,11 +9,21 @@
   &__preview-overlay {
     @include abs(0, unset, unset, 0);
     @include size;
+    z-index: -1;
     background-color: rgba($color--grey, 0.0);
-    pointer-events: none;
+    pointer-events: all;
     transition: background-color 0.3s ease-out;
 
-    &.preview--active { background-color: rgba($color--grey, 0.24); }
+    &.preview--active {
+      background-color: rgba($color--grey, 0.24);
+      z-index: 9;
+    }
+  }
+
+  &__no-results {
+    @extend %title--h3;
+    margin: 48px 0;
+    color: $color--grey;
   }
 
   &__list {
@@ -63,6 +73,14 @@
 
       &.state--preview {
         transition: transform .3s ease-out;
+        overflow: auto;
+        max-height: 75vh;
+        z-index: 999;
+
+        figure {
+          max-height: 30vh;
+          overflow: hidden;
+        }
       }
 
       .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
@@ -83,6 +101,9 @@
       figure {
         margin: 0;
         position: relative;
+        transition:
+          max-height .3s ease-in;
+        max-height: 80vh;
 
         // &::before {
         //   content: '';
@@ -95,25 +116,47 @@
         img { @include size; }
       }
 
-      ul {
-        // background-color: $color--grey-light;
-        color: $color--grey;
-        padding: 12px 24px 24px;
-
-        li:not(:first-child) { margin-top: 3px }
-      }
-
       h1 {
         @extend %title--h3;
-        padding: 18px 24px 30px;
+        padding: 18px 24px 24px;
         margin: 0;
         text-align: left;
       }
 
-      p {
-        margin-top: 0;
-        padding: 0px 24px 18px;
-        font-family: $font-serif;
+      &__details {
+        padding: 0px 24px;
+        max-height: 0px;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          max-height .24s ease-in,
+          opacity .24s ease-in;
+
+        .state--preview & {
+          transition:
+            max-height .24s ease-out,
+            opacity .24s .24s ease-out;
+          max-height: 320px;
+          opacity: 1;
+        }
+
+        ul {
+          // background-color: $color--grey-light;
+          color: $color--grey;
+
+          li:not(:first-child) { margin-top: 3px }
+        }
+
+        p {
+          margin-top: 0;
+          // padding: 0px 24px 18px;
+          font-family: $font-serif;
+        }
+
+        .buttons {
+          @include flexbox(row, center, flex-end);
+          margin: 18px 0;
+        }
       }
     }
 

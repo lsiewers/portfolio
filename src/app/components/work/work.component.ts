@@ -4,8 +4,8 @@ import {
   AfterContentChecked,
   HostListener,
   Input,
-  AfterViewInit,
   OnDestroy,
+  AfterContentInit,
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './work.component.html',
   styleUrls: ['./work.component.scss']
 })
-export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDestroy {
+export class WorkComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
   @Input() projectFilter: Filter;
 
   // filters
@@ -57,7 +57,7 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
    // lifecycle hooks
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
     this.setPageType();
     this.pageType === 'work' ?
       this.toggleFilter({ type: 'focus', values: this.projectFilter.values }) :
@@ -79,10 +79,8 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
       this.filters.find(f => f.openTab === true) ? delay = true : delay = false;
       this.filters.forEach(f => {
         if (f.openTab === undefined) { f.openTab = false; }
-        // tslint:disable-next-line: no-unused-expression
-        if (f !== filter) { f.openTab ? f.openTab = false : null;
-        } else if (delay) {
-          setTimeout(() => f.openTab = true, 480);
+        if (f !== filter) { f.openTab ? f.openTab = false : f.openTab = true;
+        } else if (delay) { setTimeout(() => f.openTab = true, 480);
         } else { f.openTab = true; }
 
         activatedTabs.push(f.openTab);
@@ -97,16 +95,12 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
       this.pageType === 'work' ?
         this.items = data.filter(item => item.title !== this.projectTitle) :
         this.items = data;
+      // this.items.sort((a: Item, b: Item) =>
+      //   new Date(b.metadata.finishDate).getTime() - new Date(a.metadata.finishDate).getTime());
+      // this.items.forEach(item => console.log(item.metadata.tools))
+
     });
   }
-
-  // set-up
-  // async getItems(): Promise<Item[]> {
-  //   return await new Promise((resolve) => {
-  //     this.workService.getWorkList()
-  //       .then(data => resolve(data));
-  //     });
-  // }
 
   setPageType() {
     this._routerSubscription = this.activeRouter.url.subscribe(params => {
@@ -117,6 +111,9 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
       } else {
         this.pageType = 'work';
         this.projectTitle = decodeURI(url);
+        this.getFilteredItems();
+        this.previewOverlay = false;
+        document.querySelector('html').style.overflow = 'auto';
       }
     });
   }
@@ -148,18 +145,18 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
   routeToPost(title: string) {
     this.router.navigate([this.pageType === 'cms' ? 'cms/' + title
     : title]);
+    document.querySelector('html').style.overflow = 'auto';
   }
 
   imageLoaded(item: Item) {
     this.loadedImages++;
+    const toLoad = this.items.length < this.showAmount ? this.items.length : this.showAmount;
 
-    if (this.loadedImages >= this.items.length) { this.loadMasonry(); }
+    if (this.loadedImages >= toLoad) { this.loadMasonry(); }
   }
 
   // Animations
   hoverAnimation(e: MouseEvent, isPreview: boolean) {
-    console.log(isPreview);
-
     if (isUndefined(isPreview) || !isPreview) {
       const target: HTMLElement = e.currentTarget as HTMLElement;
 
@@ -194,9 +191,10 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
       target.parentElement.offsetLeft -
       target.offsetLeft;
 
+
     // minus container top position + item's height / margin to set at top of screen
     // + scrollposition of htmlEL and minus masonry position
-    const y = -target.parentElement.offsetTop + target.clientHeight / 2 + window.scrollY - target.offsetTop;
+    const y = -target.parentElement.offsetTop + window.scrollY - target.offsetTop + 90;
 
     target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1.2) rotateX(0deg) rotateY(0deg)`;
     document.querySelector('html').style.overflow = 'hidden';
@@ -205,7 +203,9 @@ export class WorkComponent implements AfterViewInit, AfterContentChecked, OnDest
   }
 
   closePreview(item: Item, el?: HTMLElement, i?: number) {
-    isNull(el) ? el = document.querySelectorAll('.work__items__list__item')[i] as HTMLElement : null;
+    isNull(el) ?
+      el = document.querySelectorAll('.work__items__list__item')[i] as HTMLElement :
+      el = el;
 
     this.resetTransform(el);
     this.previewOverlay = false;

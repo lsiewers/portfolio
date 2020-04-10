@@ -1,4 +1,4 @@
-<article class="work container" *ngIf="items?.length > 0">
+<article class="work container" >
   <header class="work__header">
     <h1
       class="work__header__title title centered grey"
@@ -75,13 +75,13 @@
     <!-- end filters -->
     <p
       class="work__header__filters__text"
-      *ngIf="pageType === 'work' && projectFilter">
+      *ngIf="pageType === 'work'">
       More focused on {{ projectFilter.values }}
     </p>
 
   </header>
 
-  <main class="work__items">
+  <main class="work__items" *ngIf="items?.length > 0">
     <!-- <p class="work__items__results">{{showItems.length ? showItems.length : 'No'}} {{showItems.length <= 1 ? 'result' : 'results'}}</p> -->
     <div class="work__items__preview-overlay" [class.preview--active]="previewOverlay"></div>
     <ul
@@ -90,7 +90,7 @@
     >
       <li
         class="work__items__list__item"
-        *ngFor="let item of items; let i = index"
+        *ngFor="let item of items | slice:0:showAmount; let i = index"
         (click)="item.workPreview ? null : toPreviewAnimation($event, item);"
         (clickOutside)="item.workPreview ? closePreview(item, null, i) : null"
         (keyup.esc)="item.workPreview ? closePreview(item, null, i) : null"
@@ -100,28 +100,30 @@
       >
         <article>
           <figure>
-              <img
-                [src]="item.media.imageUrl"
-                [alt]="item.title"
-                (load)="imageLoaded(item);"
-                *ngIf="item.media.imageUrl"
-              >
+            <img
+              [src]="item.media.imageUrl"
+              [alt]="item.title"
+              (load)="imageLoaded(item);"
+              *ngIf="item.media.imageUrl"
+            >
               <!-- <video nocontrols [hidden]="!item.media.videoPlaying">
                 <source src="{{item.media.videoUrl}}">
               </video> -->
           </figure>
-          <div>
-            <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
-            <p class="title grey" title="{{item.subtitle}}" *ngIf="item.workPreview">{{item.subtitle}}</p>
-            <ul *ngIf="item.metadata && item.workPreview">
-              <li>{{ item.metadata.purpose }} project</li>
-              <li>Focused on {{ item.metadata.focus }} design</li>
+          <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
+          <div class="work__items__list__item__details">
+            <p class="title grey" title="{{item.subtitle}}">{{item.subtitle}}</p>
+            <ul *ngIf="item.metadata">
               <li>
-                <ng-container *ngFor="let person of item.metadata.collaboration; let i = index">
-                  {{ person.name }} {{ i > 0 ? ', ' : null }}
-                </ng-container>
+                {{ item.metadata.purpose }} project
+                <span *ngIf="item.metadata.purpose === 'Study'">{{ item.metadata.collaboration[0].name !== '' ? '(group)' : '(solo)' }}</span>
               </li>
+              <li>Focused on {{ item.metadata.focus }} design</li>
             </ul>
+            <div class="buttons">
+              <a class="button" (click)="item.workPreview ? closePreview(item, null, i) : null">Close</a>
+              <a class="button button--dark" (click)="routeToPost(item.title)">More details</a>
+            </div>
           </div>
         </article>
       </li>
@@ -129,9 +131,13 @@
     <a
       class="work__items__show-button button button--dark"
       *ngIf="items.length > showAmount"
-      (click)="showAmount = showAmount + 3; getFilteredItems(); bricks.update()"
+      (click)="showAmount = showAmount + 3; bricks.update()"
     >
       Show More
     </a>
   </main>
+
+  <div class="work__items__no-results" *ngIf="items?.length === 0">
+    No projects found :(
+  </div>
 </article>

@@ -30,17 +30,6 @@ export class WorkService {
     });
   }
 
-  getWorkQuery(activeFilters: Filter[]): Promise<Item[]> {
-    return new Promise<Item[]>((resolve) => {
-      this.db.collection<Item>('/posts', ref => {
-        let queryList: any = ref;
-        activeFilters.forEach(typeFilter => queryList = queryList.where(`metadata.${typeFilter.type}`, '==', typeFilter.values));
-        return queryList.orderBy('metadata.finishDate');
-      }).valueChanges()
-        .subscribe(data => resolve(data));
-    });
-  }
-
   updateWorkPost(data: Item): Promise<void> {
     return this.db.collection<Item>('posts').doc(data.id).set(data);
   }

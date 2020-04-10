@@ -46,22 +46,34 @@
           <p *ngIf="!isArray(metadata.value)">
             <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="text">
           </p>
-          <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'finishDate' && metadata.key !== 'collaboration'">
+          <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'collaboration'">
             <p *ngFor="let value of metadata.value; let i = index">
               <input
                 [(ngModel)]="metadata.value[i]"
                 [ngModelOptions]="{'updateOn': 'blur'}"
                 type="text"
-                (keyup.enter)="addField(metadata, $event)"
+                (keyup.enter)="addField(metadata, metadata.key)"
                 (keyup.backspace)="removeField(metadata, i, $event)"
               >
             </p>
           </ng-container>
           <p *ngIf="metadata.key === 'collaboration'">
-            <input *ngFor="let value of metadata.value | keyvalue; let i = index" [(ngModel)]="metadata.value[i].name" type="text">
-            <input *ngFor="let value of metadata.value | keyvalue; let i = index" [(ngModel)]="metadata.value[i].url" type="text"
-              (keyup.enter)="addField(data.metadata[metadata.key], $event)"
-              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)">
+            <br><small>NAME</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].name"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
+            >
+            <br><br><small>URL</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].url"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
+            >
             <!-- <input [(ngModel)]="subdata.values" type="date"> -->
           </p>
           <p *ngIf="metadata.key === 'finishDate'">

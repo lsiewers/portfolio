@@ -3,6 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Filter } from '../models/filter';
 import { WorkService } from './work.service';
 import { Item } from '../models/item';
+import { resolve } from 'path';
+import { isArray } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +48,22 @@ constructor(
     return activeFilters;
   }
 
-  getFilteredItems(activeFilters: Filter[]): Promise<Item[]> {
-    return this.workService.getWorkQuery(activeFilters);
+  getFilteredItems(activeFilters: Filter[]): Promise<any> {
+    return new Promise<any>((resolve) => {
+      this.workService.getWorkList().then((items: Item[]) => {
+        // console.log(items, activeFilters);
+        activeFilters.forEach((filterType: Filter) => {
+          filterType.values.forEach(value =>
+            items = items.filter(item =>
+              isArray(item.metadata[filterType.type]) ?
+                item.metadata[filterType.type].includes(value) :
+                item.metadata[filterType.type] === value
+            )
+          );
+        });
+
+        resolve(items);
+      });
+    });
   }
 }

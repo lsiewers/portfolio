@@ -15,7 +15,7 @@ export interface Item {
     tools: Array<string>,
     budget: string,
     client: Array<string>,
-    collaboration: 'solo' | Array<{
+    collaboration: Array<{
       name: string,
       url?: string
     }>,

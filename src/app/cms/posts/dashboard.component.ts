@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
         tools: [''],
         budget: '',
         client: [''],
-        collaboration: [{name: 'Luuk', url: '//luuksiewers.nl'}],
+        collaboration: [{name: '', url: ''}],
         finishDate: new Date('Wed Mar 25 2015 01:00:00 GMT+0100 (Central European Standard Time)')
       },
       filterComplete: null

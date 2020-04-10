@@ -1,16 +1,17 @@
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
 import { Item } from 'src/app/models/item';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { WorkService } from 'src/app/services/work.service';
 import { isArray } from 'util';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-detail',
   templateUrl: './post-detail.component.html',
   styleUrls: ['./post-detail.component.scss']
 })
-export class PostDetailComponent implements OnInit, AfterContentChecked {
+export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestroy {
   data: Item;
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -58,6 +59,8 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     ]
   };
   images: Array<{name: string, url: string}> = [];
+  // tslint:disable-next-line: variable-name
+  _activeRouterSubscriber: Subscription;
 
   constructor(
     private activeRouter: ActivatedRoute,
@@ -65,10 +68,14 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     private workService: WorkService,
     private changeDetector: ChangeDetectorRef
   ) {
-    this.activeRouter.params.subscribe(data => this.workService.getWorkPost(decodeURI(data.id)).then((post: Item) => {
-      this.data = post;
-      this.updateImages();
-    }));
+    this._activeRouterSubscriber =
+      this.activeRouter.params.subscribe(data =>
+        this.workService.getWorkPost(decodeURI(data.id))
+          .then((post: Item) => {
+            this.data = post;
+            this.updateImages();
+          })
+      );
   }
 
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
@@ -77,15 +84,19 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
 
   }
 
-  trackById(index: number, metadata) {
-    return metadata
-  }
-
   isArray(value: any) {
     return isArray(value);
   }
 
-  addField(metadata) { metadata.value.push(''); }
+  addField(metadata, type) {
+    if (type === 'collaboration') {
+      metadata.push({name: '', url: ''});
+    } else if (type === 'tools' || type === 'client' || type === 'focus') {
+      metadata.value.push('');
+    }
+
+    // metadata.push('');
+  }
 
   removeField(metadata: any, index: number, e: Event) {
     const targetEl: HTMLInputElement = e.target as HTMLInputElement;
@@ -129,5 +140,9 @@ export class PostDetailComponent implements OnInit, AfterContentChecked {
     if (confirm('Are you sure?')) {
       this.workService.removeWorkPost(this.data.id).then(() => this.router.navigate(['/cms']));
     }
+  }
+
+  ngOnDestroy(): void {
+    this._activeRouterSubscriber.unsubscribe();
   }
 }

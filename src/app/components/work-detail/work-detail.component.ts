@@ -1,5 +1,5 @@
-import { Component, Inject, ViewChild, AfterViewInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router, RouterEvent } from '@angular/router';
+import { Component, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Item } from '../../models/item';
 import { Observable, Subscription } from 'rxjs';
 import { WorkService } from 'src/app/services/work.service';
@@ -42,22 +42,24 @@ export class WorkDetailComponent implements OnDestroy {
     private titleService: Title,
     private meta: Meta,
     private workService: WorkService,
-    private router: Router,
+    private activeRouter: ActivatedRoute,
+    private changeDetector: ChangeDetectorRef
   ) {
-    this._routerSubscription = this.router.events.subscribe((e: RouterEvent) => {
-      if (!isUndefined(e.url)) {
-        if (this.currentPage !== e.url || isUndefined(this.currentPage)) {
-          this.currentPage = e.url;
-          this.onRoute(e.url);
-          return isUndefined(this.workComponent) ?
-            null : this.workComponent.projectDetailRoute(e.url, this.projectFilter);
+    this._routerSubscription =
+      this.activeRouter.params.subscribe(data => {
+        if (!isUndefined(data.id)) {
+          if (this.currentPage !== data.id || isUndefined(this.currentPage)) {
+            this.currentPage = data.id;
+            this.onRoute(data.id);
+            return isUndefined(this.workComponent) ?
+              null : this.workComponent.projectDetailRoute(data.id, this.projectFilter);
+          }
         }
-      }
-    });
+      });
   }
 
   updateMetadata() {
-    const projectName = decodeURI(this.currentPage).substr(1);
+    const projectName = decodeURI(this.currentPage);
     this.titleService.setTitle(projectName + ' by Luuk Siewers');
     this.meta.updateTag({ name: 'title', content: projectName + ' by Luuk Siewers' });
     this.meta.updateTag({ property: 'og:title', content: projectName + ' by Luuk Siewers'});
@@ -75,7 +77,7 @@ export class WorkDetailComponent implements OnDestroy {
   }
 
   onRoute(param) {
-    const projectTitle = decodeURI(param).substr(1);
+    const projectTitle = decodeURI(param);
     this.workService.getWorkPost(projectTitle)
       .then(post => {
         this.data = post;
