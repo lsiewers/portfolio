@@ -1,5 +1,4 @@
-import { Component, OnInit, HostListener, Inject, AfterViewInit } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -7,16 +6,12 @@ import { Meta, Title } from '@angular/platform-browser';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   constructor(
     private meta: Meta,
     private titleService: Title
   ) {
     this.updateMetadata();
-  }
-
-  ngOnInit() {
-    console.log(process.env.FIREBASE_API_KEY);
   }
 
   updateMetadata() {
