@@ -42,7 +42,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   // masonry
   bricks: BricksInstance;
   loadedImages = 0;
-  showAmount = 3;
+  showAmount = 5;
   suggested = false;
 
 
@@ -73,7 +73,6 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   // filter methods
   // filter tab (open/close)
   toggleFilterTab(filter: Filter) {
-    const activatedTabs = [];
     if (!filter.openTab) {
       let delay;
       this.filters.find(f => f.openTab === true) ? delay = true : delay = false;
@@ -82,10 +81,12 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
         if (f !== filter) { f.openTab ? f.openTab = false : f.openTab = true;
         } else if (delay) { setTimeout(() => f.openTab = true, 480);
         } else { f.openTab = true; }
-
-        activatedTabs.push(f.openTab);
       });
     } else { filter.openTab = false; }
+    // overlay when open?
+    // this.filters.find(f => f.openTab) ?
+    //   this.previewOverlay = true :
+    //   this.previewOverlay = false;
   }
 
   toggleFilter(filter: Filter) { this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters); }

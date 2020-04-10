@@ -90,6 +90,11 @@
         width: 100% !important;
         position: static !important;
         margin-top: 24px;
+
+        &.state--preview {
+          position: sticky !important;
+          max-height: 65vh;
+        }
       }
 
       &__close-preview {
@@ -145,6 +150,10 @@
           color: $color--grey;
 
           li:not(:first-child) { margin-top: 3px }
+
+          span:not(:last-child)::after {
+            content: ' & ';
+          }
         }
 
         p {

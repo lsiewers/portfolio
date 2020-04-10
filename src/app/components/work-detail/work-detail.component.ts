@@ -85,7 +85,7 @@ export class WorkDetailComponent implements OnDestroy {
         return projectTitle !== '' ?
           this.projectFilter = {
             type: Object.keys(post.metadata.focus)[0],
-            values: post.metadata.focus
+            values: [post.metadata.focus[0]]
           } : null;
       });
   }

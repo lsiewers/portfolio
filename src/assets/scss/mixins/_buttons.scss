@@ -12,26 +12,20 @@
   background-color: rgba($color--grey-dark, 0);
   transition: background-color 0.12s ease-in, transform 0.12s ease-out;
 
-  &:hover {
-    transform: scale(1.05);
-  }
+  &:hover { transform: scale(1.05); }
 
   &--dark {
     border: solid 0.2em rgba($color--grey, 0.24);
     color: $color--grey-dark;
 
-    &:hover {
-      background-color: rgba($color--grey, 0.24);
-    }
+    &:hover { background-color: rgba($color--grey, 0.24); }
   }
 
   &--light {
     border: solid 0.2em rgba($color--grey-light, 0.09);
     color: $color--grey-light;
 
-    &:hover {
-      background-color: rgba($color--grey-light, 0.09);
-    }
+    &:hover { background-color: rgba($color--grey-light, 0.09); }
   }
 
   &:active {

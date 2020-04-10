@@ -22,9 +22,9 @@
 
       &__label {
         display: block;
+        text-transform: capitalize;
 
         .tab--open & {
-          box-sizing: border-box;
           border-color: $color--grey-light;
           pointer-events: none;
         }

@@ -81,6 +81,7 @@
 
   </header>
 
+  <!-- items -->
   <main class="work__items" *ngIf="items?.length > 0">
     <!-- <p class="work__items__results">{{showItems.length ? showItems.length : 'No'}} {{showItems.length <= 1 ? 'result' : 'results'}}</p> -->
     <div class="work__items__preview-overlay" [class.preview--active]="previewOverlay"></div>
@@ -118,7 +119,7 @@
                 {{ item.metadata.purpose }} project
                 <span *ngIf="item.metadata.purpose === 'Study'">{{ item.metadata.collaboration[0].name !== '' ? '(group)' : '(solo)' }}</span>
               </li>
-              <li>Focused on {{ item.metadata.focus }} design</li>
+              <li>Focused on <span *ngFor="let focus of item.metadata.focus">{{focus}}</span> design</li>
             </ul>
             <div class="buttons">
               <a class="button" (click)="item.workPreview ? closePreview(item, null, i) : null">Close</a>
