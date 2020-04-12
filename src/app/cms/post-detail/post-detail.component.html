@@ -1,19 +1,23 @@
 <article class="work-detail cms-detail" *ngIf="data">
   <header class="work-detail__header cms-detail__header">
-    <figure class="work-detail__header__media {{data.media.imagePos}}">
-      <img [src]="data.media.imageUrl">
-      <video>
-        <source [src]="data.media.videoUrl"/>
+    <figure class="work-detail__header__media {{data.header.pos}}">
+      <img *ngIf="data.header.type === 'image'" [src]="data.header.url">
+      <video *ngIf="data.header.type === 'video'" muted="muted" autoplay loop>
+        <source [src]="data.header.url"/>
       </video>
     </figure>
-    <input class="cms-detail__header__img-input" type="text" [(ngModel)]="data.media.imageUrl">
+    <input class="cms-detail__header__img-input" type="text" [(ngModel)]="data.header.url">
 
-    <select [(ngModel)]="data.media.imagePos">
+    <select [(ngModel)]="data.header.type">
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+    </select>
+    <select [(ngModel)]="data.header.pos">
       <option value="top">Top</option>
       <option value="center">Center</option>
       <option value="bottom">Bottom</option>
     </select>
-    <input class="cms-detail__header__reference-input" type="text" [(ngModel)]="data.media.imageRef" placeholder="image reference caption">
+    <input class="cms-detail__header__reference-input" type="text" [(ngModel)]="data.header.ref" placeholder="image reference caption">
     <h1 class="work-detail__header__title">
       <input
         class="cms-detail__header__title"
@@ -85,15 +89,43 @@
   </main>
   <footer class="cms-detail__footer">
     <div class="cms-detail__footer__images">
-        <h1>Image Gallery</h1>
+        <h1>Gallery</h1>
       <ul>
-        <li *ngFor="let img of images">
-          <img [src]="img.url">
-          <small>{{img.name}}</small>
-          <button class="button button--dark" (click)="deleteImage(img.name)">delete</button>
+        <li *ngFor="let file of mediaFiles">
+          <ng-container *ngIf="file.metadata | async as metadata">
+            <object *ngIf="metadata.type.includes('pdf')" [data]="file.url | safe: 'resourceUrl'" height="200" width="200"></object>
+            <img
+              *ngIf="metadata.type.includes('image')"
+              [src]="file.url"
+            >
+            <video
+              muted autoplay loop controls
+              *ngIf="metadata.type.includes('video')"
+            ><source [src]="file.url">
+            </video>
+            <pre
+              [class.green]="metadata.size / 1024 < 500"
+              [class.orange]="metadata.size / 1024 > 500 && metadata.size / 1024 < 1000"
+              [class.red]="metadata.size / 1024 > 1000"
+            >{{ calcFileSize(metadata.size) }}</pre>
+            <small>{{ file.name }}</small>
+            <button class="button button--dark" (click)="deleteFile(file.name)">delete</button>
+            <button
+              class="button button--dark"
+              (click)="setHeader(file.url, metadata.type)"
+              *ngIf="metadata.type.includes('image') || metadata.type.includes('video')"
+            >
+              Header {{ metadata.type.includes('image') ? 'image' : 'video' }}
+            </button>
+          </ng-container>
         </li>
       </ul>
-      <input class="button button--dark" type="file" accept=".png, .jpeg, .jpg" (change)="uploadImage($event)">
+      <input
+        class="button button--dark file-upload"
+        type="file"
+        accept=".png, .jpeg, .jpg,.gif, .mp4, .mov, .pdf, .svg"
+        (change)="uploadFile($event)"
+      >
     </div>
     <div class="cms-detail__footer__buttons">
       <button class="button button--dark delete" (click)="delete();">Delete</button>

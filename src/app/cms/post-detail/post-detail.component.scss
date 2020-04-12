@@ -116,8 +116,44 @@
         width: 25%;
         margin: 12px 0 12px 24px;
 
-        img { width: 100%; }
+        img, video, object {
+          width: 100%;
+          border-radius: 6px;
+        }
+
+        img, video { cursor: pointer; }
+
+        pre {
+          &.green { color: green }
+          &.orange { color: orange }
+          &.red { color: red }
+        }
+
+        small { word-break: break-word; }
       }
+
+      .file-upload {
+        outline: none;
+        position: relative;
+        font-size: 1.1em;
+        line-height: 1;
+        padding: 60px 0 0 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        height: 60px;
+        border-style: dashed;
+        margin-top: 30px;
+        width: 100%;
+
+        &::before {
+          content: 'Drop file to upload \2913';
+          color: black;
+          @include abs(22px, unset, unset, 50%);
+          transform: translateX(-50%);
+        }
+
+      }
+
     }
 
     &__buttons { @include flexbox(row, center, center) }

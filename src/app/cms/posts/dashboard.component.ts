@@ -25,21 +25,21 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
       title: 'New Post',
       subtitle: 'A post about...',
       id: null,
-      media: {
-        imagePos: 'center',
-        imageUrl: '',
-        imageRef: '',
-        videoUrl: ''
+      header: {
+        pos: 'center',
+        ref: '',
+        type: 'image',
+        url: null
       },
-      details: null,
+      details: '<p></p>',
       metadata: {
-        focus: [''],
-        purpose: '',
+        focus: ['Experience | Interface | Visual | Experimental'],
+        purpose: 'Study | Side job | Internship',
         tools: [''],
-        budget: '',
+        budget: '< 1 week | 1 - 3 weeks | > 3 weeks',
         client: [''],
         collaboration: [{name: '', url: ''}],
-        finishDate: new Date('Wed Mar 25 2015 01:00:00 GMT+0100 (Central European Standard Time)')
+        finishDate: new Date(new Date().getTime())
       },
       filterComplete: null
     };
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
       this.newPost.id = data.id;
       this.workService.updateWorkPost(this.newPost);
     }).finally(() => {
-      this.router.navigate(['cms', encodeURI(this.newPost.title)]);
+      this.router.navigate(['cms', this.newPost.title.toLowerCase().split(' ').join('-')]);
     });
   }
 }

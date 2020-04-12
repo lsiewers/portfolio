@@ -118,7 +118,7 @@
         //   background: linear-gradient(15deg, white, rgba(white, 0));
         // }
 
-        img { @include size; }
+        img, video { @include size; }
       }
 
       h1 {

@@ -13,7 +13,6 @@ import Bricks, { BricksInstance } from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
-import { isUndefined, isNull } from 'util';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -67,7 +66,9 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   isActiveFilter(type: string, value: string) {
     const filteredType = this.activeFilters.find(activeFilter => activeFilter.type === type);
-    return typeof filteredType === 'undefined' ? false : filteredType.values.includes(value);
+    return typeof filteredType === 'undefined' ?
+              false :
+              (filteredType.values as string[]).includes(value);
   }
 
   // filter methods
@@ -91,15 +92,14 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   toggleFilter(filter: Filter) { this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters); }
 
-  getFilteredItems() {
-    this.filtersService.getFilteredItems(this.activeFilters).then(data => {
+  getFilteredItems(): Promise<any> {
+    return this.filtersService.getFilteredItems(this.activeFilters).then(data => {
       this.pageType === 'work' ?
         this.items = data.filter(item => item.title !== this.projectTitle) :
         this.items = data;
-      // this.items.sort((a: Item, b: Item) =>
-      //   new Date(b.metadata.finishDate).getTime() - new Date(a.metadata.finishDate).getTime());
+      this.items.sort((a: Item, b: Item) =>
+        new Date(b.metadata.finishDate).getTime() - new Date(a.metadata.finishDate).getTime());
       // this.items.forEach(item => console.log(item.metadata.tools))
-
     });
   }
 
@@ -144,8 +144,10 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   }
 
   routeToPost(title: string) {
-    this.router.navigate([this.pageType === 'cms' ? 'cms/' + title
-    : title]);
+    const postUrl = title.toLowerCase().split(' ').join('-');
+
+    this.router.navigate([this.pageType === 'cms' ? 'cms/' + postUrl
+    : postUrl]);
     document.querySelector('html').style.overflow = 'auto';
   }
 
@@ -158,7 +160,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   // Animations
   hoverAnimation(e: MouseEvent, isPreview: boolean) {
-    if (isUndefined(isPreview) || !isPreview) {
+    if (isPreview === undefined || !isPreview) {
       const target: HTMLElement = e.currentTarget as HTMLElement;
 
       const sensitivity = 0.1;
@@ -170,7 +172,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   }
 
   hoverLeave(e: MouseEvent, isPreview: boolean) {
-    if (isUndefined(isPreview) || !isPreview) {
+    if (isPreview === undefined || !isPreview) {
       this.resetTransform(e.currentTarget as HTMLElement);
     }
   }
@@ -204,7 +206,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   }
 
   closePreview(item: Item, el?: HTMLElement, i?: number) {
-    isNull(el) ?
+    el === null ?
       el = document.querySelectorAll('.work__items__list__item')[i] as HTMLElement :
       el = el;
 

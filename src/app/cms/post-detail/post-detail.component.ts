@@ -58,7 +58,11 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
       }
     ]
   };
-  images: Array<{name: string, url: string}> = [];
+  mediaFiles: Array<{
+    name: string,
+    url: string,
+    metadata?: Promise<{size: number, type: string}>
+  }> = [];
   // tslint:disable-next-line: variable-name
   _activeRouterSubscriber: Subscription;
 
@@ -70,10 +74,10 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   ) {
     this._activeRouterSubscriber =
       this.activeRouter.params.subscribe(data =>
-        this.workService.getWorkPost(decodeURI(data.id))
+        this.workService.getWorkPost(data.id)
           .then((post: Item) => {
             this.data = post;
-            this.updateImages();
+            this.updateFiles();
           })
       );
   }
@@ -84,8 +88,15 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
 
   }
 
+  calcFileSize(num: number): string {
+    const sizeInKb = num / 1024;
+    const unit = sizeInKb > 1024 ? 'MB' : 'kb';
+
+    return Math.floor(unit === 'MB' ? sizeInKb / 1024 : sizeInKb) + unit;
+  }
+
   isArray(value: any) {
-    return isArray(value);
+    return Array.isArray(value);
   }
 
   addField(metadata, type) {
@@ -103,30 +114,35 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     if (!targetEl.value && index > 0) { metadata.value.pop(); }
   }
 
-  uploadImage(e: Event) {
+  uploadFile(e: Event) {
     const inputFile = (e.target as HTMLInputElement).files[0];
     const ref = this.workService.getMediaFolder(this.data.id);
     const imageRef = ref.child(inputFile.name);
 
-    imageRef.put(inputFile).then(() => this.updateImages());
+    imageRef.put(inputFile).then(() => this.updateFiles());
   }
 
-  deleteImage(img: string) {
+  deleteFile(img: string) {
     const ref = this.workService.getMediaFolder(this.data.id);
     const imageRef = ref.child(img);
-    imageRef.delete().then(() => this.updateImages());
+    imageRef.delete().then(() => this.updateFiles());
   }
 
-  updateImages() {
-    this.images = [];
+  updateFiles() {
+    this.mediaFiles = [];
 
-    this.workService.getMediaFolder(this.data.id).listAll().then(images => {
-      images.items.forEach(item => item.getDownloadURL().then(downloadUrl => {
-        this.images.push({
-          name: item.name,
-          url: downloadUrl
-        });
-      }));
+    this.workService.getMediaFolder(this.data.id).listAll().then(files => {
+      files.items.forEach(file => file.getDownloadURL()
+        .then(downloadUrl => {
+          this.mediaFiles.push({
+            name: file.name,
+            url: downloadUrl,
+            metadata: file.getMetadata().then(data => {
+              return {size: data.size, type: data.contentType};
+            })
+          });
+        })
+      );
     });
   }
 
@@ -140,6 +156,11 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     if (confirm('Are you sure?')) {
       this.workService.removeWorkPost(this.data.id).then(() => this.router.navigate(['/cms']));
     }
+  }
+
+  setHeader(url: string, type: string) {
+    this.data.header.type = type.includes('image') ? 'image' : 'video';
+    this.data.header.url = url;
   }
 
   ngOnDestroy(): void {

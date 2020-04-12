@@ -20,7 +20,7 @@
     &.top { @include flexbox(row, flex-start) }
     &.center { @include flexbox(row, center) }
     &.bottom { @include flexbox(row, flex-end) }
-    img {
+    img, video {
       width: 100%;
       position: absolute;
     }

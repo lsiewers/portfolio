@@ -1,9 +1,8 @@
-import { Component, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Item } from '../../models/item';
 import { Observable, Subscription } from 'rxjs';
 import { WorkService } from 'src/app/services/work.service';
-import { isUndefined, isArray } from 'util';
 import { Filter } from 'src/app/models/filter';
 import { WorkComponent } from '../work/work.component';
 import { Meta, Title } from '@angular/platform-browser';
@@ -14,7 +13,7 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./work-detail.component.scss']
 })
 export class WorkDetailComponent implements OnDestroy {
-  @ViewChild('workComponent', {static: false}) workComponent: WorkComponent
+  @ViewChild('workComponent', {static: false}) workComponent: WorkComponent;
   data: Item;
   // pmi = [
   //   {
@@ -43,15 +42,14 @@ export class WorkDetailComponent implements OnDestroy {
     private meta: Meta,
     private workService: WorkService,
     private activeRouter: ActivatedRoute,
-    private changeDetector: ChangeDetectorRef
   ) {
     this._routerSubscription =
       this.activeRouter.params.subscribe(data => {
-        if (!isUndefined(data.id)) {
-          if (this.currentPage !== data.id || isUndefined(this.currentPage)) {
+        if (typeof data.id !== 'undefined') {
+          if (this.currentPage !== data.id || typeof this.currentPage === 'undefined') {
             this.currentPage = data.id;
             this.onRoute(data.id);
-            return isUndefined(this.workComponent) ?
+            return typeof this.workComponent === 'undefined' ?
               null : this.workComponent.projectDetailRoute(data.id, this.projectFilter);
           }
         }
@@ -72,17 +70,16 @@ export class WorkDetailComponent implements OnDestroy {
     this.meta.updateTag({ property: 'og:url', content: 'https://luuksiewers.nl' + this.currentPage });
     this.meta.updateTag({ property: 'twitter:url', content: 'https://luuksiewers.nl' + this.currentPage });
 
-    this.meta.updateTag({ property: 'og:image', content: this.data.media.imageUrl });
-    this.meta.updateTag({ property: 'twitter:image', content: this.data.media.imageUrl });
+    this.meta.updateTag({ property: 'og:image', content: this.data.header.url });
+    this.meta.updateTag({ property: 'twitter:image', content: this.data.header.url });
   }
 
-  onRoute(param) {
-    const projectTitle = decodeURI(param);
-    this.workService.getWorkPost(projectTitle)
+  onRoute(param: string) {
+    this.workService.getWorkPost(param)
       .then(post => {
         this.data = post;
-        if (!isUndefined(post)) { this.updateMetadata(); }
-        return projectTitle !== '' ?
+        if (post !== undefined) { this.updateMetadata(); }
+        return param !== '' ?
           this.projectFilter = {
             type: Object.keys(post.metadata.focus)[0],
             values: [post.metadata.focus[0]]
@@ -90,7 +87,7 @@ export class WorkDetailComponent implements OnDestroy {
       });
   }
 
-  isArray(obj) { return isArray(obj); }
+  isArray(obj) { return Array.isArray(obj); }
 
   ngOnDestroy(): void {
     this._routerSubscription.unsubscribe();

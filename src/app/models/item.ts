@@ -1,14 +1,10 @@
+import { Media } from './media';
+
 export interface Item {
   id: string;
   title: string;
   subtitle: string;
-  media: {
-    imageUrl: string;
-    imagePos: 'bottom' | 'top' | 'center',
-    imageRef: string;
-    videoUrl?: string;
-    videoPlaying?: boolean;
-  };
+  header: Media;
   metadata: {
     focus: Array<string>,
     purpose: string,
@@ -21,7 +17,7 @@ export interface Item {
     }>,
     finishDate: Date
   };
-  details: InnerHTML;
+  details: string;
   filterComplete?: Array<boolean>;
   imageLoaded?: boolean;
   workPreview?: boolean;

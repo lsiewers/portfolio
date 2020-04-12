@@ -30,7 +30,8 @@ const routes: Routes = [
   {
     path: ':id',
     component: WorkDetailComponent
-  }
+  },
+  { path: '**', component: HomeComponent }
 
 ];
 

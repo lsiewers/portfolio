@@ -29,18 +29,18 @@ constructor(
 
     // if type is already filtered
     if (activeFilters.length === 0 || typeof filteredType === 'undefined') {
-      activeFilters.push({type: filter.type, values: [value]});
+      activeFilters.push({type: filter.type, values: [value as string]});
     } else {
       // if specific value is already filtered
-      if (filteredType.values.includes(value)) {
+      if ((filteredType.values as string[]).includes(value as string)) {
         // remove filtered item
-        filteredType.values.splice(filteredType.values.indexOf(value), 1);
+        filteredType.values.splice((filteredType.values as string[]).indexOf(value as string), 1);
 
         // remove object from active filters if empty
         if (!filteredType.values.length) { activeFilters.splice(activeFilters.indexOf(filteredType), 1); }
       } else {
         // add filtered item
-        filteredType.values.push(value);
+        (filteredType.values as string[]).push(value as string);
       }
     }
 
@@ -54,7 +54,7 @@ constructor(
         activeFilters.forEach((filterType: Filter) => {
           filterType.values.forEach(value =>
             items = items.filter(item =>
-              isArray(item.metadata[filterType.type]) ?
+              Array.isArray(item.metadata[filterType.type]) ?
                 item.metadata[filterType.type].includes(value) :
                 item.metadata[filterType.type] === value
             )

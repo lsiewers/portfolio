@@ -24,7 +24,7 @@ export class WorkService {
     return new Promise<Item>((resolve, reject) => {
       this.db.collection<Item>('posts')
       .valueChanges()
-      .subscribe(items => resolve(items.find(item => item.title === urlParam)));
+      .subscribe(items => resolve(items.find(item => item.title.toLowerCase().split(' ').join('-') === urlParam)));
     });
   }
 

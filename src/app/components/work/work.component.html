@@ -102,14 +102,18 @@
         <article>
           <figure>
             <img
-              [src]="item.media.imageUrl"
+              *ngIf="item.header.type === 'image'"
+              [src]="item.header.url"
               [alt]="item.title"
               (load)="imageLoaded(item);"
-              *ngIf="item.media.imageUrl"
             >
-              <!-- <video nocontrols [hidden]="!item.media.videoPlaying">
-                <source src="{{item.media.videoUrl}}">
-              </video> -->
+            <video
+              *ngIf="item.header.type === 'video'"
+              [muted]="'muted'" autoplay loop
+              (loadeddata)="imageLoaded(item);"
+            >
+              <source src="{{ item.header.url }}">
+            </video>
           </figure>
           <h1 class="title grey" title="{{item.title}}">{{item.title}}</h1>
           <div class="work__items__list__item__details">

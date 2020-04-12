@@ -1,10 +1,10 @@
 <article class="work-detail" *ngIf="data">
   <header class="work-detail__header">
-    <figure class="work-detail__header__media {{data.media.imagePos}}">
-        <img
-          [src]="data.media.imageUrl"
-          [alt]="data.title"
-        >
+    <figure class="work-detail__header__media {{data.header.pos}}">
+        <img *ngIf="data.header.type === 'image'" [src]="data.header.url">
+        <video *ngIf="data.header.type === 'video'">
+          <source [src]="data.header.url"/>
+        </video>
     </figure>
     <h1 class="work-detail__header__title">{{data.title}}</h1>
   </header>
