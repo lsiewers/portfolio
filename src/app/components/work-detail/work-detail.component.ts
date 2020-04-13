@@ -57,7 +57,7 @@ export class WorkDetailComponent implements OnDestroy {
   }
 
   updateMetadata() {
-    const projectName = decodeURI(this.currentPage);
+    const projectName = this.data.title;
     this.titleService.setTitle(projectName + ' by Luuk Siewers');
     this.meta.updateTag({ name: 'title', content: projectName + ' by Luuk Siewers' });
     this.meta.updateTag({ property: 'og:title', content: projectName + ' by Luuk Siewers'});

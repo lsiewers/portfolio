@@ -80,9 +80,13 @@
     }
   }
 
-  img {
-    width: 100%;
+  img, video, object {
     border-radius: 30px;
+
+    span.media--small & { width: 25%; }
+    span.media--medium & { width: 50%; }
+    span.media--big & { width: 75%; }
+    span.media--full & { width: 100%; }
   }
 
   .button {

@@ -55,6 +55,22 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
       {
         name: 'Button Outlined',
         class: 'button button--dark'
+      },
+      {
+        name: 'Media Small',
+        class: 'media--small'
+      },
+      {
+        name: 'Media Medium',
+        class: 'media--medium'
+      },
+      {
+        name: 'Media Big',
+        class: 'media--big'
+      },
+      {
+        name: 'Media Full',
+        class: 'media--full'
       }
     ]
   };
@@ -92,7 +108,7 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     const sizeInKb = num / 1024;
     const unit = sizeInKb > 1024 ? 'MB' : 'kb';
 
-    return Math.floor(unit === 'MB' ? sizeInKb / 1024 : sizeInKb) + unit;
+    return (unit === 'MB' ? (sizeInKb / 1024).toFixed(1) : Math.floor(sizeInKb)) + unit;
   }
 
   isArray(value: any) {
@@ -161,6 +177,16 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   setHeader(url: string, type: string) {
     this.data.header.type = type.includes('image') ? 'image' : 'video';
     this.data.header.url = url;
+  }
+
+  toClipboard(text: string) {
+    const input = document.createElement('textarea');
+    input.innerHTML = text;
+    document.body.appendChild(input);
+    input.select();
+    const result = document.execCommand('copy');
+    document.body.removeChild(input);
+    return result;
   }
 
   ngOnDestroy(): void {
