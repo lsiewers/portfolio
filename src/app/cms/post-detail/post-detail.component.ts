@@ -71,6 +71,10 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
       {
         name: 'Media Full',
         class: 'media--full'
+      },
+      {
+        name: 'Media caption',
+        class: 'figcaption'
       }
     ]
   };
@@ -179,9 +183,9 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     this.data.header.url = url;
   }
 
-  toClipboard(text: string) {
+  toClipboard(e: Event) {
     const input = document.createElement('textarea');
-    input.innerHTML = text;
+    input.innerHTML = (e.target as HTMLElement).outerHTML;
     document.body.appendChild(input);
     input.select();
     const result = document.execCommand('copy');

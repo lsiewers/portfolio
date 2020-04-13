@@ -12,6 +12,10 @@
     margin-top: 48px;
     font-size: 1.15em;
     color: $color--grey-dark;
+    max-width: 100%;
+    word-wrap: wrap;
+    white-space: wrap;
+    word-break: normal;
   }
 
   pre {
@@ -56,10 +60,10 @@
   }
 
   span.quote {
-    position: relative;
-    left: -24px;
+    box-sizing: border-box;
     margin-top: 30px;
     width: 100%;
+    padding: 24px;
     display: inline-block;
     text-align: center;
     font-size: 2.4em;
@@ -80,13 +84,40 @@
     }
   }
 
-  img, video, object {
-    border-radius: 30px;
+  img, video, object { border-radius: 30px; }
 
-    span.media--small & { width: 25%; }
-    span.media--medium & { width: 50%; }
-    span.media--big & { width: 75%; }
-    span.media--full & { width: 100%; }
+  .figcaption {
+    font-family: $font-body;
+    color: $color--grey;
+    display: inline-block;
+    margin-top: 12px;
+    &::before {
+      content: '';
+      margin-right: 12px;
+      border-left: 3px solid $color--grey-light;
+    }
+  }
+
+  span.media--small {
+    img, video, object {
+      width: 25%;
+      @include portable {width: 100%;}
+    }
+  }
+  span.media--medium {
+    img, video, object {
+      width: 50%;
+      @include portable {width: 100%;}
+    }
+  }
+  span.media--big {
+    img, video, object {
+      width: 75%;
+      @include portable {width: 100%;}
+    }
+  }
+  span.media--full {
+    img, video, object { width: 100%; }
   }
 
   .button {

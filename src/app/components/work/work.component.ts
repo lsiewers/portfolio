@@ -11,7 +11,6 @@ import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
 import Bricks, { BricksInstance } from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
-import { WorkService } from 'src/app/services/work.service';
 import { FiltersService } from 'src/app/services/filters.service';
 import { Subscription } from 'rxjs';
 
@@ -22,6 +21,7 @@ import { Subscription } from 'rxjs';
 })
 export class WorkComponent implements AfterContentInit, AfterContentChecked, OnDestroy {
   @Input() projectFilter: Filter;
+  @Input() projectTitle: string;
 
   // filters
   activeFilters: Filter[] = [];
@@ -34,7 +34,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   // page/url
   pageType: string;
-  projectTitle: string;
+
   // tslint:disable-next-line: variable-name
   _routerSubscription: Subscription;
 
@@ -47,7 +47,6 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private workService: WorkService,
     private filtersService: FiltersService,
     private activeRouter: ActivatedRoute,
     private router: Router
@@ -75,7 +74,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   // filter tab (open/close)
   toggleFilterTab(filter: Filter) {
     if (!filter.openTab) {
-      let delay;
+      let delay: boolean;
       this.filters.find(f => f.openTab === true) ? delay = true : delay = false;
       this.filters.forEach(f => {
         if (f.openTab === undefined) { f.openTab = false; }
@@ -92,7 +91,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   toggleFilter(filter: Filter) { this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters); }
 
-  getFilteredItems(): Promise<any> {
+  async getFilteredItems(): Promise<any> {
     return this.filtersService.getFilteredItems(this.activeFilters).then(data => {
       this.pageType === 'work' ?
         this.items = data.filter(item => item.title !== this.projectTitle) :
@@ -111,7 +110,6 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
       } else if (url.includes('cms')) { this.pageType = 'cms';
       } else {
         this.pageType = 'work';
-        this.projectTitle = decodeURI(url);
         this.getFilteredItems();
         this.previewOverlay = false;
         document.querySelector('html').style.overflow = 'auto';
@@ -119,7 +117,6 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
     });
   }
 
-  // check if categorized or not
   valuesCategorized(valuesList: Array<any>): boolean {
     return !!(valuesList[0] instanceof Object);
   }
@@ -136,11 +133,6 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
       ]
     });
     this.bricks.pack();
-  }
-
-  // Other
-  projectDetailRoute(e: string, projectFilter: Filter) {
-    this.projectTitle = decodeURI(e).substr(1);
   }
 
   routeToPost(title: string) {

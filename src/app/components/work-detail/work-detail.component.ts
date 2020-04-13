@@ -49,8 +49,8 @@ export class WorkDetailComponent implements OnDestroy {
           if (this.currentPage !== data.id || typeof this.currentPage === 'undefined') {
             this.currentPage = data.id;
             this.onRoute(data.id);
-            return typeof this.workComponent === 'undefined' ?
-              null : this.workComponent.projectDetailRoute(data.id, this.projectFilter);
+            // return typeof this.workComponent === 'undefined' ?
+              // null : this.workComponent.projectDetailRoute(data.id, this.projectFilter);
           }
         }
       });

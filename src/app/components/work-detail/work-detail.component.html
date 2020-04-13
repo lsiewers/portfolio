@@ -80,7 +80,7 @@
   </footer> -->
 </article>
 
-<app-work *ngIf="projectFilter && currentPage" [projectFilter]="projectFilter" #workComponent></app-work>
+<app-work *ngIf="projectFilter && currentPage" [projectFilter]="projectFilter" [projectTitle]="data.title"></app-work>
 
 <div class="work-detail__back-to-home">
   <a [routerLink]="['/']" class="button button--dark">&#8592; Go back</a>

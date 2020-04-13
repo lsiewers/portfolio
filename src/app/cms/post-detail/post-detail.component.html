@@ -97,18 +97,16 @@
               *ngIf="metadata.type.includes('pdf')"
               [data]="file.url | safe: 'resourceUrl'"
               height="200" width="200"
-              (click)="toClipboard(file.url)"
             >
             </object>
             <img
               *ngIf="metadata.type.includes('image')"
               [src]="file.url"
-              (click)="toClipboard(file.url)"
             >
             <video
               muted autoplay loop controls
               *ngIf="metadata.type.includes('video')"
-              (click)="toClipboard(file.url)"
+              (click)="toClipboard($event)"
             ><source [src]="file.url">
             </video>
             <pre
