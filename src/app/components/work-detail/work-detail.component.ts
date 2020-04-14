@@ -88,9 +88,10 @@ export class WorkDetailComponent implements OnDestroy {
   }
 
   metadataIsEmpty(metadata: any): boolean {
-    if (this.isArray(metadata.value)) {
-      return metadata.key === 'collaboration' ? metadata.value[0].name.length > 0 : metadata.value[0].length > 0;
-    } else { return metadata.value.length > 0; }
+    if (this.isArray(metadata)) {
+      return metadata === this.data.metadata.collaboration || metadata === this.data.metadata.links ?
+        metadata[0].name.length > 0 : metadata[0].length > 0;
+    } else { return metadata.length > 0; }
   }
 
   isArray(obj) { return Array.isArray(obj); }

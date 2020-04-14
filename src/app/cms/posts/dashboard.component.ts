@@ -39,7 +39,12 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
         budget: '< 1 week | 1 - 3 weeks | > 3 weeks',
         client: [''],
         collaboration: [{name: '', url: ''}],
-        finishDate: new Date(new Date().getTime())
+        finishDate: new Date(new Date().getTime()),
+        links: [{
+          name: 'code',
+          icon: 'github.svg',
+          url: 'github.com/lsiewers'
+        }]
       },
       filterComplete: null
     };

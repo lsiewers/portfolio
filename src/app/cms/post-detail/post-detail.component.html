@@ -55,7 +55,10 @@
           <p *ngIf="!isArray(metadata.value)">
             <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="text">
           </p>
-          <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'collaboration'">
+          <ng-container
+            *ngIf="isArray(metadata.value)
+            && metadata.key !== 'collaboration'
+            && metadata.key !== 'links'">
             <p *ngFor="let value of metadata.value; let i = index">
               <input
                 [(ngModel)]="metadata.value[i]"
@@ -87,6 +90,33 @@
           </p>
           <p *ngIf="metadata.key === 'finishDate'">
             <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="date">
+          </p>
+          <p *ngIf="metadata.key === 'links'">
+            <br><small>NAME</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].name"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
+            >
+            <br><br><small>ICON</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].icon"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
+            >
+            <br><br><small>URL</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].url"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
+            >
+            <!-- <input [(ngModel)]="subdata.values" type="date"> -->
           </p>
         </li>
       </ul>
@@ -140,7 +170,10 @@
     </div>
     <div class="cms-detail__footer__buttons">
       <button class="button button--dark delete" (click)="delete();">Delete</button>
-      <button class="button button--dark save" (click)="save()">Save</button>
+      <button class="button button--dark save" (click)="save()">
+        Save
+        <div class="icon margin--left" [inlineSVG]="'download.svg'"></div>
+      </button>
     </div>
   </footer>
 </article>

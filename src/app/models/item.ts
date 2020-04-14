@@ -15,7 +15,14 @@ export interface Item {
       name: string,
       url?: string
     }>,
-    finishDate: Date
+    finishDate: Date,
+    links: [
+      {
+        name: string,
+        icon: string,
+        url: string
+      }
+    ]
   };
   details: string;
   filterComplete?: Array<boolean>;

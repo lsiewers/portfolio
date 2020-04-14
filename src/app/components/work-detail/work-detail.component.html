@@ -17,27 +17,41 @@
     <!-- Metadata -->
     <aside class="work-detail__metadata">
       <ul class="work-detail__metadata__list">
-        <li
-          *ngFor="let metadata of data.metadata | keyvalue"
-          class="work-detail__metadata__list__item {{metadata.key}}"
-        >
-          <ng-container *ngIf="metadataIsEmpty(metadata)">
-            <h1>{{metadata.key}}</h1>
-            <!-- finish date -->
-            <p *ngIf="!isArray(metadata.value) && metadata.key !== 'finishDate'">{{metadata.value}}</p>
-            <time *ngIf="metadata.key === 'finishDate'">{{metadata.value | date}}</time>
-            <!-- lists (clients, focus, tools) -->
-            <ng-container *ngIf="isArray(metadata.value) && metadata.key !== 'collaboration'">
-              <p *ngFor="let value of metadata.value">{{value}}</p>
-            </ng-container>
-            <!-- collaboration -->
-            <ng-container *ngIf="metadata.key === 'collaboration'">
-              <p *ngFor="let value of metadata.value">
-                <a *ngIf="value.url.length > 0" [href]="value.url">{{value.name}}</a>
-                <ng-container *ngIf="value.url.length === 0">{{ value.name }}</ng-container>
-              </p>
-            </ng-container>
-          </ng-container>
+        <li *ngIf="metadataIsEmpty(data.metadata.focus)" class="work-detail__metadata__list__item focus">
+          <h1>Focus</h1>
+          <p *ngFor="let value of data.metadata.focus">{{ value }} design</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.purpose)" class="work-detail__metadata__list__item purpose">
+          <h1>Purpose</h1>
+          <p>{{ data.metadata.purpose }}</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.client)" class="work-detail__metadata__list__item client">
+          <h1>Client</h1>
+          <p *ngFor="let value of data.metadata.client">{{ value }}</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.budget)" class="work-detail__metadata__list__item budget">
+          <h1>Budget</h1>
+          <p>{{ data.metadata.budget }}</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.finishDate)" class="work-detail__metadata__list__item finishDate">
+          <h1>Finish date</h1>
+          <time>{{data.metadata.finishDate | date}}</time>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.collaboration)" class="work-detail__metadata__list__item collaboration">
+          <h1>Collaboration</h1>
+          <p *ngFor="let value of data.metadata.collaboration">
+            <a *ngIf="value.url.length > 0" [href]="value.url">{{value.name}}</a>
+            <ng-container *ngIf="value.url.length === 0">{{ value.name }}</ng-container>
+          </p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.links)" class="work-detail__metadata__list__item links">
+          <h1>Links</h1>
+          <p *ngFor="let value of data.metadata.links">
+            <a class="button button--dark" target="_blank" [href]="'//' + value.url">
+              {{ value.name }}
+              <div class="icon margin--left" [inlineSVG]="value.icon"></div>
+            </a>
+          </p>
         </li>
       </ul>
     </aside>
