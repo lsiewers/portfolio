@@ -1,0 +1,16 @@
+
+.icon {
+  fill: currentColor;
+  display: inline-block;
+  max-width: 18px;
+
+  &.margin--left { margin-left: 6px; }
+  &.margin--right { margin-right: 6px; }
+
+  &.small { max-width: 12px; }
+  &.large { max-width: 24px; }
+
+  &.rotate--90 { transform: rotate(45deg); }
+  &.rotate--180 { transform: rotate(180deg); }
+  &.rotate--270 { transform: rotate(270deg); }
+}

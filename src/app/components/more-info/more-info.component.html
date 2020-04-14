@@ -16,15 +16,17 @@
     <span class="highlight">front-end development</span> with Angular, Firebase, semantic HTML, writing clean SCSS and did a lot of <span class="highlight">visual design</span>.
   </p>
   <a class="button button--dark" href="">Download CV &#10515;</a>
-  <a class="button button--dark" href="">LinkedIn profile &#10138;</a>
+  <a class="button button--dark" href="">LinkedIn profile <div class="icon margin--left" [inlineSVG]="'linkedin.svg'"></div> </a>
 
   <h2>Get in touch</h2>
   <p>
       I am still <span class="highlight">looking for an internship</span> (from 09-'20), do you have or know a good place for me? Or do you need an interaction designer for your project?
   </p>
-  <a class="button button--dark" href="">Mail me  &#9993;</a>
+  <a class="button button--dark" href="">Mail me <div class="icon margin--left" [inlineSVG]="'mail.svg'"></div></a>
 </article>
 
 <div class="more-info__back-to-home">
-  <a [routerLink]="['/']" class="button button--dark">&#8592; Go back</a>
+  <a [routerLink]="['/']" class="button button--dark">
+    <div class="icon margin--right" [inlineSVG]="'arrow.svg'"></div> Go back
+  </a>
 </div>

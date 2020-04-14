@@ -87,6 +87,12 @@ export class WorkDetailComponent implements OnDestroy {
       });
   }
 
+  metadataIsEmpty(metadata: any): boolean {
+    if (this.isArray(metadata.value)) {
+      return metadata.key === 'collaboration' ? metadata.value[0].name.length > 0 : metadata.value[0].length > 0;
+    } else { return metadata.value.length > 0; }
+  }
+
   isArray(obj) { return Array.isArray(obj); }
 
   ngOnDestroy(): void {

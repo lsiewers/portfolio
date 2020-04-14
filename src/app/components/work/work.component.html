@@ -127,7 +127,7 @@
             </ul>
             <div class="buttons">
               <a class="button" (click)="item.workPreview ? closePreview(item, null, i) : null">Close</a>
-              <a class="button button--dark" (click)="routeToPost(item.title)">More details</a>
+              <a class="button button--dark" (click)="routeToPost(item.title)">More details<div class="icon rotate--180" [inlineSVG]="'arrow.svg'"></div></a>
             </div>
           </div>
         </article>

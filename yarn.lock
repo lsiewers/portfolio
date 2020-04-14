@@ -5473,6 +5473,11 @@ ng-click-outside@^5.1.1:
   resolved "https://registry.yarnpkg.com/ng-click-outside/-/ng-click-outside-5.3.0.tgz#7e53889adb041f8f19b6af84bdb56a373638bb54"
   integrity sha512-+WYtu2hSQy0F6VlHOqKhPtdVJimTiXXNtZPBGfLORJNX71ieYGsentke8KG+8EudR36FUB6Ya9g2GwGXM0UqdA==
 
+ng-inline-svg@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/ng-inline-svg/-/ng-inline-svg-10.0.0.tgz#f8211ed04073a61ffd8428d811924446597b4921"
+  integrity sha512-gyTOWmVT2F/l6vBMEcqVwebd9dTdGTxdiyVhmo9omRA2PuCjpfdeiNDM6txGEMfMElZy5zygxgTQJzpbJk4GPA==
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"

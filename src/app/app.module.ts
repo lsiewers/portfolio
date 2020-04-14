@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 import { WorkDetailComponent } from './components/work-detail/work-detail.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { ContactComponent } from './components/contact/contact.component';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DashboardComponent } from './cms/posts/dashboard.component';
@@ -22,6 +21,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MoreInfoComponent } from './components/more-info/more-info.component';
 import { SortDatePipe } from './pipes/sort-date.pipe';
 import { CommonModule } from '@angular/common';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 @NgModule({
    declarations: [
@@ -30,7 +30,6 @@ import { CommonModule } from '@angular/common';
       SafePipe,
       WorkComponent,
       WorkDetailComponent,
-      ContactComponent,
       DashboardComponent,
       PostDetailComponent,
       MoreInfoComponent,
@@ -43,6 +42,7 @@ import { CommonModule } from '@angular/common';
       HttpClientModule,
       ClickOutsideModule,
       FormsModule,
+      InlineSVGModule.forRoot({ baseUrl: '/assets/icons/' }),
       AngularEditorModule,
       AngularFireStorageModule,
       AngularFireModule.initializeApp(environment.firebase),

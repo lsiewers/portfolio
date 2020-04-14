@@ -21,7 +21,7 @@
           *ngFor="let metadata of data.metadata | keyvalue"
           class="work-detail__metadata__list__item {{metadata.key}}"
         >
-          <ng-container *ngIf="!isArray(metadata.value) ? metadata.value[0].length > 0 : metadata.value.length > 0">
+          <ng-container *ngIf="metadataIsEmpty(metadata)">
             <h1>{{metadata.key}}</h1>
             <!-- finish date -->
             <p *ngIf="!isArray(metadata.value) && metadata.key !== 'finishDate'">{{metadata.value}}</p>
@@ -83,5 +83,6 @@
 <app-work *ngIf="projectFilter && currentPage" [projectFilter]="projectFilter" [projectTitle]="data.title"></app-work>
 
 <div class="work-detail__back-to-home">
-  <a [routerLink]="['/']" class="button button--dark">&#8592; Go back</a>
+  <a [routerLink]="['/']" class="button button--dark">
+    <div class="icon" [inlineSVG]="'arrow.svg'"></div>Go back</a>
 </div>
