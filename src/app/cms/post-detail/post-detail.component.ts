@@ -166,9 +166,11 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     });
   }
 
-  save() {
-    console.log(this.data);
+  quickSave() {
+    this.workService.updateWorkPost(this.data);
+  }
 
+  save() {
     this.workService.updateWorkPost(this.data).then(() => this.router.navigate(['/cms']));
   }
 

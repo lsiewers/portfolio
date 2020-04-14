@@ -2,13 +2,17 @@
 .icon {
   fill: currentColor;
   display: inline-block;
-  max-width: 18px;
+
+  &, svg {
+    width: 18px;
+    height: 18px;
+  }
 
   &.margin--left { margin-left: 6px; }
   &.margin--right { margin-right: 6px; }
 
-  &.small { max-width: 12px; }
-  &.large { max-width: 24px; }
+  &.small { width: 12px; }
+  &.large { width: 24px; }
 
   &.rotate--90 { transform: rotate(45deg); }
   &.rotate--180 { transform: rotate(180deg); }

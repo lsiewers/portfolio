@@ -36,6 +36,11 @@
 
     <section class="work-detail__content cms-detail__main__content">
         <angular-editor [(ngModel)]="data.details" [config]="editorConfig"></angular-editor>
+        <br>
+        <button (click)="quickSave()" class="button button--dark">
+          Quick Save
+          <div class="icon margin--left small" [inlineSVG]="'download.svg'"></div>
+        </button>
     </section>
 
     <!-- Metadata -->
