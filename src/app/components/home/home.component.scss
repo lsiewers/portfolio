@@ -29,6 +29,8 @@
     span {
       color: $color--grey;
       margin-top: 24px;
+      @include flexbox(row, center, unset);
+      display: inline-flex;
     }
 
     figure {

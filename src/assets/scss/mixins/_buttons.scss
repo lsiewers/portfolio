@@ -1,6 +1,4 @@
 .button {
-  @include flexbox(row, center, center);
-  display: inline-flex;
   font-family: $font-body;
   font-weight: 600;
   text-decoration: none;

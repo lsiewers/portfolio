@@ -37,6 +37,8 @@ li {
 a {
   // text-decoration: none;
   color: $color--grey-dark;
+  @include flexbox(row, center, unset);
+  display: inline-flex;
 }
 
 img {

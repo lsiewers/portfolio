@@ -19,10 +19,10 @@ export class MoreInfoComponent implements OnInit {
   }
 
   updateMetadata() {
-    this.titleService.setTitle('More about Luuk Siewers');
-    this.meta.updateTag({ name: 'title', content: 'More about Luuk Siewers' });
-    this.meta.updateTag({ property: 'og:title', content: 'More about Luuk Siewers'});
-    this.meta.updateTag({ name: 'twitter:title', content: 'More about Luuk Siewers'});
+    this.titleService.setTitle('More about me');
+    this.meta.updateTag({ name: 'title', content: 'More about me' });
+    this.meta.updateTag({ property: 'og:title', content: 'More about me'});
+    this.meta.updateTag({ name: 'twitter:title', content: 'More about me'});
 
     this.meta.updateTag({
       name: 'description',
