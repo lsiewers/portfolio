@@ -77,8 +77,9 @@
     line-height: 1.5;
     color: $color--grey;
     z-index: 1;
-    word-wrap: break-word;
+    // word-wrap: auto;
     white-space: break-spaces;
+    hyphens: auto;
 
     @include portable { font-size: 1.6em; }
 

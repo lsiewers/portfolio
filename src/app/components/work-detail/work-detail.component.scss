@@ -11,9 +11,13 @@
   &__main {
     padding: 48px 24px;
     max-width: 1200px;
-    display: flex;
+    // display: flex;
     margin: 0 auto;
 
+    @include desktop {
+      @include flexbox(row);
+      flex-wrap: wrap;
+    }
     @include portable { @include flexbox(column-reverse); }
     @include tablet { padding: 0 48px }
   }
