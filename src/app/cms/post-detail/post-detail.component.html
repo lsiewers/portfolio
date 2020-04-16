@@ -39,8 +39,12 @@
         <br>
         <button (click)="quickSave()" class="button button--dark">
           Quick Save
-          <div class="icon margin--left small" [inlineSVG]="'download.svg'"></div>
+          <div class="icon margin--left" [inlineSVG]="'download.svg'"></div>
         </button>
+        <a [routerLink]="'/'+postUrl" target="_blank" class="button button--dark">
+          Preview page
+          <div class="icon margin--left" [inlineSVG]="'outside.svg'"></div>
+        </a>
     </section>
 
     <!-- Metadata -->

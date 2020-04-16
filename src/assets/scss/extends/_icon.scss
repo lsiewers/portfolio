@@ -8,11 +8,21 @@
     height: 18px;
   }
 
-  &.margin--left { margin-left: 6px; }
-  &.margin--right { margin-right: 6px; }
+  &:not(.small):not(.large) {
+    &.margin--left { margin-left: 9px; }
+    &.margin--right { margin-right: 9px; }
+  }
+  &.small {
+    &, svg { width: 12px; }
+    &.margin--left { margin-left: 6px; }
+    &.margin--right { margin-right: 6px; }
+  }
+  &.large {
+    &, svg { width: 24px; }
 
-  &.small { width: 12px; }
-  &.large { width: 24px; }
+    &.margin--left { margin-left: 12px; }
+    &.margin--right { margin-right: 12px; }
+  }
 
   &.rotate--90 { transform: rotate(45deg); }
   &.rotate--180 { transform: rotate(180deg); }

@@ -18,12 +18,14 @@
   appearance: none !important;
   resize: none !important;
   transition:
-    transform 0.12s ease-out;
+    transform 0.12s ease-out,
+    border-color 0.12s ease-out;
   transform: scale(1);
   transform-origin: center top;
 
   &:focus {
     transform: scale(1.05);
+    border-color: $color--grey !important;
   }
 }
 
@@ -49,13 +51,14 @@
     font-size: 1em;
     transition:
       transform 0.12s ease-out,
-      background-color 0.12s ease-in;
+      border-color 0.12s ease-in;
     transform: scale(1);
 
     &::placeholder { opacity: .4; }
     &:focus {
       outline: none;
       transform: scale(1.05);
+      border-color: $color--grey;
     }
   }
 
@@ -90,12 +93,18 @@
   }
 
   &__main {
+    margin: 0 auto;
 
     &__content {
       padding-left: 0;
 
       .angular-editor-textarea {
         @extend .work-detail__content;
+      }
+
+      & > button, & > a {
+        font-size: 1em;
+        margin-top: 24px;
       }
     }
 
@@ -107,12 +116,19 @@
 
   &__footer {
     padding: 30px 36px;
+
     &__images {
       padding: 0 0 90px;
+      margin: 0 auto;
 
-      ul { display: flex; }
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        // justify-content: center;
+      }
 
       li {
+        min-width: 90px;
         width: 25%;
         margin: 12px 0 12px 24px;
 

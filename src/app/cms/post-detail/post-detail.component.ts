@@ -85,6 +85,7 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   }> = [];
   // tslint:disable-next-line: variable-name
   _activeRouterSubscriber: Subscription;
+  postUrl: string;
 
   constructor(
     private activeRouter: ActivatedRoute,
@@ -96,6 +97,7 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
       this.activeRouter.params.subscribe(data =>
         this.workService.getWorkPost(data.id)
           .then((post: Item) => {
+            this.postUrl = data.id;
             this.data = post;
             this.updateFiles();
           })
@@ -122,6 +124,8 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   addField(metadata, type) {
     if (type === 'collaboration') {
       metadata.push({name: '', url: ''});
+    } else if (type === 'links') {
+      metadata.push({name: '', icon: '', url: ''});
     } else if (type === 'tools' || type === 'client' || type === 'focus') {
       metadata.value.push('');
     }
@@ -167,7 +171,9 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   }
 
   quickSave() {
-    this.workService.updateWorkPost(this.data);
+    this.workService.updateWorkPost(this.data)
+      .then(() => alert('saved!'))
+      .catch(err => alert('Whoops: ' + err));
   }
 
   save() {

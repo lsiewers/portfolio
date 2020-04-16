@@ -1,4 +1,7 @@
 .content {
+  max-width: 720px;
+
+  @include portable { max-width: 100%; }
 
   h1, h2, h3, h4 { margin: 2.1em 0 0em; }
   h1 { @extend %title--h2; }
@@ -22,14 +25,18 @@
     background-color: $color--grey-light;
     font-family: $font-mono;
     margin-top: 18px;
-    padding: 30px 6px;
+    padding: 30px;
+    overflow: auto;
     line-height: 1.6;
     border-radius: 24px;
+    width: 100%;
+    word-wrap: normal;
   }
 
   & > p:first-of-type {
     font-size: 1.5em;
     line-height: 1.8;
+    margin-bottom: 4em;
 
     @include portable { font-size: 1.38em; }
 
@@ -66,7 +73,7 @@
     padding: 24px;
     display: inline-block;
     text-align: center;
-    font-size: 2.4em;
+    font-size: 2.1em;
     line-height: 1.5;
     color: $color--grey;
     z-index: 1;
