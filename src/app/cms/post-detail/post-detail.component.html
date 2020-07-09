@@ -18,33 +18,89 @@
       <option value="bottom">Bottom</option>
     </select>
     <input class="cms-detail__header__reference-input" type="text" [(ngModel)]="data.header.ref" placeholder="image reference caption">
+    <small>Transparent PNG</small>
+    <input *ngIf="data.header.type === 'image'" type="checkbox" [(ngModel)]="data.header.transparentImage"/>
     <h1 class="work-detail__header__title">
       <input
-        class="cms-detail__header__title"
+        class="cms-detail__header__title sans--bold h2"
         [(ngModel)]="data.title"
         type="text">
     </h1>
-    <p class="work-detail__header__subtitle cms-detail__header__subtitle">
-      short description
+    <p class="work-detail__header__subtitle cms-detail__header__subtitle serif--bold h6 grey">
+      Subject description (subtitle)
       <textarea
+        class="serif--bold"
+        [style.color]="data.palette.primary"
+        [style.background]="data.header.transparentImage ? 'linear-gradient('+data.palette.secondary+','+data.palette.tertiary+')' : data.palette.secondary | safe: 'style'"
         [(ngModel)]="data.subtitle"
+        type="text"></textarea>
+    </p>
+    <div class="cms-detail__header__colors">
+      <div><input type="color" [style.background-color]="data.palette.primary" [(ngModel)]="data.palette.primary"></div>
+      <div><input type="color" [style.background-color]="data.palette.secondary" [(ngModel)]="data.palette.secondary"></div>
+      <div><input type="color" [style.background-color]="data.palette.tertiary" [(ngModel)]="data.palette.tertiary"></div>
+    </div>
+    <p class="cms-detail__header__product__description cms-detail__header__subtitle serif--bold h6 grey">
+      Product description
+      <textarea
+        class="serif"
+        [(ngModel)]="data.productDescription"
         type="text"></textarea>
     </p>
   </header>
   <main class="work-detail__main cms-detail__main">
     <!-- Content -->
-
     <section class="work-detail__content cms-detail__main__content">
-        <angular-editor [(ngModel)]="data.details" [config]="editorConfig"></angular-editor>
-        <br>
-        <button (click)="quickSave()" class="button button--dark">
-          Quick Save
-          <div class="icon margin--left" [inlineSVG]="'download.svg'"></div>
-        </button>
-        <a [routerLink]="'/'+postUrl" target="_blank" class="button button--dark">
-          Preview page
-          <div class="icon margin--left" [inlineSVG]="'outside.svg'"></div>
-        </a>
+      <h1 class="h2 grey">Content</h1>
+      <ng-container *ngIf="data.details.length > 0">
+        <div class="cms-detail__main__content__paragraph" *ngFor="let paragraph of data.details; let i = index">
+            <select type="text" [(ngModel)]="paragraph.class">
+              <option value="image--left">Image left</option>
+              <option value="image--right">Image right</option>
+              <option value="image--full">Image full width</option>
+              <option value="double--column">Double column</option>
+              <option value="quote">quote</option>
+            </select>
+          <figure *ngIf="paragraph.class.includes('image')">
+              <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
+              <video *ngIf="paragraph.media.type === 'video'">
+                <source [src]="paragraph.media.url">
+              </video>
+              <input type="text" [(ngModel)]="paragraph.media.url">
+              <input type="text" [(ngModel)]="paragraph.media.ref">
+              <select type="text" [(ngModel)]="paragraph.media.type">
+                <option value="image">image</option>
+                <option value="video">video</option>
+              </select>
+          </figure>
+          <div class="cms-detail__main__content__paragraph__text">
+            <input class="h3 grey--dark title" *ngIf="paragraph.class !== 'quote'" type="text" [(ngModel)]="paragraph.title">
+            <textarea class="serif grey--dark text" type="text" [(ngModel)]="paragraph.text"></textarea>
+
+            <h4 *ngIf="paragraph.class !== 'quote'" class="h4 grey">Links</h4>
+            <div *ngIf="paragraph.class !== 'quote'" class="links">
+              <div  *ngFor="let link of paragraph.links; let j = index">
+                <input type="text" placeholder="Link name..." [(ngModel)]="link.name"><br>
+                <input type="text" placeholder="Link url..." [(ngModel)]="link.url"><br>
+                <input type="text" placeholder="Icon name..." [(ngModel)]="link.icon"><br><br>
+                <a class="button button--dark button--icon--small grey" target="_blank" [href]="link.url">{{link.name}} <i class="uil uil-{{link.icon}}"></i></a>
+                <button class="button" (click)="removeLink(i, j)"><i class="uil uil-times"></i></button>
+              </div>
+              <button class="button button--icon--small" (click)="addLink(i)">Add link <i class="uil uil-plus"></i></button>
+            </div>
+          </div>
+          <button class="button button--dark button--icon--small" (click)="removeParagraph(i);">Remove paragraph<i class="uil uil-times"></i></button>
+        </div>
+      </ng-container>
+      <!-- add paragraph to be added -->
+      <button class="button button--dark button--icon" (click)="addParagraph();">Add paragraph <i class="uil uil-plus"></i></button>
+      <br>
+      <button (click)="quickSave()" class="button button--icon button--dark sans--bold">
+        Quick Save <i class="uil uil-save grey"></i>
+      </button>
+      <a [routerLink]="'/'+postUrl" target="_blank" class="button button--icon--small button--dark">
+        Preview page <i class="uil uil-eye grey"></i>
+      </a>
     </section>
 
     <!-- Metadata -->
@@ -121,6 +177,12 @@
               (keyup.backspace)="removeField(data.metadata[metadata.key], i, $event)"
             >
             <!-- <input [(ngModel)]="subdata.values" type="date"> -->
+            <a
+              class="button button--icon--small grey"
+              *ngFor="let value of metadata.value"
+              [href]="'//'+value.url"
+              target="_blank"
+            ><i class="uil uil-{{value.icon}} grey"></i>{{value.name}}</a>
           </p>
         </li>
       </ul>
@@ -173,10 +235,9 @@
       >
     </div>
     <div class="cms-detail__footer__buttons">
-      <button class="button button--dark delete" (click)="delete();">Delete</button>
-      <button class="button button--dark save" (click)="save()">
-        Save
-        <div class="icon margin--left" [inlineSVG]="'download.svg'"></div>
+      <button class="button button--dark button--icon--small delete" (click)="delete();">Delete <i class="uil uil-times"></i></button>
+      <button class="sans--bold button button--dark button--icon save" (click)="save()">
+        Save<i class="uil uil-save"></i>
       </button>
     </div>
   </footer>

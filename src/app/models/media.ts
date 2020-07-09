@@ -1,10 +1,9 @@
-import { Url } from 'url';
-
 export interface Media {
   url: string;
-  pos: 'bottom' | 'top' | 'center';
+  pos?: 'bottom' | 'top' | 'center';
   ref: string;
-  type: 'image' | 'video';
+  type?: 'image' | 'video';
+  transparentImage?: boolean;
   name?: string;
   metadata?: Promise<{size: number, type: string}>;
 }

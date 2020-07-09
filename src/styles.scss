@@ -4,24 +4,16 @@
 html,
 body {
   // @extend %block--grey-dark;
-  font-family: $font-body;
+  @extend %sans;
   overflow-x: hidden;
   position: relative;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth
 }
 
 // html { overflow: hidden;; }
-
-body::before {
-  content: '';
-  @include abs();
-  @include size();
-  background-image: url('assets/images/paper-texture.png');
-  opacity: .75;
-  z-index: -1;
-}
 
 html,
 body,
@@ -30,19 +22,39 @@ ul {
   padding: 0;
 }
 
+body {
+  @include desktop {
+    --page-padding: 120px;
+  }
+  @include tablet {
+    --page-padding: 60px;
+  }
+  @include mobile {
+    --page-padding: 30px;
+  }
+
+  padding: 0 var(--page-padding);
+}
+
+
+body:not(.navigation--open) .navigation { transform: translateY(-80px); }
+body.navigation--open .navigation { transform: translateY(0px); }
+
 li {
   list-style: none;
 }
 
+i {
+  font-size: 1.8em;
+}
+
 a, button {
-  // text-decoration: none;
+  text-decoration: none;
   color: $color--grey-dark;
   @include flexbox(row, center, unset);
   display: inline-flex;
-}
-
-img {
-  opacity: .85;
+  border: none;
+  font-size: 1em;
 }
 
 .copyright {

@@ -1,36 +1,51 @@
 .button {
-  font-family: $font-body;
-  font-weight: 600;
+  @extend %sans;
   text-decoration: none;
-  padding: .65em 1.15em;
   margin: 6px;
-  border-radius: 2em;
+  border-radius: 1.25em;
   cursor: pointer;
-  transform: scale(1);
   box-sizing: border-box;
+  white-space: nowrap;
   background-color: rgba($color--grey-dark, 0);
-  transition: background-color 0.12s ease-in, transform 0.12s ease-out;
+  transition:
+    background-color $transition--fast $easing--in,
+    transform $transition--extra-fast $easing--in;
 
-  .icon { display: inherit; }
+  .uil {
+    &:not(.grey) { color: $color--primary; }
+  }
 
   &:hover { transform: scale(1.05); }
 
-  &--dark {
-    border: solid 0.2em rgba($color--grey, 0.24);
-    color: $color--grey-dark;
+  &:not(.button--icon):not(.button--icon--small) { padding: .5em 1.25em .75em; }
+  &--icon,
+  &--icon--small {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.12em .9em .36em 1.2em;
+  }
+  &--icon {
+    padding-right: .6em;
+    .uil { font-size: 1.8em; }
+  }
+  &--icon--small {
+    .uil { font-size: 1.5em; }
+  }
 
-    &:hover { background-color: rgba($color--grey, 0.24); }
+  &--dark {
+    color: $color--grey;
+
+    &:hover { background-color: rgba($color--grey, 0.1); }
   }
 
   &--light {
-    border: solid 0.2em rgba($color--grey-light, 0.09);
     color: $color--grey-light;
 
     &:hover { background-color: rgba($color--grey-light, 0.09); }
   }
 
   &:active {
-    transition: transform 0.024s ease-out;
-    transform: scale(1);
+    transition: transform $transition--extra-fast $easing--out;
+    transform: scale(0.95);
   }
 }

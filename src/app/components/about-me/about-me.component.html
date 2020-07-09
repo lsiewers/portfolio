@@ -1,0 +1,39 @@
+<article class="work-detail about-me" *ngIf="data">
+    <header class="work-detail__header about-me__header">
+      <figure> <img [src]="data.header.url"> </figure>
+      <p class="work-detail__header__subtitle serif">{{data.subtitle}}</p>
+    </header>
+
+    <main class="work-detail__main about-me__main">
+
+      <!-- Content -->
+      <section class="work-detail__content content">
+        <article *ngFor="let paragraph of data.details" class="{{paragraph.class}} content__paragraph">
+          <figure class="content__paragraph__media">
+            <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
+            <video *ngIf="paragraph.media.type === 'video'" >
+                <source [src]="paragraph.media.url">
+            </video>
+          </figure>
+          <div class="content__paragraph__text">
+            <h1 *ngIf="paragraph.title" class="h2">{{paragraph.title}}</h1>
+            <p class="serif">{{paragraph.text}}</p>
+            <div class="content__paragraph__text__links grey">
+              <a
+                *ngFor="let link of paragraph.links"
+                target="_blank"
+                [href]="link.url"
+                class="button"
+              >
+                <i class="uil uil-{{link.icon}} grey"></i> {{link.name}}
+              </a>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+
+  <div class="work-detail__back-to-home">
+    <a [routerLink]="['/']" class="button button--dark"><i class="uil uil-arrow-left grey"></i> Go back</a>
+  </div>

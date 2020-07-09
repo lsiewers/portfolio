@@ -13,71 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestroy {
   data: Item;
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '30rem',
-    minHeight: '30rem',
-    placeholder: 'Enter text here...',
-    translate: 'no',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: '',
-    toolbarHiddenButtons: [
-      [
-        'indent',
-        'outdent',
-        'underline',
-        'strikeThrough',
-        'justifyRight',
-        'subscript',
-        'superscript',
-        'foregroundColor',
-        'backgroundColor',
-        'fontName',
-        'fontSize',
-        'clearFormatting',
-        'insertHorizontalRule'
-      ]
-    ],
-    customClasses: [
-      {
-        name: 'Quote',
-        class: 'quote'
-      },
-      {
-        name: 'Highlight',
-        class: 'highlight'
-      },
-      {
-        name: 'Button',
-        class: 'button'
-      },
-      {
-        name: 'Button Outlined',
-        class: 'button button--dark'
-      },
-      {
-        name: 'Media Small',
-        class: 'media--small'
-      },
-      {
-        name: 'Media Medium',
-        class: 'media--medium'
-      },
-      {
-        name: 'Media Big',
-        class: 'media--big'
-      },
-      {
-        name: 'Media Full',
-        class: 'media--full'
-      },
-      {
-        name: 'Media caption',
-        class: 'figcaption'
-      }
-    ]
-  };
+
   mediaFiles: Array<{
     name: string,
     url: string,
@@ -184,6 +120,31 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
     if (confirm('Are you sure?')) {
       this.workService.removeWorkPost(this.data.id).then(() => this.router.navigate(['/cms']));
     }
+  }
+
+  addParagraph() {
+    this.data.details.push({
+      media: {
+        url: '',
+        ref: 'This is an image caption',
+        type: 'image'
+      },
+      title: 'This is a title',
+      text: 'This is some text',
+      links: [],
+      class: 'image--right'
+    });
+  }
+
+  removeParagraph(i: number) {
+    this.data.details.splice(i, 1);
+  }
+
+  addLink(i: number) {
+    this.data.details[i].links.push({name: 'a link', icon: '', url: ''});
+  }
+  removeLink(i: number, j: number) {
+    this.data.details[i].links.splice(j, 1);
   }
 
   setHeader(url: string, type: string) {

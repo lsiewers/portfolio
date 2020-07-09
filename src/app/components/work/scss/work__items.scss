@@ -1,5 +1,6 @@
 .work__items {
   @include flexbox(column);
+  padding-bottom: 60px;
 
   &__results {
     display: inline;
@@ -10,12 +11,12 @@
     @include abs(0, unset, unset, 0);
     @include size;
     z-index: -1;
-    background-color: rgba($color--grey, 0.0);
     pointer-events: all;
     transition: background-color 0.3s ease-out;
+    opacity: 0;
 
     &.preview--active {
-      background-color: rgba($color--grey, 0.24);
+      opacity: $transparency;
       z-index: 9;
     }
   }
@@ -37,154 +38,9 @@
       height: unset !important;
     }
 
-    &__item {
-      min-width: 240px; max-width: 360px;
-      // widsth: 360px;
-      // border: solid 6px $color--black;
-      // background-color: white;
-      background-image: url('/assets/images/paper-texture.png');
-      border-radius: 18px;
-      box-sizing: border-box;
-      // padding: 1em 1em 1.25em;
-      box-shadow: 0 6px 12px rgba($color--grey, .3);
-      transform: translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg);
-      transform-origin: center center;
-      will-change: transform;
-      perspective: 100px;
-      overflow: hidden;
-      transition:
-        box-shadow .18s ease-in,
-        transform .24s ease-in,
-        opacity .3s .2s ease-in;
-      opacity: 0;
-
-      &:hover {
-        transition:
-          box-shadow .24s ease-out,
-          transform .18s ease-out;
-        box-shadow: 0 9px 24px rgba($color--grey, .18);
-      }
-
-      &:not(.state--preview) {
-        cursor: pointer;
-
-        article { pointer-events: none; }
-      }
-
-      &.state--preview {
-        transition: transform .3s ease-out;
-        overflow: auto;
-        max-height: 75vh;
-        z-index: 999;
-
-        figure {
-          max-height: 30vh;
-          overflow: hidden;
-        }
-      }
-
-      .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
-
-      @include portable {
-        max-width: unset;
-        width: 100% !important;
-        position: static !important;
-        margin-top: 24px;
-
-        &.state--preview {
-          position: sticky !important;
-          max-height: 65vh;
-        }
-      }
-
-      &__close-preview {
-        @include abs(20px, 20px, unset, unset);
-        pointer-events: all !important;
-        z-index: 99;
-      }
-
-      figure {
-        margin: 0;
-        position: relative;
-        transition:
-          max-height .3s ease-in;
-        max-height: 80vh;
-
-        // &::before {
-        //   content: '';
-        //   @include size;
-        //   @include abs(unset, unset, 0, 0);
-        //   display: block;
-        //   background: linear-gradient(15deg, white, rgba(white, 0));
-        // }
-
-        img, video { @include size; }
-      }
-
-      h1 {
-        @extend %title--h3;
-        padding: 18px 24px 24px;
-        margin: 0;
-        text-align: left;
-      }
-
-      &__details {
-        padding: 0px 24px;
-        max-height: 0px;
-        overflow: hidden;
-        opacity: 0;
-        transition:
-          max-height .24s ease-in,
-          opacity .24s ease-in;
-
-        .state--preview & {
-          transition:
-            max-height .24s ease-out,
-            opacity .24s .24s ease-out;
-          max-height: 320px;
-          opacity: 1;
-        }
-
-        ul {
-          // background-color: $color--grey-light;
-          color: $color--grey;
-
-          li:not(:first-child) { margin-top: 3px }
-
-          span:not(:last-child)::after {
-            content: ' & ';
-          }
-        }
-
-        p {
-          margin-top: 0;
-          // padding: 0px 24px 18px;
-          font-family: $font-serif;
-        }
-
-        .buttons {
-          @include flexbox(row, center, flex-end);
-          margin: 18px 0;
-        }
-      }
-    }
-
 
     .masonry-gutter { width: 10%; }
   }
 
   &__show-button { margin: 60px auto 0; }
-}
-
-@keyframes fadeIn {
-  0% {
-    box-shadow: 0 6px 12px rgba($color--grey, .3);
-    filter:blur(1px);
-    opacity: 0
-  }
-  100% {
-    box-shadow: 0 9px 24px rgba($color--grey, .18);
-    filter:blur(0px);
-    opacity: 1
-  }
 }

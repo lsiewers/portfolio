@@ -1,72 +1,36 @@
 @import '../../../assets/scss/all';
 
-.main-title {
-  @extend %centralize--horizontal;
-  @extend %title--h4;
-  top: 0;
-  // position: fixed;
-  z-index: 999;
-}
-
-.home {
-  @include flexbox(column, center);
-  font-size: 1.1em;
+.home__header {
   position: relative;
-  // padding: 0px 48px;
-  margin-top: 72px;
 
-  &__article {
-    @include flexbox(row, center, center);
-    // @extend %block--grey-light;
-    border: solid 4px $color--grey-light;
-    overflow: hidden;
-    border-radius: 30px;
-    max-height: 240px;
-    max-width: 960px;
-    padding: 0px 90px 0 12px;
-    margin: 0 24px;
+  &__upper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 
-    span {
-      color: $color--grey;
-      margin-top: 18px;
-      @include flexbox(row, center, unset);
-      display: inline-flex;
+    figure, h1 { margin:0 }
+
+    @include mobile {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+
+      h1 { margin-top: 30px }
     }
+  }
 
-    figure {
-      @include rel(unset, unset, -30px, -36px);
-      overflow: hidden;
-      border-radius: 24px;
-      max-width: 240px;
-
-      img {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        filter: contrast(80%);
-        margin: 0;
-      }
-    }
+  &__bottom {
 
     p {
-      margin: 12px 0 0;
-      max-width: 480px;
-      line-height: 1.6;
-      font-family: $font-serif;
+      @extend %serif;
+      margin: 0 0 30px;
+      line-height: 1.3;
+      max-width: 1200px;
     }
 
-    @include portable {
-      @include flexbox(column-reverse);
-      max-height: unset;
-      padding: 18px 30px 48px;
+    a, button { font-size: 1.2em }
 
-      span { @include rel(120px, unset, unset, 40vw); }
-
-      figure {
-        @include rel();
-        width: 180px;
-        max-height: 180px;
-        margin: 0 0 -62px -48px;
-      }
-    }
+    @include desktop { padding: 120px 0; }
+    @include tablet { padding: 90px 0; }
+    @include mobile { padding: 60px 0; }
   }
 }

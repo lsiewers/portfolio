@@ -34,6 +34,7 @@ export class WorkDetailComponent implements OnDestroy {
   opacity = 1;
   currentPage: string;
   projectFilter: Filter;
+  readMore = false;
   // tslint:disable-next-line: variable-name
   _routerSubscription: Subscription;
 
@@ -78,6 +79,7 @@ export class WorkDetailComponent implements OnDestroy {
     this.workService.getWorkPost(param)
       .then(post => {
         this.data = post;
+        this.readMore = false;
         if (post !== undefined) { this.updateMetadata(); }
         return param !== '' ?
           this.projectFilter = {
@@ -100,54 +102,4 @@ export class WorkDetailComponent implements OnDestroy {
     this._routerSubscription.unsubscribe();
   }
 
-  // PMI
-  //
-  //
-  // addField(fields: any, e: Event) {
-  //   // if length of string is at least 4 chars
-  //   if (fields[fields.length - 1].length > 4) {
-  //     fields.push('');
-
-  //     setTimeout(() => {
-  //       const lastInput: HTMLInputElement = ((e.target as HTMLElement)
-  //         .parentElement
-  //         .parentElement
-  //         .lastElementChild
-  //         .previousElementSibling
-  //         .firstElementChild as HTMLInputElement);
-
-  //       // lastInput.value = '';
-  //       lastInput.value = '';
-  //       lastInput.focus();
-  //     }, 150);
-  //   }
-  // }
-
-  // removeField(topicIndex: number, fieldIndex: number, e: Event) {
-  //   const target: HTMLInputElement = e.target as HTMLInputElement;
-  //   const fields = this.pmi[topicIndex].fields;
-
-  //   if (
-  //     fields.length > 1 &&
-  //     target.value.length === 0
-  //   ) {
-  //     fields.pop();
-
-  //     if (fieldIndex === 0) { target.focus();
-  //     } else  { target.parentElement.previousElementSibling.querySelector(`input`).focus(); }
-  //   } else {
-  //     target.focus();
-  //   }
-  // }
-
-  // @HostListener('document:scroll', ['$event'])
-  // parallaxBlur() {
-  //   const scrollTop = this.document.documentElement.scrollTop;
-  //   if (scrollTop < this.screenHeight * 0.8) {
-  //     const blurSensitivity = 0.015;
-
-  //     this.blur = (this.screenHeight - (this.screenHeight - scrollTop)) * blurSensitivity;
-
-  //   }
-  // }
 }

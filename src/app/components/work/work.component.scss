@@ -2,8 +2,8 @@
 
 @import 'scss/work__header';
 @import 'scss/work__items';
+@import 'scss/work__item';
 
 .work {
   @include flexbox(column, center);
-  padding: 72px 30px 90px;
 }

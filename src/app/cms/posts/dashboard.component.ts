@@ -29,9 +29,22 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
         pos: 'center',
         ref: '',
         type: 'image',
+        transparentImage: false,
         url: null
       },
-      details: '<p></p>',
+      details: [
+        {
+          class: 'image--right',
+          text: 'Blah die blah die blah',
+          title: 'My role or final product',
+          links: [{name: 'a link', icon: '', url: ''}],
+          media: {
+            ref: '',
+            type: 'image',
+            url: null
+          }
+        }
+      ],
       metadata: {
         focus: ['Experience | Interface | Visual | Experimental'],
         purpose: 'Study | Side job | Internship',
@@ -42,11 +55,17 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
         finishDate: new Date(new Date().getTime()),
         links: [{
           name: 'code',
-          icon: 'github.svg',
+          icon: 'github',
           url: 'github.com/lsiewers'
         }]
       },
-      filterComplete: null
+      filterComplete: null,
+      productDescription: '',
+      palette: {
+        primary: '#000',
+        secondary: '#fff',
+        tertiary: '#fefefe',
+      }
     };
   }
 

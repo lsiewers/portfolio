@@ -40,7 +40,12 @@ constructor(
         if (!filteredType.values.length) { activeFilters.splice(activeFilters.indexOf(filteredType), 1); }
       } else {
         // add filtered item
-        (filteredType.values as string[]).push(value as string);
+        // if filter, than replace value
+        if (filter.type === 'focus') {
+          (filteredType.values as string[]) = [(value as string)];
+        } else {
+          (filteredType.values as string[]).push(value as string);
+        }
       }
     }
 

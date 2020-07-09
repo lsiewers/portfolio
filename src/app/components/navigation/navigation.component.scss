@@ -1,0 +1,26 @@
+@import '../../../assets/scss/all';
+
+.navigation {
+  @include fxd(0, null, null, 0);
+  @include size(100%, 72px);
+  padding: 0 var(--page-padding);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  box-shadow: $shadow--small rgba($color--grey, 0.24);
+  z-index: 9999;
+  transition: transform $transition;
+
+  div {
+    display: flex;
+    align-items: center;
+
+    a { margin-right: 0; }
+  }
+
+  img {
+    @include size(72px);
+    object-fit: contain;
+  }
+}

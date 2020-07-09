@@ -1,58 +1,23 @@
 @import '../../components/work-detail/work-detail.component.scss';
 
-:host ::ng-deep .angular-editor-toolbar {
-  &, & button {
-    font-family: $font-body !important;
-    border: none !important;
-    background: none !important;
-    appearance: none;
-    outline: none !important;
-  }
-}
-
-::ng-deep .angular-editor-textarea {
-  @extend .content;
-  cursor: text;
-  border: 1px solid $color--grey-light !important;
-  outline: none !important;
-  appearance: none !important;
-  resize: none !important;
-  transition:
-    transform 0.12s ease-out,
-    border-color 0.12s ease-out;
-  transform: scale(1);
-  transform-origin: center top;
-
-  &:focus {
-    transform: scale(1.05);
-    border-color: $color--grey !important;
-  }
-}
-
-::ng-deep .angular-editor-placeholder { display: none !important }
-
 .cms-detail {
-  input, button, textarea {
+  input:not([type='checkbox']), button, textarea {
     appearance: none;
-    background: transparent;
+    // background: transparent;
     max-width: 100%;
     resize: none;
-
-    font-family: $font-body;
   }
 
-  textarea { font-family: $font-serif; }
-
-  input:not([type='file']), textarea {
+  input:not([type='file']):not([type='checkbox']), textarea {
     margin-top: 12px; padding: .5em 1em;
     box-sizing: border-box;
-    appearance: none;
     border: 1px solid $color--grey-light;
     font-size: 1em;
     transition:
       transform 0.12s ease-out,
       border-color 0.12s ease-in;
     transform: scale(1);
+    border-radius: 24px;
 
     &::placeholder { opacity: .4; }
     &:focus {
@@ -63,31 +28,59 @@
   }
 
   &__header {
-
-    &__img-input {
-      width: 300px;
-      margin: 36px 36px 0;
-    }
+    & > figure { overflow: hidden; }
+    & > input,
+    & > select { margin: 12px; }
 
     &__reference-input { margin-left: 36px; }
 
+    &__colors {
+      display: flex;
+      justify-content: center;
+      & > div {
+        margin: 0px 30px 60px;
+        input {
+          @include size(90px, 30px);
+          font-size: .5em !important;
+        }
+      }
+    }
+
     &__title {
-      @extend %title--h4;
-      font-family: $font-title !important;
       width: 100%;
       color: black;
       border: none;
+      text-align: center;
     }
 
     &__subtitle {
-      width: 540px;
+      width: 480px;
       display: block;
       margin: 0 auto 24px;
       border: none;
+      font-size: 1.33em;
+      line-height: 1.5;
 
       textarea {
         width: 100%;
         height: 180px;
+        padding: 30px;
+        border-radius: 30px;
+      }
+    }
+
+    &__product {
+      display: flex;
+
+      &__description textarea {
+        height: 300px;
+      }
+      &__image {
+        margin-left: 48px;
+        img {
+          max-height: 300px;
+          max-width: 480px;
+        }
       }
     }
   }
@@ -96,10 +89,35 @@
     margin: 0 auto;
 
     &__content {
-      padding-left: 0;
+      padding: 30px 0 150px 0;
+      border-bottom: 1px solid $color--grey-light;
+      max-height: unset;
 
-      .angular-editor-textarea {
-        @extend .work-detail__content;
+      &__paragraph {
+        padding: 30px;
+        border-bottom: 1px solid $color--grey-light;
+
+        figure {
+          width: 60%;
+          input { margin: 6px 12px; }
+          img, video {
+            border-radius: 30px;
+            @include size;
+          }
+        }
+
+        &__text {
+          display: flex;
+          flex-direction: column;
+
+          .title { font-size: 2.4em !important; }
+          .text { min-height: 300px; }
+          .links {
+            display: flex;
+            justify-content: flex-start;
+            input { font-size: .75em !important; }
+          }
+        }
       }
 
       & > button, & > a {
@@ -109,6 +127,7 @@
     }
 
     &__metadata {
+      display: flex;
 
       &__id { color: $color--grey; }
     }
@@ -175,6 +194,6 @@
     &__buttons { @include flexbox(row, center, center) }
 
     .delete { border: none }
-    .save { font-size: 1.1em; }
+    .save { font-size: 1.2em; }
   }
 }

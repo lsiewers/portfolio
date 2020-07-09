@@ -1,0 +1,168 @@
+.work__items__list__item {
+  min-width: 240px; max-width: 360px;
+  min-height: 240px;
+  border-radius: 30px;
+  padding: 6px 30px 180px;
+  box-sizing: border-box;
+  transform: translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg);
+  transform-origin: center center;
+  will-change: transform, opacity, box-shadow;
+  perspective: 100px;
+  overflow: hidden;
+  transition:
+    box-shadow $transition--fast,
+    transform $transition,
+    opacity $transition .2s;
+  opacity: 0;
+
+  &:not(.state--preview) {
+    cursor: pointer;
+
+    article { pointer-events: none; }
+  }
+
+  // text which is visible when not quick preview
+  &__preview {
+    max-height: 360px;
+    display: block;
+    pointer-events: none;
+    opacity: 1;
+    transition:
+      max-height $transition--slow,
+      display $transition--fast,
+      opacity $transition--slow;
+    transition-delay: .3s;
+    will-change: max-height, opacity;
+
+    .state--preview & {
+      max-height: 0px;
+      transition-delay: 0s;
+      display: hidden;
+      opacity: 0;
+    }
+
+    & > p {
+      margin: 0;
+      padding: 1em 0 0;
+    }
+    & > h1 { margin-top: .48em }
+  }
+
+  &:not(.state--preview):hover {
+    transition:
+      box-shadow $transition,
+      transform $transition--fast;
+    box-shadow: $shadow rgba($color--grey-light, $transparency);
+
+    figure { opacity: $transparency--low }
+  }
+
+  &.state--preview {
+    transition: transform $transition--slow;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 75vh;
+    z-index: 999;
+
+    figure {
+      transition: transform $transition--slow;
+      opacity: 1;
+    }
+    &:not(.image--transparant) figure {
+      max-height: 30vh;
+      transform: scale(1.1);
+    }
+    &.image--transparant figure { transform: scale(1.2) translate3d(30%,0,0) }
+  }
+
+  .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
+
+  @include portable {
+    max-width: unset;
+    width: 100% !important;
+    position: static !important;
+    margin-top: 24px;
+
+    &.state--preview {
+      position: sticky !important;
+      max-height: 65vh;
+    }
+  }
+
+  &__close-preview {
+    @include abs(20px, 20px, unset, unset);
+    pointer-events: all !important;
+    z-index: 99;
+  }
+
+  &.image--transparant {
+    overflow: visible;
+
+    figure { transform: scale(1) translate3d(15%,0,0); }
+  }
+
+  figure {
+    @include abs(null, null, 0, 0);
+    z-index: -1;
+    margin: 0;
+    width: 100%;
+    pointer-events: none;
+    opacity: $transparency--high;
+    transition:
+      opacity $transition--fast,
+      transform $transition--slow;
+    will-change: transform;
+
+    .overlay {
+      @extend %fullsize;
+      position: absolute;
+      z-index: 999;
+    }
+
+    img, video {
+      @extend %fullsize;
+      margin-bottom: -5px;
+    }
+  }
+
+  &__details {
+    max-height: 0px;
+    opacity: 0;
+    transition:
+      max-height $transition--slow,
+      opacity $transition--slow;
+    will-change: max-height, opacity;
+
+    &__title { margin: 1em 0 0 }
+    &__description { font-size: 1.2em }
+    &__metadata {
+      opacity: $transparency;
+    }
+    &__more-details {
+      @extend %flex-center;
+      @include size(100%, 90px);
+
+      .uil {
+        color: inherit !important;
+        top: 0;
+      }
+    }
+
+    .state--preview & {
+      max-height: 360px;
+      opacity: 1;
+    }
+  }
+}
+
+
+@keyframes fadeIn {
+  0% {
+    filter:blur(1px);
+    opacity: 0
+  }
+  100% {
+    filter:blur(0px);
+    opacity: 1
+  }
+}

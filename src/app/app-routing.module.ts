@@ -4,7 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { WorkDetailComponent } from './components/work-detail/work-detail.component';
 import { DashboardComponent } from './cms/posts/dashboard.component';
 import { PostDetailComponent } from './cms/post-detail/post-detail.component';
-import { MoreInfoComponent } from './components/more-info/more-info.component';
+import { AboutMeComponent } from './components/about-me/about-me.component';
 
 
 const routes: Routes = [
@@ -14,14 +14,14 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'about-me',
-    pathMatch: 'full',
-    component: MoreInfoComponent
-  },
-  {
     path: 'cms',
     pathMatch: 'full',
     component: DashboardComponent
+  },
+  {
+    path: 'about-me',
+    pathMatch: 'full',
+    component: AboutMeComponent
   },
   {
     path: 'cms/:id',

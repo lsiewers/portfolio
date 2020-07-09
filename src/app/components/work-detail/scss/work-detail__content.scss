@@ -1,7 +1,17 @@
 .work-detail__content {
-  // width: 100%;
-  @include desktop {
-    padding-right: 90px;
-    box-sizing: border-box;
+  max-height: 960px;
+  overflow: hidden;
+  position: relative;
+
+  &.read-more {
+    max-height: 15000px;
+    overflow: visible;
+  }
+
+  &__read-more {
+    @include abs(null, null, 0, 0);
+    @include size(100%, 120px);
+    @extend %flex-center;
+    button, button .uil { color: inherit; }
   }
 }

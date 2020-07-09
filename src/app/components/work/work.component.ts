@@ -6,6 +6,7 @@ import {
   Input,
   OnDestroy,
   AfterContentInit,
+  Inject,
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
@@ -13,6 +14,8 @@ import Bricks, { BricksInstance } from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FiltersService } from 'src/app/services/filters.service';
 import { Subscription } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-work',
@@ -26,11 +29,14 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   // filters
   activeFilters: Filter[] = [];
   filters: Filter[] = [];
+  focuses = [];
 
   // items
   items: Item[];
 
   previewOverlay = false;
+  previewOverlayColor: string;
+  bodyClassList;
 
   // page/url
   pageType: string;
@@ -49,8 +55,12 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
     private changeDetector: ChangeDetectorRef,
     private filtersService: FiltersService,
     private activeRouter: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    private deviceService: DeviceDetectorService,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    this.bodyClassList = document.body.classList;
+  }
 
    // lifecycle hooks
   ngAfterContentChecked() { this.changeDetector.detectChanges(); }
@@ -59,7 +69,10 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
     this.setPageType();
     this.pageType === 'work' ?
       this.toggleFilter({ type: 'focus', values: this.projectFilter.values }) :
-      this.filtersService.getFilters().then(filters => this.filters = filters);
+      this.filtersService.getFilters().then(filters => {
+        this.filters = filters;
+        this.focuses = filters.find(filter => filter.type === 'focus').values;
+      });
     this.getFilteredItems();
   }
 
@@ -83,15 +96,14 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
         } else { f.openTab = true; }
       });
     } else { filter.openTab = false; }
-    // overlay when open?
-    // this.filters.find(f => f.openTab) ?
-    //   this.previewOverlay = true :
-    //   this.previewOverlay = false;
   }
 
-  toggleFilter(filter: Filter) { this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters); }
+  toggleFilter(filter: Filter) {
+    this.activeFilters = this.filtersService.toggleFilter(filter, this.activeFilters);
+    this.getFilteredItems();
+  }
 
-  async getFilteredItems(): Promise<any> {
+  getFilteredItems(): Promise<any> {
     return this.filtersService.getFilteredItems(this.activeFilters).then(data => {
       this.pageType === 'work' ?
         this.items = data.filter(item => item.title !== this.projectTitle) :
@@ -100,6 +112,29 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
         new Date(b.metadata.finishDate).getTime() - new Date(a.metadata.finishDate).getTime());
       // this.items.forEach(item => console.log(item.metadata.tools))
     });
+  }
+
+  // all focuses tab functions
+  removeFocusFilters() {
+    if (this.activeFilters.length !== 0) {
+      const activeFocus = this.activeFilters.find(f => f.type === 'focus');
+      if (typeof activeFocus !== 'undefined') {
+        activeFocus.values.forEach(value => this.toggleFilter({type: 'focus', values: [value]}));
+      }
+    }
+  }
+
+  focusFilterActive() {
+    if (this.activeFilters.length === 0) {
+       return false;
+     } else {
+        const activeFocus = this.activeFilters.find(f => f.type === 'focus');
+        if (typeof activeFocus === 'undefined') {
+          return false;
+        } else {
+          return activeFocus.values.length === 0 ? false : activeFocus.values[0];
+        }
+     }
   }
 
   setPageType() {
@@ -126,10 +161,10 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
       container: '.work__items__list',
       packed: 'packed',
       sizes: [
-        { mq: '820px', columns: 2, gutter: 36 },
-        { mq: '900px', columns: 2, gutter: 60 },
-        { mq: '1280px', columns: 3, gutter: 36 },
-        { mq: '1400px', columns: 3, gutter: 60 }
+        { mq: '820px', columns: 2, gutter: 24 },
+        { mq: '900px', columns: 2, gutter: 36 },
+        { mq: '1280px', columns: 3, gutter: 24 },
+        { mq: '1400px', columns: 3, gutter: 36 }
       ]
     });
     this.bricks.pack();
@@ -152,10 +187,10 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   // Animations
   hoverAnimation(e: MouseEvent, isPreview: boolean) {
-    if (isPreview === undefined || !isPreview) {
+    if (isPreview === undefined || !isPreview && !(this.deviceService.isMobile())) {
       const target: HTMLElement = e.currentTarget as HTMLElement;
 
-      const sensitivity = 0.1;
+      const sensitivity = 0.06;
       const x = (e.offsetX - target.offsetWidth / 2) * sensitivity;
       const y = (e.offsetY - target.offsetHeight / 2) * sensitivity;
 
@@ -175,6 +210,8 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   toPreviewAnimation(e: MouseEvent, item: Item) {
     this.previewOverlay = true;
+    this.previewOverlayColor = item.palette.secondary;
+    this.bodyClassList.contains('navigation--open') ? this.bodyClassList.remove('navigation--open') : null;
 
     const target: HTMLElement = e.currentTarget as HTMLElement;
 
@@ -190,8 +227,8 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
     // minus container top position + item's height / margin to set at top of screen
     // + scrollposition of htmlEL and minus masonry position
     const y = -target.parentElement.offsetTop + window.scrollY - target.offsetTop + 90;
-
-    target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(1.2) rotateX(0deg) rotateY(0deg)`;
+    const scale: number = this.deviceService.isMobile() ? 1.05 : 1.2;
+    target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale}) rotateX(0deg) rotateY(0deg)`;
     document.querySelector('html').style.overflow = 'hidden';
 
     item.workPreview = true;
@@ -204,10 +241,9 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
     this.resetTransform(el);
     this.previewOverlay = false;
-    setTimeout(() => {
-      item.workPreview = false;
-      document.querySelector('html').style.overflow = 'auto';
-    }, 300);
+    item.workPreview = false;
+    document.querySelector('html').style.overflow = 'auto';
+    this.bodyClassList.contains('navigation--open') ? null : this.bodyClassList.add('navigation--open');
   }
 
   // Resize update

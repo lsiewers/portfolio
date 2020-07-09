@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
@@ -7,6 +7,8 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  @ViewChild('header', { static: true}) header: ElementRef;
+
   constructor(
     private meta: Meta,
     private titleService: Title
@@ -29,5 +31,14 @@ export class HomeComponent {
 
     this.meta.updateTag({ property: 'og:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
     this.meta.updateTag({ property: 'twitter:image', content: '//luuksiewers.nl/assets/images/meta-image.png' });
+  }
+
+  scrollToPortfolio() {
+    console.log
+    window.scrollTo({
+      top: this.header.nativeElement.clientHeight - 90,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 }
