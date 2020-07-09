@@ -2,11 +2,11 @@
 .content {
   width: 100%;
   max-width: 1200px;
-  margin: 0 var(--page-padding);
+  padding: 0 var(--page-padding);
+  box-sizing: border-box;
 
   &__paragraph {
     height: auto;
-    overflow: hidden;
     margin-bottom: 120px;
 
     &__text {
@@ -33,6 +33,11 @@
         min-height: 100%;
         display: block;
         object-fit: cover;
+
+        .content__paragraph.image--right &,
+        .content__paragraph.image--left & {
+          border-radius: 36px
+        }
       }
 
       figcaption {
@@ -42,94 +47,114 @@
       }
     }
 
+    @include large {
+      overflow: hidden;
 
-    // image right or left
-    &.image--right,
-    &.image--left {
-      padding-top: 240px;
-      position: relative;
+      // image right or left
+      &.image--right,
+      &.image--left {
+        padding-top: 240px;
+        position: relative;
 
-      .content__paragraph__media {
-        position: absolute;
-        top: 0;
-        width: 55%; min-width: 360px;
-        max-height: 480px;
-        margin: 0;
+        .content__paragraph__media {
+          position: absolute;
+          top: 0;
+          width: 55%; min-width: 360px;
+          max-height: 480px;
+          margin: 0;
+        }
+      }
 
-        img, video {
+      &.image--right {
+        flex-direction: row-reverse;
+        .content__paragraph__media {
+          right: 0;
+          figcaption {
+            text-align: right;
+            float: right
+          }
+        }
+        .content__paragraph__text { left: -60px; }
+      }
+      &.image--left {
+        .content__paragraph__text {
+          right: -60px;
+          float: right;
+        }
+      }
+
+      // image full
+      &.image--full {
+        padding-top: 480px;
+        position: relative;
+        overflow: visible;
+
+        .content__paragraph__media {
+          @include abs(0, null, null, calc(var(--page-padding) * -1));
+          @include size(100vw, 480px);
+          min-height: 480px;
+          margin: 0;
+          figcaption {
+            text-align: right;
+            float: right;
+            margin-right: var(--page-padding);
+          }
+        }
+
+        .content__paragraph__text {
+          margin-top: -var(--page-padding);
+        }
+      }
+
+      // image full, left and right
+      &.image--full,
+      &.image--left,
+      &.image--right {
+        .content__paragraph__text {
+          position: relative;
+          width: calc(45% + 48px);
+          padding: 48px 60px;
           border-radius: 36px;
         }
       }
-    }
 
-    &.image--right {
-      flex-direction: row-reverse;
-      .content__paragraph__media {
-        right: 0;
-        figcaption {
-          text-align: right;
-          float: right
+      // double column
+      &.double--column {
+
+        .content__paragraph__text {
+          width: calc((45% + 24px)*2);
+          p {
+            width: 100%;
+            column-count: 2;
+            column-gap: 96px;
+          }
+          h1 {
+            text-align: center;
+            margin-bottom: 1.2em;
+          }
         }
       }
-      .content__paragraph__text { left: -60px; }
     }
-    &.image--left {
-      .content__paragraph__text {
-        right: -60px;
-        float: right;
+
+    @include mobile {
+      &.image--full {
+        .content__paragraph__media {
+          img, video {
+            @include rel(null, null, null, calc(var(--page-padding) * -1));
+            width: 100vw;
+          }
+        }
       }
-    }
 
-    // image full
-    &.image--full {
-      padding-top: 480px;
-      position: relative;
-      overflow: visible;
-
-      .content__paragraph__media {
-        @include abs(0, null, null, calc(var(--page-padding) * -1));
-        @include size(100vw, 480px);
-        min-height: 480px;
+      &__media {
+        width: 100%;
         margin: 0;
-        figcaption {
-          text-align: right;
-          float: right;
-          margin-right: var(--page-padding);
-        }
       }
 
-      .content__paragraph__text {
-        margin-top: -var(--page-padding);
+      &__text {
+        margin-top: 60px;
       }
-    }
 
-    // image full, left and right
-    &.image--full,
-    &.image--left,
-    &.image--right {
-      .content__paragraph__text {
-        position: relative;
-        width: calc(45% + 48px);
-        padding: 48px 60px;
-        border-radius: 36px;
-      }
-    }
-
-    // double column
-    &.double--column {
-
-      .content__paragraph__text {
-        width: calc((45% + 24px)*2);
-        p {
-          width: 100%;
-          column-count: 2;
-          column-gap: 96px;
-        }
-        h1 {
-          text-align: center;
-          margin-bottom: 1.2em;
-        }
-      }
     }
 
     // quote

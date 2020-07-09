@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 
 
@@ -14,6 +15,7 @@ import { DOCUMENT } from '@angular/common';
 export class NavigationComponent {
   showNavigation = false;
   bodyClassList;
+  isMobile;
 
   // page/url
   pageType: string;
@@ -24,8 +26,10 @@ export class NavigationComponent {
   constructor(
     private activeRouter: ActivatedRoute,
     private router: Router,
+    private deviceService: DeviceDetectorService,
     @Inject(DOCUMENT) private document: Document
   ) {
+    this.isMobile = deviceService.isMobile();
     router.events.pipe(
       filter(e => e instanceof NavigationEnd))
         .subscribe((e: NavigationEnd) => this.setPageType(e.url as string));
@@ -33,11 +37,11 @@ export class NavigationComponent {
   }
 
   setPageType(url: string) {
-    if (typeof url === 'undefined' || url === '') { this.pageType = 'home';
+    if (typeof url === 'undefined' || url === '/') { this.pageType = 'home';
     } else if (url.includes('cms')) { this.pageType = 'cms';
     } else if (url.includes('about-me')) { this.pageType = 'about-me';
     } else { this.pageType = 'work'; }
-    console.log(this.pageType);
+    console.log(url);
 
   }
 

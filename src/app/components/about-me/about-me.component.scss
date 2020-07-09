@@ -6,7 +6,8 @@
     @extend %flex-center;
     flex-direction: column;
     border-bottom: solid 1px $color--grey-light;
-    padding: 90px 0;
+    padding: 90px 12px;
+    box-sizing: border-box;
 
     figure {
       @include size(240px);

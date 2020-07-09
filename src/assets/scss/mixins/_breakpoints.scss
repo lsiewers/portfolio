@@ -23,6 +23,13 @@ $desktop: 1200px;
   }
 }
 
+// tablet and mobile
+@mixin large {
+  @media screen and (min-width: #{$tablet}) {
+      @content;
+  }
+}
+
 // desktop
 @mixin desktop {
   @media screen and (min-width: #{$tablet}) {

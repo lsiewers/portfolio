@@ -1,6 +1,6 @@
 <nav class="navigation" *ngIf="pageType !== 'cms'">
-  <a [routerLink]="'/'"><h1 class="grey h5">Luuk Siewers - Experience Designer</h1></a>
-  <div class="navigation__right" *ngIf="pageType !== 'about-me' && pageType !== 'work'">
+  <a [routerLink]="'/'"><h1 class="grey h6">Luuk Siewers - Experience Designer</h1></a>
+  <div class="navigation__right" *ngIf="pageType !== 'about-me' && pageType !== 'work' && !isMobile">
     <img src="../../../assets/images/portait-1.png" alt="Photo of me">
     <a [routerLink]="'about-me'" class="button button--icon--small grey">About me <i class="uil uil-arrow-right grey"></i></a>
   </div>
