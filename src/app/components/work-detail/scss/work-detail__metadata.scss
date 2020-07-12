@@ -6,11 +6,11 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
-    padding: 12px calc(var(--page-padding) - 30px) 18px;
+    padding: 36px calc(var(--page-padding) - 30px) 24px;
 
     &__item {
       width: 180px;
-      margin: 30px 24px;
+      margin: 12px 24px;
 
       & > h1 {
         font-size: .84em;
@@ -24,7 +24,7 @@
       }
 
       &.links {
-        margin: 0;
+        margin: 12px 0 0;
         display: flex;
         width: 100%;
       }

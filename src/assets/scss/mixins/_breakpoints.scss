@@ -1,8 +1,15 @@
-$mobile: 480px;
-$tablet: 900px;
-$desktop: 1200px;
+$small: 480px;
+$mobile: 680px;
+$tablet: 960px;
+$desktop: 1400px;
 
 // Small devices
+@mixin small {
+  @media screen and (max-width: #{$small}) {
+      @content;
+  }
+}
+
 @mixin mobile {
   @media screen and (max-width: #{$mobile}) {
       @content;
@@ -25,7 +32,7 @@ $desktop: 1200px;
 
 // tablet and mobile
 @mixin large {
-  @media screen and (min-width: #{$tablet}) {
+  @media screen and (min-width: #{$mobile}) {
       @content;
   }
 }

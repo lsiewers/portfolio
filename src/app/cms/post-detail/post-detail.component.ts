@@ -70,8 +70,11 @@ export class PostDetailComponent implements OnInit, AfterContentChecked, OnDestr
   }
 
   removeField(metadata: any, index: number, e: Event) {
-    const targetEl: HTMLInputElement = e.target as HTMLInputElement;
-    if (!targetEl.value && index > 0) { metadata.value.pop(); }
+    console.log(metadata.value[index].length);
+
+    if (metadata.value[index].length <= 0) {
+      metadata.value.splice(index, 1);
+    }
   }
 
   uploadFile(e: Event) {

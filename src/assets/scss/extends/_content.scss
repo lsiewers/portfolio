@@ -1,8 +1,6 @@
 
 .content {
   width: 100%;
-  max-width: 1200px;
-  padding: 0 var(--page-padding);
   box-sizing: border-box;
 
   &__paragraph {
@@ -26,6 +24,7 @@
     }
 
     &__media {
+      margin: 0;
 
       img, video {
         @extend %fullsize;
@@ -40,11 +39,23 @@
         }
       }
 
-      figcaption {
+      .caption {
         margin-top: 12px;
         opacity: $transparency--low;
-        max-width: 60%;
+        @include large { max-width: calc(150px + var(--page-padding)); }
+
+        a {
+          &, i { color: inherit; }
+          font-size: .8em;
+        }
       }
+    }
+
+    &:not(.image--full) {
+      max-width: 1200px;
+      padding: 0 var(--page-padding);
+      margin-left: auto;
+      margin-right: auto;
     }
 
     @include large {
@@ -59,17 +70,23 @@
         .content__paragraph__media {
           position: absolute;
           top: 0;
-          width: 55%; min-width: 360px;
-          max-height: 480px;
           margin: 0;
+          width: 55%;
+
+          img, video {
+            min-width: 360px;
+            max-height: 480px;
+          }
         }
       }
 
       &.image--right {
         flex-direction: row-reverse;
         .content__paragraph__media {
+          padding-right: var(--page-padding);
+          box-sizing: border-box;;
           right: 0;
-          figcaption {
+          .caption {
             text-align: right;
             float: right
           }
@@ -85,24 +102,38 @@
 
       // image full
       &.image--full {
-        padding-top: 480px;
-        position: relative;
         overflow: visible;
+        display: flex;
+        max-width: 1200px;
+        flex-direction: column;
+        margin: auto;
+        padding: 0 var(--page-padding);
 
         .content__paragraph__media {
-          @include abs(0, null, null, calc(var(--page-padding) * -1));
+          @include abs(null, null, null, 0);
           @include size(100vw, 480px);
           min-height: 480px;
-          margin: 0;
-          figcaption {
+
+          .caption {
             text-align: right;
             float: right;
             margin-right: var(--page-padding);
+            position: relative;
+            z-index: 1;
           }
         }
 
+        .gradient {
+          @include size(100%, 300px);
+          @include abs(null, null, null, 0);
+          margin-top: 480px;
+          z-index: 0;
+          opacity: $transparency;
+        }
+
         .content__paragraph__text {
-          margin-top: -var(--page-padding);
+          margin-top: #{480 - 106}px;
+          margin-bottom: 180px;
         }
       }
 
@@ -138,11 +169,12 @@
 
     @include mobile {
       &.image--full {
+        padding: 0 var(--page-padding);
         .content__paragraph__media {
-          img, video {
-            @include rel(null, null, null, calc(var(--page-padding) * -1));
-            width: 100vw;
-          }
+          @include rel(null, null, null, calc(var(--page-padding) * -1));
+          width: 100vw;
+
+          .caption { margin-left: var(--page-padding); }
         }
       }
 
@@ -162,7 +194,8 @@
 
       .content__paragraph__text {
         p {
-          font-size: 3em;
+          @include large { font-size: 3em }
+          @include mobile { font-size: 2.4em }
           font-style: italic;
           text-align: center;
         }

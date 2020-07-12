@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Item } from '../../models/item';
 import { Filter } from '../../models/filter';
-import Bricks, { BricksInstance } from 'bricks.js';
+import Bricks from 'bricks.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FiltersService } from 'src/app/services/filters.service';
 import { Subscription } from 'rxjs';
@@ -45,7 +45,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
   _routerSubscription: Subscription;
 
   // masonry
-  bricks: BricksInstance;
+  bricks: Bricks.Instance;
   loadedImages = 0;
   showAmount = 5;
   suggested = false;
@@ -161,9 +161,9 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
       container: '.work__items__list',
       packed: 'packed',
       sizes: [
-        { mq: '820px', columns: 2, gutter: 24 },
-        { mq: '900px', columns: 2, gutter: 36 },
-        { mq: '1280px', columns: 3, gutter: 24 },
+        { mq: '780px', columns: 2, gutter: 24 },
+        { mq: '960px', columns: 2, gutter: 36 },
+        { mq: '1200px', columns: 3, gutter: 24 },
         { mq: '1400px', columns: 3, gutter: 36 }
       ]
     });
@@ -187,7 +187,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   // Animations
   hoverAnimation(e: MouseEvent, isPreview: boolean) {
-    if (isPreview === undefined || !isPreview && !(this.deviceService.isMobile())) {
+    if (isPreview === undefined || !isPreview && !(this.deviceService.isMobile()) && !(this.deviceService.isTablet())) {
       const target: HTMLElement = e.currentTarget as HTMLElement;
 
       const sensitivity = 0.06;
@@ -206,6 +206,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
 
   resetTransform(item: HTMLElement) {
     item.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg)';
+    item.scrollTo(0, 0);
   }
 
   toPreviewAnimation(e: MouseEvent, item: Item) {
@@ -227,7 +228,7 @@ export class WorkComponent implements AfterContentInit, AfterContentChecked, OnD
     // minus container top position + item's height / margin to set at top of screen
     // + scrollposition of htmlEL and minus masonry position
     const y = -target.parentElement.offsetTop + window.scrollY - target.offsetTop + 90;
-    const scale: number = this.deviceService.isMobile() ? 1.05 : 1.2;
+    const scale: number = this.deviceService.isMobile() || this.deviceService.isTablet() ? 1.05 : 1.2;
     target.style.transform = `translate3d(${x}px, ${y}px, 0px) scale(${scale}) rotateX(0deg) rotateY(0deg)`;
     document.querySelector('html').style.overflow = 'hidden';
 

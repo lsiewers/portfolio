@@ -1,7 +1,8 @@
 <article class="work-detail" *ngIf="data">
   <header
     class="work-detail__header"
-    [style.background-color]="data.palette.secondary"
+    [class.animate--in]="animateHeaderIn"
+    [style.background]="data.header.transparentImage ? 'linear-gradient(' + data.palette.tertiary + ', ' + data.palette.secondary + ')' : data.palette.secondary"
     [style.color]="data.palette.primary"
   >
     <figure
@@ -9,7 +10,7 @@
       [class.image--transparent]="data.header.transparentImage"
     >
         <img *ngIf="data.header.type === 'image'" [src]="data.header.url">
-        <video *ngIf="data.header.type === 'video'">
+        <video *ngIf="data.header.type === 'video'" autoplay muted>
           <source [src]="data.header.url"/>
         </video>
         <figcaption *ngIf="data.header.ref">{{data.header.ref}}</figcaption>
@@ -27,37 +28,43 @@
 
     <!-- Content -->
     <section class="work-detail__content content" [class.read-more]="readMore">
-      <article *ngFor="let paragraph of data.details" class="{{paragraph.class}} content__paragraph">
-        <figure class="content__paragraph__media" *ngIf="paragraph.class.includes('image')">
-          <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
-          <video *ngIf="paragraph.media.type === 'video'" >
-              <source [src]="paragraph.media.url">
-          </video>
-          <figcaption *ngIf="paragraph.media.ref">{{paragraph.media.ref}}</figcaption>
-        </figure>
-        <div
-          class="content__paragraph__text"
-          [style.background-color]="data.palette.secondary"
-        >
-          <h1 *ngIf="paragraph.title && paragraph.class !== 'quote'" class="h2">{{paragraph.title}}</h1>
-          <p class="serif">{{paragraph.text}}</p>
+      <article *ngFor="let paragraph of data.details; let i = index" class="{{paragraph.class}} content__paragraph">
+        <ng-container *ngIf="i <  3 || readMore">
+            <figure class="content__paragraph__media" *ngIf="paragraph.class.includes('image')">
+              <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
+              <video *ngIf="paragraph.media.type === 'video'" autoplay muted loop>
+                <source [src]="paragraph.media.url">
+              </video>
+              <div class="caption">
+                  <figcaption *ngIf="paragraph.media.ref">{{paragraph.media.ref}}</figcaption>
+                  <a class="button" [href]="paragraph.media.url" target="_blank"> <i class="uil uil-external-link-alt"></i></a>
+              </div>
+          </figure>
+          <div *ngIf="paragraph.class === 'image--full'" class="gradient" [style.background-image]="'linear-gradient(' + data.palette.tertiary + ', ' + data.palette.secondary + ')' "></div>
           <div
-            *ngIf="paragraph.links !== null && paragraph.links.length > 0"
-            class="content__paragraph__text__links"
+            class="content__paragraph__text"
+            [style.background-color]="data.palette.secondary"
           >
-            <a
-              *ngFor="let link of paragraph.links"
-              target="_blank"
-              [href]="link.url"
-              class="button"
+            <h1 *ngIf="paragraph.title && paragraph.class !== 'quote'" class="h2">{{paragraph.title}}</h1>
+            <p class="serif">{{paragraph.text}}</p>
+            <div
+              *ngIf="paragraph.links !== null && paragraph.links.length > 0"
+              class="content__paragraph__text__links"
             >
-              <i class="uil uil-{{link.icon}}"></i> {{link.name}}
-            </a>
+              <a
+                *ngFor="let link of paragraph.links"
+                target="_blank"
+                [href]="link.url"
+                class="button"
+              >
+                <i class="uil uil-{{link.icon}}"></i> {{link.name}}
+              </a>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </article>
       <div class="work-detail__content__read-more" *ngIf="!readMore" [style.background-image]="'linear-gradient('+data.palette.secondary+'00,'+data.palette.secondary+')'">
-        <button (click)="readMore = true;" class="button button--icon sans--bold">Read more <i class="uil uil-angle-down"></i></button>
+        <button (click)="readMore = true;" class="button button--icon button--dark sans--bold">Read more <i class="uil uil-angle-down"></i></button>
       </div>
     </section>
 

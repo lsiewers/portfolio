@@ -12,6 +12,9 @@
     @include abs(null, null, 0, 0);
     @include size(100%, 120px);
     @extend %flex-center;
-    button, button .uil { color: inherit; }
+    button, button .uil {
+      font-size: 1.2em;
+      color: inherit;
+    }
   }
 }

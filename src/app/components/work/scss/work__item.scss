@@ -4,19 +4,21 @@
   border-radius: 30px;
   padding: 6px 30px 180px;
   box-sizing: border-box;
-  transform: translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg);
   transform-origin: center center;
-  will-change: transform, opacity, box-shadow;
   perspective: 100px;
   overflow: hidden;
-  transition:
-    box-shadow $transition--fast,
-    transform $transition,
-    opacity $transition .2s;
   opacity: 0;
+  z-index: 1;
 
   &:not(.state--preview) {
     cursor: pointer;
+    transition:
+      box-shadow $transition--fast $easing,
+      transform $transition,
+      opacity $transition .2s $easing,
+      z-index $transition--slow step-end;
+    will-change: transform, opacity, box-shadow;
+    transform: translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg);
 
     article { pointer-events: none; }
   }
@@ -28,9 +30,10 @@
     pointer-events: none;
     opacity: 1;
     transition:
-      max-height $transition--slow,
-      display $transition--fast,
-      opacity $transition--slow;
+      max-height $transition--slow $easing,
+      display $transition--fast $easing,
+      opacity $transition--slow $easing,
+      z-index 0.0s;
     transition-delay: .3s;
     will-change: max-height, opacity;
 
@@ -50,34 +53,61 @@
 
   &:not(.state--preview):hover {
     transition:
-      box-shadow $transition,
-      transform $transition--fast;
+      box-shadow $transition $easing,
+      transform $transition $easing--out;
     box-shadow: $shadow rgba($color--grey-light, $transparency);
 
     figure { opacity: $transparency--low }
   }
 
   &.state--preview {
-    transition: transform $transition--slow;
-    overflow-x: hidden;
-    overflow-y: auto;
+    transition: transform $transition--slow $easing;
     max-height: 75vh;
     z-index: 999;
 
+    &:not(.image--transparant) {
+      overflow-y: auto;
+
+      figure {
+        max-height: 30vh;
+        transform: scale(1.1);
+      }
+    }
+    &.image--transparant {
+      @include mobile {
+        padding: 0 30px;
+        overflow: unset;
+        height: 75vh;
+
+        & > article {
+          height: 100%;
+          position: absolute;
+          overflow: auto;
+        }
+
+        .work__items__list__item__details {
+          margin-bottom: 180px;
+        }
+      }
+
+
+      figure {
+        transform: scale(1.2) translate3d(30%,0,0);
+
+      }
+    }
+
     figure {
-      transition: transform $transition--slow;
-      opacity: 1;
+      transition: transform $transition--slow $easing;
+      opacity: 1
     }
-    &:not(.image--transparant) figure {
-      max-height: 30vh;
-      transform: scale(1.1);
-    }
-    &.image--transparant figure { transform: scale(1.2) translate3d(30%,0,0) }
   }
+
+
 
   .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
 
-  @include portable {
+  @include mobile {
     max-width: unset;
     width: 100% !important;
     position: static !important;
@@ -98,19 +128,36 @@
   &.image--transparant {
     overflow: visible;
 
-    figure { transform: scale(1) translate3d(15%,0,0); }
+    figure {
+      transform: scale(1) translate3d(15%,0,0);
+      @include abs(null, 0, 0, null);
+      @include size(100%, 240px);
+      @extend %flex-center;
+
+      img, video {
+        @include size(auto);
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
+
+  &:not(.image--transparant) {
+    figure {
+      @include abs(null, null, null, 0);
+      margin-bottom: -5px;
+    }
   }
 
   figure {
-    @include abs(null, null, 0, 0);
     z-index: -1;
     margin: 0;
     width: 100%;
     pointer-events: none;
     opacity: $transparency--high;
     transition:
-      opacity $transition--fast,
-      transform $transition--slow;
+      opacity $transition--fast $easing,
+      transform $transition--slow $easing;
     will-change: transform;
 
     .overlay {
@@ -129,11 +176,14 @@
     max-height: 0px;
     opacity: 0;
     transition:
-      max-height $transition--slow,
-      opacity $transition--slow;
+      max-height $transition--slow $easing,
+      opacity $transition--slow $easing;
     will-change: max-height, opacity;
 
-    &__title { margin: 1em 0 0 }
+    &__title {
+      margin: 1em 0 0;
+      line-height: 1.2;
+    }
     &__description { font-size: 1.2em }
     &__metadata {
       opacity: $transparency;

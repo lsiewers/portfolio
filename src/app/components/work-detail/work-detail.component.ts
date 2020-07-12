@@ -15,26 +15,13 @@ import { Meta, Title } from '@angular/platform-browser';
 export class WorkDetailComponent implements OnDestroy {
   @ViewChild('workComponent', {static: false}) workComponent: WorkComponent;
   data: Item;
-  // pmi = [
-  //   {
-  //     title: 'like or see working',
-  //     fields: ['']
-  //   },
-  //   {
-  //     title: 'dislike or don\'t see working',
-  //     fields: ['']
-  //   },
-  //   {
-  //     title: 'find interesting',
-  //     fields: ['']
-  //   }
-  // ];
   items: Observable<any[]>;
   blur = 0;
   opacity = 1;
   currentPage: string;
   projectFilter: Filter;
   readMore = false;
+  animateHeaderIn = false;
   // tslint:disable-next-line: variable-name
   _routerSubscription: Subscription;
 
@@ -76,10 +63,12 @@ export class WorkDetailComponent implements OnDestroy {
   }
 
   onRoute(param: string) {
+    this.animateHeaderIn = false;
     this.workService.getWorkPost(param)
       .then(post => {
         this.data = post;
         this.readMore = false;
+        this.animateHeaderIn = true;
         if (post !== undefined) { this.updateMetadata(); }
         return param !== '' ?
           this.projectFilter = {

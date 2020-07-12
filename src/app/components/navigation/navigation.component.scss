@@ -10,7 +10,7 @@
   background-color: white;
   box-shadow: $shadow--small rgba($color--grey, 0.24);
   z-index: 9999;
-  transition: transform $transition;
+  transition: transform $transition--slow $easing--out;
 
   div {
     display: flex;

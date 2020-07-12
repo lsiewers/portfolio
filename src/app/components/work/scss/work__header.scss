@@ -26,6 +26,7 @@
        content: '';
        @include abs(null, null, 0, 0);
        @include size(100%, 3px);
+       display: block;
        background-color: $color--grey-light;
        border-radius: 3px;
        transform: scaleY(0);
@@ -36,7 +37,7 @@
 
     li.tab--active {
       pointer-events: none;
-      &::after { transform: scaleY(1); }
+      &::before { transform: scaleY(1); }
       button { @extend %sans--bold; }
     }
   }

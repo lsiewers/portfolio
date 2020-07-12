@@ -22,7 +22,6 @@ const components = [
 
 // modules
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -41,7 +40,6 @@ const modules = [
   ClickOutsideModule,
   FormsModule,
   DeviceDetectorModule,
-  AngularEditorModule,
   AngularFireStorageModule,
   AngularFireModule.initializeApp(environment.firebase),
   AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database feature

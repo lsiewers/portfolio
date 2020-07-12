@@ -12,7 +12,7 @@
     @include size;
     z-index: -1;
     pointer-events: all;
-    transition: background-color 0.3s ease-out;
+    transition: opacity $transition $easing;
     opacity: 0;
 
     &.preview--active {
@@ -33,7 +33,7 @@
     // flex-direction: column;
     // justify-content: flex-start;
     // align-items: flex-start;
-    @include portable {
+    @include mobile {
       width: 100% !important;
       height: unset !important;
     }

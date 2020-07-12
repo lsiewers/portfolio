@@ -5,8 +5,18 @@
     min-height: 480px;
     padding: 0; margin: 0;
     overflow: hidden;
+    transform: translateY(0px) scale(1);
+    opacity: 0;
+
+    .work-detail__header.animate--in & {
+      animation: headerMediaFadeIn #{$transition--slow * 2} $easing--out $transition--fast forwards;
+    }
 
     &.image--transparent {
+      &.top { @include flexbox(row, center, flex-start) }
+      &.center { @extend %flex-center; }
+      &.bottom { @include flexbox(row, center, flex-end) }
+
       img, video {
         max-height: 100%;
         max-width: 100%;
@@ -17,6 +27,11 @@
 
     &:not(.image--transparent) {
       position: relative;
+
+      &.top { @include flexbox(row, flex-start) }
+      &.center { @include flexbox(row, center) }
+      &.bottom { @include flexbox(row, flex-end) }
+
       .overlay {
         @include abs(null, null, 0, 0);
         @include size(100%, 50%);
@@ -33,18 +48,22 @@
         position: unset !important;
       }
     }
-
-    &.top { @include flexbox(row, flex-start) }
-    &.center { @include flexbox(row, center) }
-    &.bottom { @include flexbox(row, flex-end) }
     img, video { width: 100%; }
   }
 
   &__title,
   &__subtitle {
     text-align: center;
+    transform: translateY(12px);
+    opacity: 0;
+
+
+    .work-detail__header.animate--in & {
+      animation: headerTitleFadeIn #{$transition--slow * 2} $easing--out forwards;
+    }
   }
   &__title {
+    animation-delay: $transition--slow;
     @include rel(-60px);
     margin: 0;
 
@@ -53,6 +72,7 @@
     @include mobile { font-size: 3em; }
   }
   &__subtitle {
+    animation-delay: #{$transition--slow * 2};
     @include desktop { font-size: 2.4em; }
     @include tablet { font-size: 2.1em; }
     @include mobile {
@@ -62,5 +82,25 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 0px 12px 180px;
+  }
+}
+
+@keyframes headerMediaFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0px) scale(1);
+  } to {
+    opacity: 1;
+    transform: translateY(-12px) scale(1.05);
+  }
+}
+
+@keyframes headerTitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px)   ;
+  } to {
+    opacity: 1;
+    transform: translateY(0px);
   }
 }

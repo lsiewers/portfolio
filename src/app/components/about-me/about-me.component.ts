@@ -22,9 +22,8 @@ export class AboutMeComponent implements OnInit {
       title: string,
       text: string
     } ]
-    header: { url: string },
-
-  }
+    header: { url: string }
+  };
 
   constructor(
     private titleService: Title,
@@ -41,6 +40,7 @@ export class AboutMeComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   updateMetadata() {

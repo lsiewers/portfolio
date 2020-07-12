@@ -51,15 +51,18 @@
       color: black;
       border: none;
       text-align: center;
+      top: 0;
+      margin-bottom: 30px;
     }
 
     &__subtitle {
       width: 480px;
       display: block;
-      margin: 0 auto 24px;
+      margin: 0 auto;
       border: none;
       font-size: 1.33em;
       line-height: 1.5;
+      padding-bottom: 12px;
 
       textarea {
         width: 100%;
@@ -93,6 +96,8 @@
       border-bottom: 1px solid $color--grey-light;
       max-height: unset;
 
+      & > h1 { text-align: center; }
+
       &__paragraph {
         padding: 30px;
         border-bottom: 1px solid $color--grey-light;
@@ -115,7 +120,11 @@
           .links {
             display: flex;
             justify-content: flex-start;
-            input { font-size: .75em !important; }
+
+            input {
+              font-size: .75em !important;
+              @extend %sans;
+            }
           }
         }
       }
@@ -123,6 +132,18 @@
       & > button, & > a {
         font-size: 1em;
         margin-top: 24px;
+      }
+
+      &__buttons {
+        @include fxd(null, null, 24px, 50%);
+        z-index: 9999;
+        background-color: white;
+        box-shadow: $shadow rgba($color--grey, $transparency);
+        border-radius: 40px;
+        transform: translateX(-50%);
+        padding: 3px 12px;
+
+        button { @extend %sans--bold }
       }
     }
 
@@ -176,7 +197,7 @@
         // box-sizing: border-box;
         // overflow: hidden;
         height: 60px;
-        border-style: dashed;
+        border: solid 1px $color--grey-light;
         margin-top: 30px;
         width: 100%;
 

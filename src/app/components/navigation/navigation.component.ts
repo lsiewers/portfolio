@@ -41,11 +41,9 @@ export class NavigationComponent {
     } else if (url.includes('cms')) { this.pageType = 'cms';
     } else if (url.includes('about-me')) { this.pageType = 'about-me';
     } else { this.pageType = 'work'; }
-    console.log(url);
-
   }
 
-  @HostListener('window:scroll', ['$event'])
+  @HostListener('window:scroll')
   onWindowScroll() {
     // In chrome and some browser scroll is given to body tag
     const pos = (this.document.documentElement.scrollTop || this.document.body.scrollTop);

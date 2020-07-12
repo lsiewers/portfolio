@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Filter } from '../models/filter';
 import { WorkService } from './work.service';
 import { Item } from '../models/item';
-import { isArray } from 'util';
 
 @Injectable({
   providedIn: 'root'

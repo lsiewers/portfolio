@@ -1,17 +1,19 @@
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Item } from 'src/app/models/item';
 import { WorkService } from 'src/app/services/work.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, AfterContentChecked {
+export class DashboardComponent implements OnInit, AfterContentChecked, OnDestroy {
   posts: Item[];
   newPost: Item;
+  _getWorkListSubscriber: Subscription;
 
   constructor(
     private db: AngularFirestore,
@@ -75,7 +77,7 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
   }
 
   getWorkList() {
-    this.db.collection<Item>('posts').valueChanges().subscribe(posts => this.posts = posts);
+    this._getWorkListSubscriber = this.db.collection<Item>('posts').valueChanges().subscribe(posts => this.posts = posts);
   }
 
   addProject() {
@@ -85,5 +87,9 @@ export class DashboardComponent implements OnInit, AfterContentChecked {
     }).finally(() => {
       this.router.navigate(['cms', this.newPost.title.toLowerCase().split(' ').join('-')]);
     });
+  }
+
+  ngOnDestroy(): void {
+    this._getWorkListSubscriber.unsubscribe();
   }
 }

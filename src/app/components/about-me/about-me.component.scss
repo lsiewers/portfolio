@@ -10,9 +10,10 @@
     box-sizing: border-box;
 
     figure {
-      @include size(240px);
+      @include size(240px, 300px);
       border-radius: 30px;
       overflow: hidden;
+      min-height: unset;
 
       img {
         @extend %fullsize;
@@ -21,7 +22,7 @@
     }
 
     p {
-      padding: 30px 0 0;
+      padding: 60px 0 0;
     }
   }
 
