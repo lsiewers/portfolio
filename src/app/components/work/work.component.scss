@@ -1,9 +1,0 @@
-@import '../../../assets/scss/all';
-
-@import 'scss/work__header';
-@import 'scss/work__items';
-@import 'scss/work__item';
-
-.work {
-  @include flexbox(column, center);
-}
