@@ -1,0 +1,151 @@
+[
+  {
+    "title": "Basics: What does interaction actually mean?",
+    "imageUrl": "../assets/images/0.jpg",
+    "videoUrl": "https://storage.coverr.co/videos/it-was-all-yellow?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTczODMzODU0fQ.oQZueYbbNqE204uYC1hZCggyznF_J8hSNCfuCWZbMMM",
+    "videoPlaying": false,
+    "metadata": [
+      {
+        "type": "focus",
+        "value": "Interaction design"
+      },
+      {
+        "type": "purpose",
+        "value": "Study"
+      },
+      {
+        "type": "tools",
+        "value": "Arduino"
+      },
+      {
+        "type": "budget",
+        "value": "1 - 3 weeks"
+      },
+      {
+        "type": "client",
+        "value": "HKU"
+      },
+      {
+        "type": "collaboration",
+        "value": "solo"
+      },
+      {
+        "type": "finish date",
+        "value": "2019-05-27"
+      }
+    ],
+    "paragraphs": []
+  },
+  {
+    "title": "What if VR is in 2D?",
+    "imageUrl": "../assets/images/4.jpg",
+
+    "videoUrl": "https://storage.coverr.co/videos/it-was-all-yellow?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTczODMzODU0fQ.oQZueYbbNqE204uYC1hZCggyznF_J8hSNCfuCWZbMMM",
+    "videoPlaying": false,
+    "metadata": [
+      {
+        "type": "focus",
+        "value": "Game development"
+      },
+      {
+        "type": "purpose",
+        "value": "Study"
+      },
+      {
+        "type": "tools",
+        "value": ["Unity", "Adobe Illustrator"]
+      },
+      {
+        "type": "budget",
+        "value": "1 - 3 weeks"
+      },
+      {
+        "type": "client",
+        "value": "HKU"
+      },
+      {
+        "type": "collaboration",
+        "value": "solo"
+      },
+      {
+        "type": "finish date",
+        "value": "2019-05-12"
+      }
+    ],
+    "paragraphs": []
+  },
+  {
+    "title": "The lifecycle of plastic waste",
+    "imageUrl": "../assets/images/1.jpg",
+    "videoUrl": "https://storage.coverr.co/videos/it-was-all-yellow?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTczODMzODU0fQ.oQZueYbbNqE204uYC1hZCggyznF_J8hSNCfuCWZbMMM",
+    "videoPlaying": false,
+    "metadata": [
+      {
+        "type": "focus",
+        "value": "User Experience"
+      },
+      {
+        "type": "purpose",
+        "value": "Study"
+      },
+      {
+        "type": "tools",
+        "value": ["Unity", "Adobe Illustrator"]
+      },
+      {
+        "type": "budget",
+        "value": "1 - 3 weeks"
+      },
+      {
+        "type": "client",
+        "value": "HKU"
+      },
+      {
+        "type": "collaboration",
+        "value": "solo"
+      },
+      {
+        "type": "finish date",
+        "value": "2019-05-12"
+      }
+    ],
+    "paragraphs": []
+  },
+  {
+    "title": "A digital card game based on POWER",
+    "imageUrl": "../assets/images/2.jpg",
+    "videoUrl": "https://storage.coverr.co/videos/it-was-all-yellow?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjExNDMyN0NEOTRCMUFCMTFERTE3IiwiaWF0IjoxNTczODMzODU0fQ.oQZueYbbNqE204uYC1hZCggyznF_J8hSNCfuCWZbMMM",
+    "videoPlaying": false,
+    "metadata": [
+      {
+        "type": "focus",
+        "value": "Game development"
+      },
+      {
+        "type": "purpose",
+        "value": "Internship"
+      },
+      {
+        "type": "tools",
+        "value": ["Unity", "Adobe Illustrator"]
+      },
+      {
+        "type": "budget",
+        "value": "1 - 3 weeks"
+      },
+      {
+        "type": "client",
+        "value": "Boerdam"
+      },
+      {
+        "type": "collaboration",
+        "value": "solo"
+      },
+      {
+        "type": "finish date",
+        "value": "2019-05-12"
+      }
+    ],
+    "paragraphs": []
+  }
+]

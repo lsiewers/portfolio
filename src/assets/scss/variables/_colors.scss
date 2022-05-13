@@ -1,0 +1,17 @@
+$color--primary: #298200;
+
+$color--black: #0b0b0b;
+$color--grey-dark: #4A4A4A;
+$color--grey: #707070;
+$color--grey-light: #e5e5e5;
+$color--grey-lighter: #F8F8F8;
+
+$transparency--low: 0.8;
+$transparency: 0.6;
+$transparency--high: 0.4;
+
+.black { color: $color--grey-dark }
+.grey-dark { color: $color--grey-dark }
+.grey { color: $color--grey }
+.grey-light { color: $color--grey-light }
+.grey-lighter { color: $color--grey-lighter }

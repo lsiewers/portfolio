@@ -1,0 +1,112 @@
+<article class="work-detail" *ngIf="data">
+  <header
+    class="work-detail__header"
+    [class.animate--in]="animateHeaderIn"
+    [style.background]="data.header.transparentImage ? 'linear-gradient(' + data.palette.tertiary + ', ' + data.palette.secondary + ')' : data.palette.secondary"
+    [style.color]="data.palette.primary"
+  >
+    <figure
+      class="work-detail__header__media {{data.header.pos}}"
+      [class.image--transparent]="data.header.transparentImage"
+    >
+        <img *ngIf="data.header.type === 'image'" [src]="data.header.url">
+        <video *ngIf="data.header.type === 'video'" autoplay muted>
+          <source [src]="data.header.url"/>
+        </video>
+        <figcaption *ngIf="data.header.ref">{{data.header.ref}}</figcaption>
+        <div class="overlay" *ngIf="!data.header.transparentImage" [style.background-image]="'linear-gradient('+data.palette.secondary+'00,'+data.palette.secondary+')'"></div>
+    </figure>
+    <h1 class="work-detail__header__title h1">{{data.title}}</h1>
+    <p class="work-detail__header__subtitle serif">{{data.subtitle}}</p>
+  </header>
+
+  <main
+    class="work-detail__main"
+    [style.background-color]="data.palette.secondary"
+    [style.color]="data.palette.primary"
+  >
+
+    <!-- Content -->
+    <section class="work-detail__content content" [class.read-more]="readMore">
+      <article *ngFor="let paragraph of data.details; let i = index" class="{{paragraph.class}} content__paragraph">
+        <ng-container *ngIf="i <  3 || readMore">
+            <figure class="content__paragraph__media" *ngIf="paragraph.class.includes('image')">
+              <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
+              <video *ngIf="paragraph.media.type === 'video'" autoplay muted loop>
+                <source [src]="paragraph.media.url">
+              </video>
+              <div class="caption">
+                  <figcaption *ngIf="paragraph.media.ref">{{paragraph.media.ref}}</figcaption>
+                  <a class="button" [href]="paragraph.media.url" target="_blank"> <i class="uil uil-external-link-alt"></i></a>
+              </div>
+          </figure>
+          <div *ngIf="paragraph.class === 'image--full'" class="gradient" [style.background-image]="'linear-gradient(' + data.palette.tertiary + ', ' + data.palette.secondary + ')' "></div>
+          <div
+            class="content__paragraph__text"
+            [style.background-color]="data.palette.secondary"
+          >
+            <h1 *ngIf="paragraph.title && paragraph.class !== 'quote'" class="h2">{{paragraph.title}}</h1>
+            <p class="serif">{{paragraph.text}}</p>
+            <div
+              *ngIf="paragraph.links !== null && paragraph.links.length > 0"
+              class="content__paragraph__text__links"
+            >
+              <a
+                *ngFor="let link of paragraph.links"
+                target="_blank"
+                [href]="link.url"
+                class="button"
+              >
+                <i class="uil uil-{{link.icon}}"></i> {{link.name}}
+              </a>
+            </div>
+          </div>
+        </ng-container>
+      </article>
+      <div class="work-detail__content__read-more" *ngIf="!readMore" [style.background-image]="'linear-gradient('+data.palette.secondary+'00,'+data.palette.secondary+')'">
+        <button (click)="readMore = true;" class="button button--icon button--dark sans--bold">Read more <i class="uil uil-angle-down"></i></button>
+      </div>
+    </section>
+
+    <!-- Metadata -->
+    <aside class="work-detail__metadata grey">
+      <ul class="work-detail__metadata__list">
+        <li *ngIf="metadataIsEmpty(data.metadata.focus)" class="work-detail__metadata__list__item focus">
+          <h1>Focus</h1>
+          <p *ngFor="let value of data.metadata.focus">{{ value }} design</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.client)" class="work-detail__metadata__list__item client">
+          <h1>Client</h1>
+          <p *ngFor="let value of data.metadata.client">{{ value }}</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.collaboration)" class="work-detail__metadata__list__item collaboration">
+          <h1>Collaboration</h1>
+          <p *ngFor="let value of data.metadata.collaboration">
+            <a *ngIf="value.url.length > 0" [href]="value.url">{{value.name}}</a>
+            <ng-container *ngIf="value.url.length === 0">{{ value.name }}</ng-container>
+          </p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.budget)" class="work-detail__metadata__list__item budget">
+          <h1>Budget</h1>
+          <p>{{ data.metadata.budget }}</p>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.finishDate)" class="work-detail__metadata__list__item finishDate">
+          <h1>Finish date</h1>
+          <time>{{data.metadata.finishDate | date}}</time>
+        </li>
+        <li *ngIf="metadataIsEmpty(data.metadata.links)" class="work-detail__metadata__list__item links">
+          <p *ngFor="let value of data.metadata.links">
+            <a class="button button--dark" target="_blank" [href]="'//' + value.url">
+              <i class="uil uil-{{value.icon}} grey"></i> {{ value.name }}
+            </a>
+          </p>
+        </li>
+      </ul>
+    </aside>
+  </main>
+
+<app-work *ngIf="projectFilter && currentPage" [projectFilter]="projectFilter" [projectTitle]="data.title"></app-work>
+
+<div class="work-detail__back-to-home">
+  <a [routerLink]="['/']" class="button button--dark"><i class="uil uil-arrow-left grey"></i> Go back</a>
+</div>

@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/scss/all.scss";
+
+html,
+body {
+  // @extend %block--grey-dark;
+  @extend %sans;
+  overflow-x: hidden;
+  position: relative;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth
+}
+
+// html { overflow: hidden;; }
+
+html,
+body,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  @include desktop {
+    --page-padding: 120px;
+  }
+  @include tablet {
+    --page-padding: 60px;
+  }
+  @include mobile {
+    --page-padding: 30px;
+  }
+
+  padding: 0 var(--page-padding);
+}
+
+
+body:not(.navigation--open) .navigation { transform: translateY(-80px); }
+body.navigation--open .navigation { transform: translateY(0px); }
+
+li {
+  list-style: none;
+}
+
+i {
+  font-size: 1.8em;
+}
+
+a, button {
+  text-decoration: none;
+  color: $color--grey-dark;
+  @include flexbox(row, center, unset);
+  display: inline-flex;
+  border: none;
+  font-size: 1em;
+}
+
+.copyright {
+  padding: 48px 24px 36px;
+  text-align: center;
+  color: $color--grey;
+}

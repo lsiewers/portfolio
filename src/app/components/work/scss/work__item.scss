@@ -1,0 +1,218 @@
+.work__items__list__item {
+  min-width: 240px; max-width: 360px;
+  min-height: 240px;
+  border-radius: 30px;
+  padding: 6px 30px 180px;
+  box-sizing: border-box;
+  transform-origin: center center;
+  perspective: 100px;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 1;
+
+  &:not(.state--preview) {
+    cursor: pointer;
+    transition:
+      box-shadow $transition--fast $easing,
+      transform $transition,
+      opacity $transition .2s $easing,
+      z-index $transition--slow step-end;
+    will-change: transform, opacity, box-shadow;
+    transform: translate3d(0px, 0px, 0px) scale(1) rotateX(0deg) rotateY(0deg);
+
+    article { pointer-events: none; }
+  }
+
+  // text which is visible when not quick preview
+  &__preview {
+    max-height: 360px;
+    display: block;
+    pointer-events: none;
+    opacity: 1;
+    transition:
+      max-height $transition--slow $easing,
+      display $transition--fast $easing,
+      opacity $transition--slow $easing,
+      z-index 0.0s;
+    transition-delay: .3s;
+    will-change: max-height, opacity;
+
+    .state--preview & {
+      max-height: 0px;
+      transition-delay: 0s;
+      display: hidden;
+      opacity: 0;
+    }
+
+    & > p {
+      margin: 0;
+      padding: 1em 0 0;
+    }
+    & > h1 { margin-top: .48em }
+  }
+
+  &:not(.state--preview):hover {
+    transition:
+      box-shadow $transition $easing,
+      transform $transition $easing--out;
+    box-shadow: $shadow rgba($color--grey-light, $transparency);
+
+    figure { opacity: $transparency--low }
+  }
+
+  &.state--preview {
+    transition: transform $transition--slow $easing;
+    max-height: 75vh;
+    z-index: 999;
+
+    &:not(.image--transparant) {
+      overflow-y: auto;
+
+      figure {
+        max-height: 30vh;
+        transform: scale(1.1);
+      }
+    }
+    &.image--transparant {
+      @include mobile {
+        padding: 0 30px;
+        overflow: unset;
+        height: 75vh;
+
+        & > article {
+          height: 100%;
+          position: absolute;
+          overflow: auto;
+        }
+
+        .work__items__list__item__details {
+          margin-bottom: 180px;
+        }
+      }
+
+
+      figure {
+        transform: scale(1.2) translate3d(30%,0,0);
+
+      }
+    }
+
+    figure {
+      transition: transform $transition--slow $easing;
+      opacity: 1
+    }
+  }
+
+
+
+  .masonry--loaded & { animation: fadeIn .4s #{random()}s forwards ease-in; }
+
+  @include mobile {
+    max-width: unset;
+    width: 100% !important;
+    position: static !important;
+    margin-top: 24px;
+
+    &.state--preview {
+      position: sticky !important;
+      max-height: 65vh;
+    }
+  }
+
+  &__close-preview {
+    @include abs(20px, 20px, unset, unset);
+    pointer-events: all !important;
+    z-index: 99;
+  }
+
+  &.image--transparant {
+    overflow: visible;
+
+    figure {
+      transform: scale(1) translate3d(15%,0,0);
+      @include abs(null, 0, 0, null);
+      @include size(100%, 240px);
+      @extend %flex-center;
+
+      img, video {
+        @include size(auto);
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
+
+  &:not(.image--transparant) {
+    figure {
+      @include abs(null, null, null, 0);
+      margin-bottom: -5px;
+    }
+  }
+
+  figure {
+    z-index: -1;
+    margin: 0;
+    width: 100%;
+    pointer-events: none;
+    opacity: $transparency--high;
+    transition:
+      opacity $transition--fast $easing,
+      transform $transition--slow $easing;
+    will-change: transform;
+
+    .overlay {
+      @extend %fullsize;
+      position: absolute;
+      z-index: 999;
+    }
+
+    img, video {
+      @extend %fullsize;
+      margin-bottom: -5px;
+    }
+  }
+
+  &__details {
+    max-height: 0px;
+    opacity: 0;
+    transition:
+      max-height $transition--slow $easing,
+      opacity $transition--slow $easing;
+    will-change: max-height, opacity;
+
+    &__title {
+      margin: 1em 0 0;
+      line-height: 1.2;
+    }
+    &__description { font-size: 1.2em }
+    &__metadata {
+      opacity: $transparency;
+    }
+    &__more-details {
+      @extend %flex-center;
+      @include size(100%, 90px);
+
+      .uil {
+        color: inherit !important;
+        top: 0;
+      }
+    }
+
+    .state--preview & {
+      max-height: 360px;
+      opacity: 1;
+    }
+  }
+}
+
+
+@keyframes fadeIn {
+  0% {
+    filter:blur(1px);
+    opacity: 0
+  }
+  100% {
+    filter:blur(0px);
+    opacity: 1
+  }
+}

@@ -1,0 +1,9 @@
+%block--grey-light {
+  background-color: $color--grey-light;
+  color: $color--grey-dark;
+}
+
+%block--grey-dark {
+  background-color: $color--grey-dark;
+  color: $color--grey-light;
+}

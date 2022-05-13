@@ -1,0 +1,24 @@
+<div class="home__header" #header>
+    <div class="home__header__upper">
+      <div class="home__header__upper__titles">
+        <h1 class="h4 grey-dark">Luuk Siewers - Experience Designer</h1>
+      </div>
+      <figure class="home__portrait-image">
+        <img src="/assets/images/portait-1.png" alt="Me" width="180">
+      </figure>
+    </div>
+    <div class="home__header__bottom">
+        <p class="h1 serif grey">
+            Learning to design quality interactive technology by human-centered design and design thinking methodology.
+        </p>
+
+        <button (click)="scrollToPortfolio();" class="button button--icon--small grey">Portfolio <i class="uil uil-angle-down grey"></i></button>
+        <a class="button button--dark button--icon--small" [routerLink]="'about-me'">
+          About Me <i class="uil uil-arrow-right"></i>
+        </a>
+    </div>
+</div>
+
+
+<app-work></app-work>
+<!-- <app-profile></app-profile> -->

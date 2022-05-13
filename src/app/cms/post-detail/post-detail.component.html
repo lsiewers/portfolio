@@ -1,0 +1,246 @@
+<article class="work-detail cms-detail" *ngIf="data">
+  <header class="work-detail__header cms-detail__header">
+    <figure class="work-detail__header__media {{data.header.pos}}">
+      <img *ngIf="data.header.type === 'image'" [src]="data.header.url">
+      <video *ngIf="data.header.type === 'video'" muted="muted" autoplay loop>
+        <source [src]="data.header.url"/>
+      </video>
+    </figure>
+    <input class="cms-detail__header__img-input" type="text" [(ngModel)]="data.header.url">
+
+    <select [(ngModel)]="data.header.type">
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+    </select>
+    <select [(ngModel)]="data.header.pos">
+      <option value="top">Top</option>
+      <option value="center">Center</option>
+      <option value="bottom">Bottom</option>
+    </select>
+    <input class="cms-detail__header__reference-input" type="text" [(ngModel)]="data.header.ref" placeholder="image reference caption">
+    <small>Transparent PNG</small>
+    <input *ngIf="data.header.type === 'image'" type="checkbox" [(ngModel)]="data.header.transparentImage"/>
+    <h1 class="work-detail__header__title">
+      <input
+        class="cms-detail__header__title sans--bold h2"
+        [(ngModel)]="data.title"
+        type="text">
+    </h1>
+    <p class="work-detail__header__subtitle cms-detail__header__subtitle serif--bold h6 grey">
+      Subject description (subtitle)
+      <textarea
+        class="serif--bold"
+        [style.color]="data.palette.primary"
+        [style.background]="data.header.transparentImage ? 'linear-gradient('+data.palette.secondary+','+data.palette.tertiary+')' : data.palette.secondary | safe: 'style'"
+        [(ngModel)]="data.subtitle"
+        type="text"></textarea>
+    </p>
+    <div class="cms-detail__header__colors">
+      <div><input type="color" [style.background-color]="data.palette.primary" [(ngModel)]="data.palette.primary"></div>
+      <div><input type="color" [style.background-color]="data.palette.secondary" [(ngModel)]="data.palette.secondary"></div>
+      <div><input type="color" [style.background-color]="data.palette.tertiary" [(ngModel)]="data.palette.tertiary"></div>
+    </div>
+    <p class="cms-detail__header__product__description cms-detail__header__subtitle serif--bold h6 grey">
+      Product description
+      <textarea
+        class="serif"
+        [(ngModel)]="data.productDescription"
+        type="text"></textarea>
+    </p>
+  </header>
+  <main class="work-detail__main cms-detail__main">
+    <!-- Content -->
+    <section class="work-detail__content cms-detail__main__content">
+      <h1 class="h2 grey">Content</h1>
+      <ng-container *ngIf="data.details.length > 0">
+        <div class="cms-detail__main__content__paragraph" *ngFor="let paragraph of data.details; let i = index">
+            <select type="text" [(ngModel)]="paragraph.class">
+              <option value="image--left">Image left</option>
+              <option value="image--right">Image right</option>
+              <option value="image--full">Image full width</option>
+              <option value="double--column">Double column</option>
+              <option value="quote">quote</option>
+            </select>
+          <figure *ngIf="paragraph.class.includes('image')">
+              <img *ngIf="paragraph.media.type === 'image'" [src]="paragraph.media.url" [alt]="paragraph.media.ref">
+              <video *ngIf="paragraph.media.type === 'video'">
+                <source [src]="paragraph.media.url">
+              </video>
+              <input type="text" [(ngModel)]="paragraph.media.url">
+              <input type="text" [(ngModel)]="paragraph.media.ref">
+              <select type="text" [(ngModel)]="paragraph.media.type">
+                <option value="image">image</option>
+                <option value="video">video</option>
+              </select>
+          </figure>
+          <div class="cms-detail__main__content__paragraph__text">
+            <input class="h3 grey--dark title" *ngIf="paragraph.class !== 'quote'" type="text" [(ngModel)]="paragraph.title">
+            <textarea class="serif grey--dark text" type="text" [(ngModel)]="paragraph.text"></textarea>
+
+            <h4 *ngIf="paragraph.class !== 'quote'" class="h4 grey">Links</h4>
+            <div *ngIf="paragraph.class !== 'quote'" class="links">
+              <div  *ngFor="let link of paragraph.links; let j = index">
+                <input type="text" placeholder="Link name..." [(ngModel)]="link.name"><br>
+                <input type="text" placeholder="Link url..." [(ngModel)]="link.url"><br>
+                <input type="text" placeholder="Icon name..." [(ngModel)]="link.icon"><br><br>
+                <a class="button button--dark button--icon--small grey" target="_blank" [href]="link.url">{{link.name}} <i class="uil uil-{{link.icon}}"></i></a>
+                <button class="button" (click)="removeLink(i, j)"><i class="uil uil-times"></i></button>
+              </div>
+              <button class="button button--icon--small" (click)="addLink(i)">Add link <i class="uil uil-plus"></i></button>
+            </div>
+          </div>
+          <button class="button button--dark button--icon--small" (click)="removeParagraph(i);">Remove paragraph<i class="uil uil-times"></i></button>
+        </div>
+      </ng-container>
+      <!-- add paragraph to be added -->
+      <button class="button button--dark button--icon" (click)="addParagraph();">Add paragraph <i class="uil uil-plus"></i></button>
+      <br>
+      <div class="cms-detail__main__content__buttons">
+        <button (click)="quickSave()" class="button button--icon button--dark">
+          Quick Save <i class="uil uil-save grey"></i>
+        </button>
+        <a [routerLink]="'/'+postUrl" target="_blank" class="button button--icon--small button--dark">
+          Preview page <i class="uil uil-eye grey"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Metadata -->
+    <aside class="work-detail__metadata cms-detail__main__metadata">
+      <small class="cms-detail__main__metadata__id">ID: {{data.id}}</small>
+      <ul class="work-detail__metadata__list">
+        <li
+          *ngFor="let metadata of data.metadata | keyvalue;"
+          class="work-detail__metadata__list__item {{metadata.key}}"
+        >
+          <h1>{{ metadata.key }}</h1>
+          <p *ngIf="!isArray(metadata.value)">
+            <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="text">
+          </p>
+          <ng-container
+            *ngIf="isArray(metadata.value)
+            && metadata.key !== 'collaboration'
+            && metadata.key !== 'links'">
+            <p *ngFor="let value of metadata.value; let i = index">
+              <input
+                [(ngModel)]=" metadata.value[i]"
+                [ngModelOptions]="{'updateOn': 'blur'}"
+                type="text"
+                (keyup.enter)="addField(metadata, metadata.key)"
+                (keyup.backspace)="removeField(metadata, i, $event)"
+              >
+            </p>
+          </ng-container>
+          <p *ngIf="metadata.key === 'collaboration'">
+            <br><small>NAME</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].name"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(metadata, i, $event)"
+            >
+            <br><br><small>URL</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].url"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(metadata, i, $event)"
+            >
+            <!-- <input [(ngModel)]="subdata.values" type="date"> -->
+          </p>
+          <p *ngIf="metadata.key === 'finishDate'">
+            <input [(ngModel)]="data.metadata[metadata.key]" [ngModelOptions]="{ updateOn: 'blur' }" type="date">
+          </p>
+          <p *ngIf="metadata.key === 'links'">
+            <br><small>NAME</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].name"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(metadata, i, $event)"
+            >
+            <br><br><small>ICON</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].icon"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(metadata, i, $event)"
+            >
+            <br><br><small>URL</small><br>
+            <input
+              *ngFor="let value of metadata.value | keyvalue; let i = index"
+              [(ngModel)]="metadata.value[i].url"
+              type="text"
+              (keyup.enter)="addField(data.metadata[metadata.key], metadata.key)"
+              (keyup.backspace)="removeField(metadata, i, $event)"
+            >
+            <!-- <input [(ngModel)]="subdata.values" type="date"> -->
+            <a
+              class="button button--icon--small grey"
+              *ngFor="let value of metadata.value"
+              [href]="'//'+value.url"
+              target="_blank"
+            ><i class="uil uil-{{value.icon}} grey"></i>{{value.name}}</a>
+          </p>
+        </li>
+      </ul>
+    </aside>
+  </main>
+  <footer class="cms-detail__footer">
+    <div class="cms-detail__footer__images">
+        <h1>Gallery</h1>
+      <ul>
+        <li *ngFor="let file of mediaFiles">
+          <ng-container *ngIf="file.metadata | async as metadata">
+            <object
+              *ngIf="metadata.type.includes('pdf')"
+              [data]="file.url | safe: 'resourceUrl'"
+              height="200" width="200"
+            >
+            </object>
+            <img
+              *ngIf="metadata.type.includes('image')"
+              [src]="file.url"
+            >
+            <video
+              muted autoplay loop controls
+              *ngIf="metadata.type.includes('video')"
+              (click)="toClipboard($event)"
+            ><source [src]="file.url">
+            </video>
+            <pre
+              [class.green]="metadata.size / 1024 < 500"
+              [class.orange]="metadata.size / 1024 > 500 && metadata.size / 1024 < 1000"
+              [class.red]="metadata.size / 1024 > 1000"
+            >{{ calcFileSize(metadata.size) }}</pre>
+            <small>{{ file.name }}</small>
+            <button class="button button--dark" (click)="deleteFile(file.name)">delete</button>
+            <button
+              class="button button--dark"
+              (click)="setHeader(file.url, metadata.type)"
+              *ngIf="metadata.type.includes('image') || metadata.type.includes('video')"
+            >
+              Header {{ metadata.type.includes('image') ? 'image' : 'video' }}
+            </button>
+          </ng-container>
+        </li>
+      </ul>
+      <input
+        class="button button--dark file-upload"
+        type="file"
+        accept=".png, .jpeg, .jpg,.gif, .mp4, .mov, .pdf, .svg"
+        (change)="uploadFile($event)"
+      >
+    </div>
+    <div class="cms-detail__footer__buttons">
+      <button class="button button--dark button--icon--small delete" (click)="delete();">Delete <i class="uil uil-times"></i></button>
+      <button class="sans--bold button button--dark button--icon save" (click)="save()">
+        Save<i class="uil uil-save"></i>
+      </button>
+    </div>
+  </footer>
+</article>

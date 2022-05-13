@@ -1,0 +1,212 @@
+<article class="work">
+  <header class="work__header">
+
+    <!-- tabs -->
+    <ul class="work__header__tabs" *ngIf="pageType === 'home'">
+      <li [class.tab--active]="!focusFilterActive()">
+        <button
+          class="button"
+          (click)="removeFocusFilters()"
+        >
+          All
+        </button>
+      </li>
+      <li
+        [class.tab--active]="focusFilterActive() === focus"
+        *ngFor="let focus of focuses"
+      >
+        <button class="button" (click)="toggleFilter({type: 'focus', values: [focus]})">
+          {{focus}}
+        </button>
+      </li>
+    </ul>
+
+    <!-- filters -->
+    <ul class="work__header__filters" *ngIf="pageType === 'home'">
+      <i class="uil uil-filter"></i>
+      <ng-container *ngFor="let filter of filters">
+        <li
+          *ngIf="filter.type !== 'focus'"
+          class="work__header__filters__filter"
+          [class.tab--open]="filter.openTab"
+          [class.tab--closed]="!filter.openTab"
+        >
+          <span
+            class="work__header__filters__filter__label button button--dark button--icon--small"
+            (clickOutside)="filter.openTab ? toggleFilterTab(filter) : null"
+            [exclude]="'.work__header__filters__filter__dropdown'"
+            (click)="toggleFilterTab(filter)"
+          >
+            {{filter.type === 'tools' ? 'Tools & methods' : 'Project purpose'}} <i class="uil uil-angle-down"></i>
+          </span>
+          <!-- arrow icon -->
+          <ul class="work__header__filters__filter__dropdown">
+
+            <!-- uncategorized items -->
+            <ng-container *ngIf="!valuesCategorized(filter.values)">
+              <div class="work__header__filters__filter__dropdown__categorie">
+                <li
+                  class="work__header__filters__filter__dropdown__value"
+                  *ngFor="let value of filter.values"
+                  (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
+                  [class.filter--active]="isActiveFilter(filter.type, value)"
+                >
+                  <i class="uil uil-angle-right"></i> {{value}}
+                </li>
+              </div>
+            </ng-container>
+
+            <!-- categorized items -->
+            <ng-container *ngIf="valuesCategorized(filter.values)">
+              <li *ngFor="let categorie of filter.values">
+                <ul class="work__header__filters__filter__dropdown__categorie">
+                    <h3>{{categorie.name}}</h3>
+                    <li
+                      *ngFor="let value of categorie.values;"
+                      class="work__header__filters__filter__dropdown__value"
+                      [class.filter--active]="isActiveFilter(filter.type, value)"
+                      (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
+                    >
+                      <i class="uil uil-angle-right"></i> {{value}}
+                    </li>
+                </ul>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+    <!-- active filter toggle thingies -->
+    <p
+      class="work__header__filters__text grey"
+      [class.no-filters]="activeFilters.length <= 0"
+      *ngIf="pageType === 'home'"
+    >
+      {{activeFilters.length > 0 ? '' : 'No filter applied'}}
+      <ng-container *ngFor="let filter of activeFilters  | slice:0:showAmount">
+        <ng-container *ngIf="filter.type !== 'focus'">
+          <div
+            class="button button--icon--small"
+            *ngFor="let value of filter.values"
+            (click)="toggleFilter({type: filter.type, values: [value]}); getFilteredItems()"
+          >
+            <i class="uil uil-times grey"></i>{{ value }}
+          </div>
+        </ng-container>
+      </ng-container>
+    </p>
+    <!-- end filters -->
+
+    <!-- More focused on ... -->
+    <p
+      class="work__header__filters__text work__header__filters__text__bg-gradient"
+      *ngIf="pageType === 'work'">
+      More focused on {{ projectFilter.values }} Design
+    </p>
+
+  </header>
+
+  <!-- items -->
+  <main class="work__items" *ngIf="items?.length > 0">
+    <!-- <p class="work__items__results">{{showItems.length ? showItems.length : 'No'}} {{showItems.length <= 1 ? 'result' : 'results'}}</p> -->
+    <!-- overlay -->
+    <div
+      class="work__items__preview-overlay"
+      [class.preview--active]="previewOverlay"
+      [style.background-color]="previewOverlayColor"
+    ></div>
+    <!-- items list -->
+    <ul
+      class="work__items__list"
+      [class.masonry--loaded]="items.length > 0"
+    >
+      <li
+        class="work__items__list__item"
+        *ngFor="let item of items | slice:0:showAmount; let i = index"
+        (click)="item.workPreview ? null : toPreviewAnimation($event, item);"
+        (clickOutside)="item.workPreview ? closePreview(item, null, i) : null"
+        (keyup.esc)="item.workPreview ? closePreview(item, null, i) : null"
+        (mousemove)="hoverAnimation($event, item.workPreview)"
+        (mouseleave)="hoverLeave($event, item.workPreview)"
+        [class.image--transparant]="item.header.transparentImage"
+        [class.state--preview]="item.workPreview"
+        [style.background]="item.header.transparentImage ? 'linear-gradient('+item.palette.secondary+','+item.palette.tertiary+')' : item.palette.secondary"
+        [style.color]="item.palette.secondary"
+      >
+        <article>
+          <!-- preview data when not opened -->
+          <div class="work__items__list__item__preview">
+            <p
+              class="serif--bold h5"
+              [style.color]="item.palette.primary"
+              title="{{item.subtitle}}"
+            >{{item.subtitle}}</p>
+            <h1
+              class="h6 sans"
+              title="{{item.title}}"
+              [style.color]="item.palette.primary"
+            >{{item.title}}</h1>
+          </div>
+          <!-- details when opened -->
+          <div class="work__items__list__item__details"
+              [style.color]="item.palette.primary">
+              <h1
+                class="h4 sans--bold work__items__list__item__details__title"
+                title="{{item.title}}"
+              >{{item.title}}</h1>
+              <p
+                class="serif work__items__list__item__details__description"
+                title="{{item.productDescription}}"
+              >{{item.productDescription}}</p>
+            <ul *ngIf="item.metadata" class="work__items__list__item__details__metadata">
+              <li>
+                {{ item.metadata.purpose }} project
+                <span *ngIf="item.metadata.purpose === 'Study'">{{ item.metadata.collaboration[0].name !== '' ? '(group)' : '(solo)' }}</span>
+              </li>
+              <li>Focused on <span *ngFor="let focus of item.metadata.focus">{{focus}}</span> design</li>
+            </ul>
+            <div class="work__items__list__item__details__more-details">
+              <a
+                class="button button--light button--icon sans--bold"
+                (click)="routeToPost(item.title)"
+                [style.color]="item.palette.primary"
+              >More details <i class="uil uil-angle-right"></i></a>
+            </div>
+          </div>
+        </article>
+        <figure>
+          <div
+            *ngIf="!item.header.transparentImage"
+            class="overlay"
+            [style.background-image]="'linear-gradient(' + item.palette.secondary + ', ' + item.palette.secondary + '00)'"
+          ></div>
+          <img
+            *ngIf="item.header.type === 'image'"
+            [src]="item.header.url"
+            [alt]="item.title"
+            (load)="imageLoaded(item);"
+          >
+          <video
+            *ngIf="item.header.type === 'video'"
+            [muted]="'muted'" autoplay loop
+            (loadeddata)="imageLoaded(item);"
+          >
+            <source src="{{ item.header.url }}">
+          </video>
+        </figure>
+      </li>
+    </ul>
+    <a
+      class="work__items__show-button button button--dark button--icon--small"
+      *ngIf="items.length > showAmount"
+      (click)="showAmount = showAmount + 3; bricks.update()"
+    >
+      Show More <i class="uil uil-angle-down grey"></i>
+    </a>
+  </main>
+
+  <!-- No projects feedback -->
+  <div class="work__items__no-results" *ngIf="items?.length === 0">
+    No projects found :(
+  </div>
+</article>

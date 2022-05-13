@@ -1,0 +1,35 @@
+.work-detail__metadata {
+  border-top: 1px solid $color--grey-light;
+  background-color: white;
+
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 36px calc(var(--page-padding) - 30px) 24px;
+
+    &__item {
+      width: 180px;
+      margin: 12px 24px;
+
+      & > h1 {
+        font-size: .84em;
+        text-transform: uppercase;
+      }
+
+      & > p {
+        margin: 12px 0;
+
+        a { text-decoration: underline; }
+      }
+
+      &.links {
+        margin: 12px 0 0;
+        display: flex;
+        width: 100%;
+      }
+    }
+
+
+  }
+}
