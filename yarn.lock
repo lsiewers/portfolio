@@ -1195,13 +1195,6 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
 
-"@kolkov/angular-editor@^1.0.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@kolkov/angular-editor/-/angular-editor-1.1.2.tgz#d23819340d754ac3fb094bddba043702c75524cb"
-  integrity sha512-ae6v4XDLxIZhHyMAWma4QZvGIDvsn7eeqE+sQIm+9VbXn2jWaS3Mqg4nnKbZSB7p0xhbWviKG2Frb1I8s+ne0Q==
-  dependencies:
-    tslib "^1.9.0"
-
 "@ngtools/webpack@8.3.28":
   version "8.3.28"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-8.3.28.tgz#3164cd136a6c4fd884edee52a731633bfbb86d65"
@@ -2989,9 +2982,9 @@ decamelize@^1.2.0:
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-equal@^1.0.1:
   version "1.1.1"
